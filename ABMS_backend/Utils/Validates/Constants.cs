@@ -2,9 +2,9 @@
 {
     public class Constants
     {
-        public static readonly String PUBLIC_REQUEST_MAPPING_PREFIX = "/public/api";
-        public static readonly String REQUEST_MAPPING_PREFIX = "/api";
-        public static readonly String VERSION_API_V1 = "/v1";
+        public const string PUBLIC_REQUEST_MAPPING_PREFIX = "/public/api";
+        public const string REQUEST_MAPPING_PREFIX = "/api";
+        public const string VERSION_API_V1 = "/v1";
 
         public enum STATUS
         {
@@ -14,8 +14,6 @@
             APPROVED = 3,
             REJECTED = 4,
             PAID = 5
-
-
         }
     }
 }

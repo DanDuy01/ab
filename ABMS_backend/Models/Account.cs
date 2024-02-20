@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ABMS_backend.Models
 {
@@ -19,6 +20,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Số điện thoại
         /// </summary>
+        [Phone]
         public string PhoneNumber { get; set; } = null!;
         /// <summary>
         /// Mật khẩu salt
@@ -31,6 +33,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Email
         /// </summary>
+        [EmailAddress]
         public string Email { get; set; } = null!;
         /// <summary>
         /// Họ và tên
