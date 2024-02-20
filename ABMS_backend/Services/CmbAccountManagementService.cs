@@ -1,27 +1,30 @@
 ﻿using ABMS_backend.DTO;
 using ABMS_backend.Models;
+using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Validates;
-using AutoMapper;
 using System.Net;
 
 namespace ABMS_backend.Services
 {
-    public class CmbAccountManagementService : ICmbAccountManagementService
+    public class CmbAccountManagementService : ICmbAccountManagementRepository
     { 
         private readonly abmsContext _abmsContext;
 
-        private IMapper _mapper;
-
-        public CmbAccountManagementService(abmsContext abmsContext, IMapper mapper)
+        public CmbAccountManagementService(abmsContext abmsContext)
         {
             _abmsContext = abmsContext;
-            _mapper = mapper;
         }
 
-        ResponseData<string> ICmbAccountManagementService.createCmbAccount(CmbAccountForInsertDTO dto)
+        ResponseData<string> ICmbAccountManagementRepository.createCmbAccount(CmbAccountForInsertDTO dto)
         {
             Account account = new Account();
-            account = _mapper.Map<Account>(dto);
+            account.ApartmentId = dto.apartmentId;
+            account.PhoneNumber = dto.phone;
+            account.PasswordSalt = dto.pwd_salt;
+            account.PasswordHash = dto.pwd_hash;
+            account.Email = dto.email;
+            account.FullName = dto.full_name;
+            account.Avatar = dto.avatar;
             account.Id = Guid.NewGuid().ToString();
             account.CreateUser = "admin";
             account.CreateTime = DateTime.Now;
@@ -36,22 +39,22 @@ namespace ABMS_backend.Services
             };
         }
 
-        ResponseData<string> ICmbAccountManagementService.deleteCmbAccount(string id)
+        ResponseData<string> ICmbAccountManagementRepository.deleteCmbAccount(string id)
         {
             throw new NotImplementedException();
         }
 
-        List<ResponseData<Account>> ICmbAccountManagementService.getCmbAccount(CmbAccountForSearchDTO dto)
+        List<ResponseData<Account>> ICmbAccountManagementRepository.getCmbAccount(CmbAccountForSearchDTO dto)
         {
             throw new NotImplementedException();
         }
 
-        ResponseData<Account> ICmbAccountManagementService.getCmbAccountById(string id)
+        ResponseData<Account> ICmbAccountManagementRepository.getCmbAccountById(string id)
         {
             throw new NotImplementedException();
         }
 
-        ResponseData<string> ICmbAccountManagementService.updateCmbAccount(string id, CmbAccountForInsertDTO dto)
+        ResponseData<string> ICmbAccountManagementRepository.updateCmbAccount(string id, CmbAccountForInsertDTO dto)
         {
             throw new NotImplementedException();
         }
