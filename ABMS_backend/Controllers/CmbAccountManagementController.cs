@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ABMS_backend.Utils.Validates;
-using ABMS_backend.Services;
 using ABMS_backend.DTO;
+using ABMS_backend.Repositories;
 
 namespace ABMS_backend.Controllers
 {
@@ -9,9 +9,9 @@ namespace ABMS_backend.Controllers
     [ApiController]
     public class CmbAccountManagementController : ControllerBase
     {
-        private ICmbAccountManagementService _service;
+        private ICmbAccountManagementRepository _service;
 
-        public CmbAccountManagementController(ICmbAccountManagementService service)
+        public CmbAccountManagementController(ICmbAccountManagementRepository service)
         {
             _service = service;
         }
