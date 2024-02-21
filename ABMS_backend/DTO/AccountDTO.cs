@@ -1,6 +1,6 @@
 ﻿namespace ABMS_backend.DTO
 {
-    public class CmbAccountForInsertDTO
+    public class AccountDTO
     {
         public string id { get; set; }
 

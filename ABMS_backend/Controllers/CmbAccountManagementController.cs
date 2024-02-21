@@ -17,7 +17,7 @@ namespace ABMS_backend.Controllers
         }
 
         [HttpPost("CmbAccount/create")]
-        public IActionResult Create([FromBody] CmbAccountForInsertDTO dto)
+        public IActionResult Create([FromBody] AccountDTO dto)
         {
             _service.createCmbAccount(dto);
             return Ok();

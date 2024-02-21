@@ -15,7 +15,7 @@ namespace ABMS_backend.Services
             _abmsContext = abmsContext;
         }
 
-        ResponseData<string> ICmbAccountManagementRepository.createCmbAccount(CmbAccountForInsertDTO dto)
+        ResponseData<string> ICmbAccountManagementRepository.createCmbAccount(AccountDTO dto)
         {
             Account account = new Account();
             account.ApartmentId = dto.apartmentId;
@@ -54,7 +54,7 @@ namespace ABMS_backend.Services
             throw new NotImplementedException();
         }
 
-        ResponseData<string> ICmbAccountManagementRepository.updateCmbAccount(string id, CmbAccountForInsertDTO dto)
+        ResponseData<string> ICmbAccountManagementRepository.updateCmbAccount(string id, AccountDTO dto)
         {
             throw new NotImplementedException();
         }

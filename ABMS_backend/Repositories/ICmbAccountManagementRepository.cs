@@ -5,9 +5,9 @@ namespace ABMS_backend.Repositories
 {
     public interface ICmbAccountManagementRepository
     {
-        ResponseData<string> createCmbAccount(CmbAccountForInsertDTO dto);
+        ResponseData<string> createCmbAccount(AccountDTO dto);
 
-        ResponseData<string> updateCmbAccount(string id, CmbAccountForInsertDTO dto);
+        ResponseData<string> updateCmbAccount(string id, AccountDTO dto);
 
         ResponseData<string> deleteCmbAccount(string id);
 
