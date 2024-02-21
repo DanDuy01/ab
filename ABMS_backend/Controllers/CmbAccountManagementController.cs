@@ -22,5 +22,19 @@ namespace ABMS_backend.Controllers
             ResponseData<string> response = _service.createCmbAccount(dto);
             return response;
         }
+
+        [HttpPut("cmb-account/update/{id}")]
+        public ResponseData<string> Update(String id, [FromBody] AccountForInsertDTO dto)
+        {
+            ResponseData<string> response = _service.updateCmbAccount(id, dto);
+            return response;
+        }
+
+        [HttpDelete("cmb-account/delete/{id}")]
+        public ResponseData<string> Delete(String id)
+        {
+            ResponseData<string> response = _service.deleteCmbAccount(id);
+            return response;
+        }
     }
 }
