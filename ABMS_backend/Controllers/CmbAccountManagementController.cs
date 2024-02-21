@@ -16,11 +16,16 @@ namespace ABMS_backend.Controllers
             _service = service;
         }
 
+<<<<<<< HEAD
         [HttpPost("CmbAccount/create")]
         public IActionResult Create([FromBody] AccountDTO dto)
+=======
+        [HttpPost("cmb-account/create")]
+        public ResponseData<string> Create([FromBody] AccountForInsertDTO dto)
+>>>>>>> ae8801e6f333eda5eeb0e6347c14a65027ee5e0b
         {
-            _service.createCmbAccount(dto);
-            return Ok();
+            ResponseData<string> response = _service.createCmbAccount(dto);
+            return response;
         }
     }
 }

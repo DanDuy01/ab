@@ -15,7 +15,11 @@ namespace ABMS_backend.Services
             _abmsContext = abmsContext;
         }
 
+<<<<<<< HEAD
         ResponseData<string> ICmbAccountManagementRepository.createCmbAccount(AccountDTO dto)
+=======
+        ResponseData<string> ICmbAccountManagementRepository.createCmbAccount(AccountForInsertDTO dto)
+>>>>>>> ae8801e6f333eda5eeb0e6347c14a65027ee5e0b
         {
             Account account = new Account();
             account.ApartmentId = dto.apartmentId;
@@ -44,7 +48,7 @@ namespace ABMS_backend.Services
             throw new NotImplementedException();
         }
 
-        List<ResponseData<Account>> ICmbAccountManagementRepository.getCmbAccount(CmbAccountForSearchDTO dto)
+        List<ResponseData<Account>> ICmbAccountManagementRepository.getCmbAccount(AccountForSearchDTO dto)
         {
             throw new NotImplementedException();
         }
@@ -54,7 +58,11 @@ namespace ABMS_backend.Services
             throw new NotImplementedException();
         }
 
+<<<<<<< HEAD
         ResponseData<string> ICmbAccountManagementRepository.updateCmbAccount(string id, AccountDTO dto)
+=======
+        ResponseData<string> ICmbAccountManagementRepository.updateCmbAccount(string id, AccountForInsertDTO dto)
+>>>>>>> ae8801e6f333eda5eeb0e6347c14a65027ee5e0b
         {
             throw new NotImplementedException();
         }
