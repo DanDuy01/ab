@@ -17,7 +17,7 @@ namespace ABMS_backend.Controllers
         }
 
         [HttpPost("cmb-account/create")]
-        public ResponseData<string> Create([FromBody] CmbAccountForInsertDTO dto)
+        public ResponseData<string> Create([FromBody] AccountForInsertDTO dto)
         {
             ResponseData<string> response = _service.createCmbAccount(dto);
             return response;
