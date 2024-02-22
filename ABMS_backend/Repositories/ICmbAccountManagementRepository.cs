@@ -11,7 +11,7 @@ namespace ABMS_backend.Repositories
 
         ResponseData<string> deleteCmbAccount(string id);
 
-        List<ResponseData<Account>> getCmbAccount(AccountForSearchDTO dto);
+        ResponseData<List<Account>> getCmbAccount(AccountForSearchDTO dto);
 
         ResponseData<Account> getCmbAccountById(string id);
     }

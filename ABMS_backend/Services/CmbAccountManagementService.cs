@@ -5,11 +5,12 @@ using ABMS_backend.Utils.Validates;
 using System.Net;
 using AutoMapper;
 using ABMS_backend.Utils.Exceptions;
+using System.Collections.Generic;
 
 namespace ABMS_backend.Services
 {
     public class CmbAccountManagementService : ICmbAccountManagementRepository
-    { 
+    {
         private readonly abmsContext _abmsContext;
         private IMapper _mapper;
 
@@ -24,7 +25,7 @@ namespace ABMS_backend.Services
             //validate
             string error = dto.Validate();
 
-            if(error != null)
+            if (error != null)
             {
                 return new ResponseData<string>
                 {
@@ -56,7 +57,7 @@ namespace ABMS_backend.Services
                     ErrMsg = ErrorApp.SUCCESS.description
                 };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new ResponseData<string>
                 {
@@ -64,7 +65,56 @@ namespace ABMS_backend.Services
                     ErrMsg = "Created failed why " + ex.Message
                 };
             }
-            
+
+        }
+
+        ResponseData<string> ICmbAccountManagementRepository.updateCmbAccount(string id, AccountForInsertDTO dto)
+        {
+            //validate
+            string error = dto.Validate();
+
+            if (error != null)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = error
+                };
+            }
+
+            try
+            {
+                Account account = _abmsContext.Accounts.Find(id);
+                if (account == null)
+                {
+                    throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
+                }
+                account.ApartmentId = dto.apartmentId;
+                account.PhoneNumber = dto.phone;
+                account.PasswordSalt = dto.pwd_salt;
+                account.PasswordHash = dto.pwd_hash;
+                account.Email = dto.email;
+                account.FullName = dto.full_name;
+                account.Avatar = dto.avatar;
+                account.ModifyUser = "admin";
+                account.ModifyTime = DateTime.Now;
+                _abmsContext.Accounts.Update(account);
+                _abmsContext.SaveChanges();
+                return new ResponseData<string>
+                {
+                    Data = account.Id,
+                    StatusCode = HttpStatusCode.OK,
+                    ErrMsg = ErrorApp.SUCCESS.description
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = "Updated failed why " + ex.Message
+                };
+            }
         }
 
         ResponseData<string> ICmbAccountManagementRepository.deleteCmbAccount(string id)
@@ -98,63 +148,38 @@ namespace ABMS_backend.Services
             }
         }
 
-        List<ResponseData<Account>> ICmbAccountManagementRepository.getCmbAccount(AccountForSearchDTO dto)
+        ResponseData<List<Account>> ICmbAccountManagementRepository.getCmbAccount(AccountForSearchDTO dto)
         {
-            throw new NotImplementedException();
+            var list = _abmsContext.Accounts.
+                Where(x => (dto.apartmentId == null || x.ApartmentId.Contains(dto.apartmentId.ToLower()))
+                && (dto.phone == null || x.PhoneNumber.Contains(dto.phone.ToLower()))
+                && (dto.email == null || x.Email.Contains(dto.email.ToLower()))
+                && (dto.full_name == null || x.FullName.Contains(dto.full_name.ToLower()))
+                && (dto.status == null || x.Status == dto.status)).ToList();
+            return new ResponseData<List<Account>>
+            {
+                Data = list,
+                StatusCode = HttpStatusCode.OK,
+                ErrMsg = ErrorApp.SUCCESS.description,
+                Count = list.Count
+            };
         }
 
         ResponseData<Account> ICmbAccountManagementRepository.getCmbAccountById(string id)
         {
-            throw new NotImplementedException();
+            Account account = _abmsContext.Accounts.Find(id);
+            if (account == null)
+            {
+                throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
+            }
+            return new ResponseData<Account>
+            {
+                Data = account,
+                StatusCode = HttpStatusCode.OK,
+                ErrMsg = ErrorApp.SUCCESS.description
+            };
         }
 
-        ResponseData<string> ICmbAccountManagementRepository.updateCmbAccount(string id, AccountForInsertDTO dto)
-        {
-            //validate
-            string error = dto.Validate();
 
-            if (error != null)
-            {
-                return new ResponseData<string>
-                {
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    ErrMsg = error
-                };
-            }
-
-            try
-            {
-                Account account = _abmsContext.Accounts.Find(id);
-                if(account == null)
-                {
-                    throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
-                }
-                account.ApartmentId = dto.apartmentId;
-                account.PhoneNumber = dto.phone;
-                account.PasswordSalt = dto.pwd_salt;
-                account.PasswordHash = dto.pwd_hash;
-                account.Email = dto.email;
-                account.FullName = dto.full_name;
-                account.Avatar = dto.avatar;
-                account.ModifyUser = "admin";
-                account.ModifyTime = DateTime.Now;
-                _abmsContext.Accounts.Update(account);
-                _abmsContext.SaveChanges();
-                return new ResponseData<string>
-                {
-                    Data = account.Id,
-                    StatusCode = HttpStatusCode.OK,
-                    ErrMsg = ErrorApp.SUCCESS.description
-                };
-            }
-            catch (Exception ex)
-            {
-                return new ResponseData<string>
-                {
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    ErrMsg = "Updated failed why " + ex.Message
-                };
-            }
-        }
     }
 }
