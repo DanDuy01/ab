@@ -19,7 +19,7 @@ namespace ABMS_backend.DTO
 
         public string full_name { get; set; }
 
-        public string avatar { get; set; }
+        public string? avatar { get; set; }
 
         public string Validate()
         {

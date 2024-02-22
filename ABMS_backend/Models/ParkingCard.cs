@@ -45,7 +45,7 @@ namespace ABMS_backend.Models
         /// </summary>
         public DateTime? ModifyTime { get; set; }
         /// <summary>
-        /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực, 2 chưa thanh toán
+        /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực, 2 đã gửi, 5 chưa thanh toán
         /// </summary>
         public int Status { get; set; }
     }
