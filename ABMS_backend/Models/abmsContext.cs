@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ABMS_backend.Models
 {
@@ -31,12 +34,10 @@ namespace ABMS_backend.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var config = new ConfigurationBuilder()
-                    .AddJsonFile("appsettings.json")
-                    .Build();
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySql(config.GetConnectionString("value"), new MySqlServerVersion(new Version(11, 3, 2)));
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseMySql("server=127.0.0.1;port=3307;database=abms;user=root;password=123", Microsoft.EntityFrameworkCore.ServerVersion.Parse("11.2.3-mariadb"));
             }
         }
 
@@ -233,7 +234,7 @@ namespace ABMS_backend.Models
                 entity.Property(e => e.Status)
                     .HasColumnType("int(11)")
                     .HasColumnName("status")
-                    .HasComment("Trạng thái: 0 đã gửi, 1 đã duyệt, 2 bị từ chối");
+                    .HasComment("Trạng thái: 2 đã gửi, 3 đã duyệt, 4 bị từ chối");
             });
 
             modelBuilder.Entity<Expense>(entity =>
@@ -377,7 +378,7 @@ namespace ABMS_backend.Models
                 entity.Property(e => e.Status)
                     .HasColumnType("int(11)")
                     .HasColumnName("status")
-                    .HasComment("Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực, 2 chưa thanh toán");
+                    .HasComment("Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực, 2 đã gửi, 5 chưa thanh toán");
             });
 
             modelBuilder.Entity<Post>(entity =>
@@ -648,7 +649,6 @@ namespace ABMS_backend.Models
                     .HasComment("Giờ mở cửa");
 
                 entity.Property(e => e.PricePerSlot)
-                    .HasMaxLength(100)
                     .HasColumnName("price_per_slot")
                     .HasComment("Giá tiện ích");
 
@@ -698,7 +698,7 @@ namespace ABMS_backend.Models
                 entity.Property(e => e.Status)
                     .HasColumnType("int(11)")
                     .HasColumnName("status")
-                    .HasComment("Trạng thái: 0 đã gửi, 1 đã duyệt, 2 bị từ chối, 3 đã thanh toán");
+                    .HasComment("Trạng thái: 2 đã gửi, 3 đã duyệt, 4 bị từ chối, 5 đã thanh toán");
 
                 entity.Property(e => e.UtilityId)
                     .HasMaxLength(100)
@@ -769,7 +769,7 @@ namespace ABMS_backend.Models
                 entity.Property(e => e.Status)
                     .HasColumnType("int(11)")
                     .HasColumnName("status")
-                    .HasComment("Trạng thái: 0 đã gửi, 1 đã duyệt, 2 bị từ chối");
+                    .HasComment("Trạng thái: 2 đã gửi, 3 đã duyệt, 4 bị từ chối");
             });
 
             OnModelCreatingPartial(modelBuilder);

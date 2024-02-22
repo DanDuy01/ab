@@ -4,8 +4,9 @@ namespace ABMS_backend.DTO
 {
     public class ResponseData<T>
     {
-        public T? Data { get; set; }
         public HttpStatusCode StatusCode { get; set; }
         public string? ErrMsg { get; set; }
+        public T? Data { get; set; }   
+        public int? Count { get; set; }
     }
 }

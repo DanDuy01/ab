@@ -53,7 +53,7 @@ namespace ABMS_backend.Models
         /// </summary>
         public string? ApproveUser { get; set; }
         /// <summary>
-        /// Trạng thái: 0 đã gửi, 1 đã duyệt, 2 bị từ chối
+        /// Trạng thái: 2 đã gửi, 3 đã duyệt, 4 bị từ chối
         /// </summary>
         public int Status { get; set; }
     }

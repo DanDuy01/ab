@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ABMS_backend.Utils.Validates;
-using ABMS_backend.Services;
 using ABMS_backend.DTO;
+using ABMS_backend.Repositories;
+using ABMS_backend.Models;
 
 namespace ABMS_backend.Controllers
 {
@@ -9,18 +10,47 @@ namespace ABMS_backend.Controllers
     [ApiController]
     public class CmbAccountManagementController : ControllerBase
     {
-        private ICmbAccountManagementService _service;
+        private ICmbAccountManagementRepository _repository;
 
-        public CmbAccountManagementController(ICmbAccountManagementService service)
+        public CmbAccountManagementController(ICmbAccountManagementRepository repository)
         {
-            _service = service;
+            _repository = repository;
         }
 
-        [HttpPost("CmbAccount/create")]
-        public IActionResult Create([FromBody] CmbAccountForInsertDTO dto)
+        [HttpPost("cmb-account/create")]
+        public ResponseData<string> Create([FromBody] AccountForInsertDTO dto)
         {
-            _service.createCmbAccount(dto);
-            return Ok();
+            ResponseData<string> response = _repository.createCmbAccount(dto);
+            return response;
+        }
+
+        [HttpPut("cmb-account/update/{id}")]
+        public ResponseData<string> Update(String id, [FromBody] AccountForInsertDTO dto)
+        {
+            ResponseData<string> response = _repository.updateCmbAccount(id, dto);
+            return response;
+        }
+
+        [HttpDelete("cmb-account/delete/{id}")]
+        public ResponseData<string> Delete(String id)
+        {
+            ResponseData<string> response = _repository.deleteCmbAccount(id);
+            return response;
+        }
+
+        [HttpGet("cmb-account/get")]
+        public ResponseData<List<Account>> Get(AccountForSearchDTO dto)
+        {
+            ResponseData<List<Account>> response = _repository.getCmbAccount(dto);
+            return response;
+        }
+
+
+        [HttpGet("cmb-account/get/{id}")]
+        public ResponseData<Account> GetById(String id)
+        {
+            ResponseData<Account> response = _repository.getCmbAccountById(id);
+            return response;
         }
     }
 }
