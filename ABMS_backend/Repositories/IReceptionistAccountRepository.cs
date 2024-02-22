@@ -11,7 +11,7 @@ namespace ABMS_backend.Services
 
         ResponseData<string> deleteReceptionAccount(string id);
 
-        List<ResponseData<Account>> getReceptionAccount(ReceptionAccountManagerService dto);
+        ResponseData<List<Account>> getReceptionAccount (AccountForSearchDTO dto);
 
         ResponseData<Account> getReceptionAccountById(string id);
     }

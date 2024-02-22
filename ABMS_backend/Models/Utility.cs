@@ -31,7 +31,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Giá tiện ích
         /// </summary>
-        public string PricePerSlot { get; set; } = null!;
+        public float PricePerSlot { get; set; }
         /// <summary>
         /// Mô tả
         /// </summary>
