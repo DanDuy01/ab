@@ -5,13 +5,13 @@ namespace ABMS_backend.Services
 {
     public interface IReceptionistAccountRepository
     {
-        ResponseData<string> createReceptionAccount(AccountDTO dto);
+        ResponseData<string> createReceptionAccount(AccountForInsertDTO dto);
 
-        ResponseData<string> updateReceptionAccount(string id, AccountDTO dto);
+        ResponseData<string> updateReceptionAccount(string id, AccountForInsertDTO dto);
 
         ResponseData<string> deleteReceptionAccount(string id);
 
-        List<ResponseData<Account>> getReceptionAccount(CmbAccountForSearchDTO dto);
+        List<ResponseData<Account>> getReceptionAccount(ReceptionAccountManagerService dto);
 
         ResponseData<Account> getReceptionAccountById(string id);
     }

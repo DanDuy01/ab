@@ -12,6 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ICmbAccountManagementRepository, CmbAccountManagementService>();
+builder.Services.AddScoped<IReceptionistAccountRepository, ReceptionAccountManagerService>();
 builder.Services.AddCors(opts =>
 {
     opts.AddPolicy("CORSPolicy", builder => builder.AllowAnyHeader().AllowAnyMethod().AllowCredentials().SetIsOriginAllowed((host) => true));

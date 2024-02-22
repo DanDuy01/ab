@@ -1,10 +1,6 @@
 ﻿namespace ABMS_backend.DTO
 {
-<<<<<<<< HEAD:ABMS_backend/DTO/AccountDTO.cs
-    public class AccountDTO
-========
     public class AccountForInsertDTO
->>>>>>>> ae8801e6f333eda5eeb0e6347c14a65027ee5e0b:ABMS_backend/DTO/AccountForInsertDTO.cs
     {
         public string id { get; set; }
 

@@ -19,11 +19,11 @@ namespace ABMS_backend.Controllers
             _service = service;
         }
 
-        [HttpPost("ReceptionAccount/create")]
-        public IActionResult Create([FromBody] AccountDTO dto)
+        [HttpPost("reception-account/create")]
+        public ResponseData<String> Create([FromBody] AccountForInsertDTO dto)
         {
-            _service.createReceptionAccount(dto);
-            return Ok();
+            ResponseData<string> response = _service.createReceptionAccount(dto);
+            return response;
         }
     }
 }

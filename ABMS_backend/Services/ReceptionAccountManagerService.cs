@@ -1,5 +1,7 @@
 ﻿using ABMS_backend.DTO;
 using ABMS_backend.Models;
+using ABMS_backend.Utils.Validates;
+using System.Net;
 
 namespace ABMS_backend.Services
 {
@@ -11,9 +13,28 @@ namespace ABMS_backend.Services
         {
             _abmsContext = abmsContext;
         }
-        public ResponseData<string> createReceptionAccount(AccountDTO dto)
+        public ResponseData<string> createReceptionAccount(AccountForInsertDTO dto)
         {
-            throw new NotImplementedException();
+            Account account = new Account();
+            account.ApartmentId = dto.apartmentId;
+            account.PhoneNumber = dto.phone;
+            account.PasswordSalt = dto.pwd_salt;
+            account.PasswordHash = dto.pwd_hash;
+            account.Email = dto.email;
+            account.FullName = dto.full_name;
+            account.Avatar = dto.avatar;
+            account.Id = Guid.NewGuid().ToString();
+            account.CreateUser = "reception";
+            account.CreateTime = DateTime.Now;
+            account.Status = (int)Constants.STATUS.ACTIVE;
+            _abmsContext.Accounts.Add(account);
+            _abmsContext.SaveChanges();
+            return new ResponseData<string>
+            {
+                Data = account.Id,
+                StatusCode = HttpStatusCode.OK,
+                ErrMsg = ErrorApp.SUCCESS.description
+            };
         }
 
         public ResponseData<string> deleteReceptionAccount(string id)
@@ -21,7 +42,7 @@ namespace ABMS_backend.Services
             throw new NotImplementedException();
         }
 
-        public List<ResponseData<Account>> getReceptionAccount(CmbAccountForSearchDTO dto)
+        public List<ResponseData<Account>> getReceptionAccount(ReceptionAccountManagerService dto)
         {
             throw new NotImplementedException();
         }
@@ -31,7 +52,7 @@ namespace ABMS_backend.Services
             throw new NotImplementedException();
         }
 
-        public ResponseData<string> updateReceptionAccount(string id, AccountDTO dto)
+        public ResponseData<string> updateReceptionAccount(string id, AccountForInsertDTO dto)
         {
             throw new NotImplementedException();
         }
