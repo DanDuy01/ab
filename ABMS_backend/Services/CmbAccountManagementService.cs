@@ -151,10 +151,10 @@ namespace ABMS_backend.Services
         ResponseData<List<Account>> ICmbAccountManagementRepository.getCmbAccount(AccountForSearchDTO dto)
         {
             var list = _abmsContext.Accounts.
-                Where(x => (dto.apartmentId == null || x.ApartmentId.Contains(dto.apartmentId.ToLower()))
-                && (dto.phone == null || x.PhoneNumber.Contains(dto.phone.ToLower()))
-                && (dto.email == null || x.Email.Contains(dto.email.ToLower()))
-                && (dto.full_name == null || x.FullName.Contains(dto.full_name.ToLower()))
+                Where(x => (dto.searchMessage == null || x.PhoneNumber.Contains(dto.searchMessage.ToLower()) 
+                || x.Email.ToLower().Contains(dto.searchMessage.ToLower()) 
+                || x.FullName.ToLower().Contains(dto.searchMessage.ToLower()))
+                && (dto.apartmentId == null || x.ApartmentId.Equals(dto.apartmentId.ToLower()))
                 && (dto.status == null || x.Status == dto.status)).ToList();
             return new ResponseData<List<Account>>
             {

@@ -13,6 +13,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<ICmbAccountManagementRepository, CmbAccountManagementService>();
+builder.Services.AddScoped<IUtilityManagementRepository, UtilityManagementService>();
+builder.Services.AddControllersWithViews().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new TimeOnlyConverter());
+});
+
 builder.Services.AddCors(opts =>
 {
     opts.AddPolicy("CORSPolicy", builder => builder.AllowAnyHeader().AllowAnyMethod().AllowCredentials().SetIsOriginAllowed((host) => true));
