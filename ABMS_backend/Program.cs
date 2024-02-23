@@ -1,7 +1,6 @@
 using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Services;
-using Assignment2.Services;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 

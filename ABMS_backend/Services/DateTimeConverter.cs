@@ -1,31 +1,30 @@
-﻿using System.Formats.Asn1;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using System.Text.Json;
 
-namespace ABMS_backend.Services
+public class DateTimeConverter : JsonConverter<DateTime>
 {
-    public class DateTimeConverter : JsonConverter<DateTime>
+    public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        public override DateTime ReadJson(JsonReader reader, Type objectType, DateTime existingValue, bool hasExistingValue, JsonSerializer serializer)
+        if (reader.TokenType == JsonTokenType.String)
         {
-            if (reader.TokenType == JsonToken.Null)
-                return default(DateTime);
-
-            if (reader.TokenType == JsonToken.Date)
-                return (DateTime)reader.Value;
-
-            if (reader.TokenType == JsonToken.Integer)
-                return new DateTime(1970, 1, 1).AddMilliseconds((long)reader.Value);
-
-            throw new JsonSerializationException($"Unexpected token type: {reader.TokenType}");
+            if (DateTime.TryParse(reader.GetString(), out DateTime dateTime))
+            {
+                return dateTime;
+            }
+        }
+        else if (reader.TokenType == JsonTokenType.Number)
+        {
+            if (reader.TryGetInt64(out long unixTime))
+            {
+                return DateTimeOffset.FromUnixTimeMilliseconds(unixTime).DateTime;
+            }
         }
 
-        public override void WriteJson(JsonWriter writer, DateTime value, JsonSerializer serializer)
-        {
-            writer.WriteValue(value);
-        }
+        throw new JsonException("Unable to parse DateTime.");
+    }
+
+    public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
+    {
+        writer.WriteStringValue(value.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"));
     }
 }
-
-
-
