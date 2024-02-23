@@ -5,6 +5,7 @@ namespace ABMS_backend.Repositories
 {
     public interface IResidentAccountManagementRepository
     {
+
         ResponseData<string> createResidentAccount(ResidentForInsertDTO dto);
         ResponseData<string> updateResidentAccount(string id, ResidentForInsertDTO dto);
         ResponseData<string> deleteResidentAccount(string id);
