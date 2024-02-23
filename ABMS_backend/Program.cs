@@ -1,6 +1,7 @@
 using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Services;
+using Assignment2.Services;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,8 @@ builder.Services.AddScoped<IUtilityManagementRepository, UtilityManagementServic
 builder.Services.AddControllersWithViews().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new TimeOnlyConverter());
+    options.JsonSerializerOptions.Converters.Add(new DateOnlyConverter());
+    options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
 });
 
 builder.Services.AddCors(opts =>
