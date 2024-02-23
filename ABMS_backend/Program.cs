@@ -13,6 +13,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<ICmbAccountManagementRepository, CmbAccountManagementService>();
+builder.Services.AddScoped<IUtilityManagementRepository, UtilityManagementService>();
+builder.Services.AddScoped<IResidentAccountManagementRepository, ResidentAccountManagementService>();
+builder.Services.AddControllersWithViews().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new TimeOnlyConverter());
+    options.JsonSerializerOptions.Converters.Add(new DateOnlyConverter());
+    options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+});
+
 builder.Services.AddScoped<IReceptionistAccountRepository, ReceptionAccountManagerService>();
 builder.Services.AddCors(opts =>
 {

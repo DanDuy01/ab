@@ -56,7 +56,22 @@ namespace ABMS_backend.Services
         }
 
 
-        ResponseData<string> ICmbAccountManagementRepository.updateCmbAccount(string id, AccountForInsertDTO dto)
+        ResponseData<List<Account>> ICmbAccountManagementRepository.getCmbAccount(AccountForSearchDTO dto)
+        {
+            var list = _abmsContext.Accounts.
+                Where(x => (dto.searchMessage == null || x.PhoneNumber.Contains(dto.searchMessage.ToLower()) 
+                || x.Email.ToLower().Contains(dto.searchMessage.ToLower()) 
+                || x.FullName.ToLower().Contains(dto.searchMessage.ToLower()))
+                && (dto.apartmentId == null || x.ApartmentId.Equals(dto.apartmentId.ToLower()))
+                && (dto.status == null || x.Status == dto.status)).ToList();
+            return new ResponseData<List<Account>>
+            {
+                Data = list,
+                StatusCode = HttpStatusCode.OK,
+                ErrMsg = ErrorApp.SUCCESS.description,
+                Count = list.Count
+            };
+        }
 
         {
             throw new NotImplementedException();

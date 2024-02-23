@@ -46,12 +46,12 @@ namespace ABMS_backend.DTO
 
             else if (String.IsNullOrEmpty(pwd_salt))
             {
-                return "password salt is required!";
+                return "Password salt is required!";
             }
 
             else if (String.IsNullOrEmpty(pwd_hash))
             {
-                return "password hash is required!";
+                return "Password hash is required!";
             }
 
             else if (String.IsNullOrEmpty(full_name))
