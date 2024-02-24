@@ -8,18 +8,33 @@ namespace ABMS_backend.Models
     /// </summary>
     public partial class Room
     {
+        public Room()
+        {
+            Constructions = new HashSet<Construction>();
+            Elevators = new HashSet<Elevator>();
+            Feedbacks = new HashSet<Feedback>();
+            Residents = new HashSet<Resident>();
+            ServiceCharges = new HashSet<ServiceCharge>();
+            UtilitySchedules = new HashSet<UtilitySchedule>();
+            Visitors = new HashSet<Visitor>();
+        }
+
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
         public string Id { get; set; } = null!;
         /// <summary>
-        /// Mã tài khoản
+        /// Mã tòa nhà
         /// </summary>
-        public string AccountId { get; set; } = null!;
+        public string BuildingId { get; set; } = null!;
         /// <summary>
         /// Số nhà
         /// </summary>
         public string RoomNumber { get; set; } = null!;
+        /// <summary>
+        /// Diện tích căn hộ
+        /// </summary>
+        public float RoomArea { get; set; }
         /// <summary>
         /// Số thành viên
         /// </summary>
@@ -44,5 +59,13 @@ namespace ABMS_backend.Models
         /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực
         /// </summary>
         public int Status { get; set; }
+
+        public virtual ICollection<Construction> Constructions { get; set; }
+        public virtual ICollection<Elevator> Elevators { get; set; }
+        public virtual ICollection<Feedback> Feedbacks { get; set; }
+        public virtual ICollection<Resident> Residents { get; set; }
+        public virtual ICollection<ServiceCharge> ServiceCharges { get; set; }
+        public virtual ICollection<UtilitySchedule> UtilitySchedules { get; set; }
+        public virtual ICollection<Visitor> Visitors { get; set; }
     }
 }

@@ -8,14 +8,15 @@ namespace ABMS_backend.Models
     /// </summary>
     public partial class Post
     {
+        public Post()
+        {
+            AccountPosts = new HashSet<AccountPost>();
+        }
+
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
         public string Id { get; set; } = null!;
-        /// <summary>
-        /// Mã lễ tân
-        /// </summary>
-        public string ReceptionistId { get; set; } = null!;
         /// <summary>
         /// Tiêu đề
         /// </summary>
@@ -45,8 +46,10 @@ namespace ABMS_backend.Models
         /// </summary>
         public DateTime? ModifyTime { get; set; }
         /// <summary>
-        /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực
+        /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực, 2 đã gửi, 4 bị từ chối
         /// </summary>
         public int Status { get; set; }
+
+        public virtual ICollection<AccountPost> AccountPosts { get; set; }
     }
 }

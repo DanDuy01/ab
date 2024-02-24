@@ -4,9 +4,9 @@ using System.Collections.Generic;
 namespace ABMS_backend.Models
 {
     /// <summary>
-    /// Thang chuyển đồ
+    /// Thi công
     /// </summary>
-    public partial class Elevator
+    public partial class Construction
     {
         /// <summary>
         /// Khóa chính của bảng
@@ -17,17 +17,33 @@ namespace ABMS_backend.Models
         /// </summary>
         public string RoomId { get; set; } = null!;
         /// <summary>
-        /// Ngày, giờ bắt đầu
+        /// Tên thi công
+        /// </summary>
+        public string Name { get; set; } = null!;
+        /// <summary>
+        /// Đơn vị thi công
+        /// </summary>
+        public string ConstructionOrganization { get; set; } = null!;
+        /// <summary>
+        /// Số điện thoại liên hệ
+        /// </summary>
+        public string PhoneContact { get; set; } = null!;
+        /// <summary>
+        /// Giờ bắt đầu
         /// </summary>
         public DateTime StartTime { get; set; }
         /// <summary>
-        /// Ngày, giờ kết thúc
+        /// Giờ kết thúc
         /// </summary>
         public DateTime EndTime { get; set; }
         /// <summary>
         /// Mô tả
         /// </summary>
         public string? Description { get; set; }
+        /// <summary>
+        /// Ngày tạo
+        /// </summary>
+        public DateTime CreateTime { get; set; }
         /// <summary>
         /// Người phê duyệt
         /// </summary>

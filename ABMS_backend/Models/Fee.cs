@@ -4,22 +4,34 @@ using System.Collections.Generic;
 namespace ABMS_backend.Models
 {
     /// <summary>
-    /// Chi
+    /// Giá dịch vụ
     /// </summary>
-    public partial class Expense
+    public partial class Fee
     {
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
         public string Id { get; set; } = null!;
         /// <summary>
-        /// Số tiền chi
+        /// Tên dịch vụ
         /// </summary>
-        public float Expense1 { get; set; }
+        public string FeeName { get; set; } = null!;
         /// <summary>
-        /// Nguồn chi
+        /// Giá
         /// </summary>
-        public string? ExpenseSource { get; set; }
+        public int Price { get; set; }
+        /// <summary>
+        /// Đơn vị
+        /// </summary>
+        public string Unit { get; set; } = null!;
+        /// <summary>
+        /// Ngày có hiệu lực
+        /// </summary>
+        public DateOnly EffectiveDate { get; set; }
+        /// <summary>
+        /// Ngày hết hiệu lực
+        /// </summary>
+        public DateOnly? ExpireDate { get; set; }
         /// <summary>
         /// Mô tả
         /// </summary>
@@ -31,7 +43,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Ngày tạo
         /// </summary>
-        public DateTime CreateTime { get; set; }
+        public string CreateTime { get; set; } = null!;
         /// <summary>
         /// Người chỉnh sửa
         /// </summary>
@@ -39,7 +51,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Ngày chỉnh sửa
         /// </summary>
-        public DateTime? ModifyTime { get; set; }
+        public string? ModifyTime { get; set; }
         /// <summary>
         /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực
         /// </summary>

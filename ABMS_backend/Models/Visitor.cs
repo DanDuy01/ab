@@ -56,5 +56,7 @@ namespace ABMS_backend.Models
         /// Trạng thái: 2 đã gửi, 3 đã duyệt, 4 bị từ chối
         /// </summary>
         public int Status { get; set; }
+
+        public virtual Room Room { get; set; } = null!;
     }
 }

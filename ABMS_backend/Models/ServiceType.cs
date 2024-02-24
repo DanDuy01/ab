@@ -4,26 +4,23 @@ using System.Collections.Generic;
 namespace ABMS_backend.Models
 {
     /// <summary>
-    /// Chi
+    /// Loại dịch vụ
     /// </summary>
-    public partial class Expense
+    public partial class ServiceType
     {
+        public ServiceType()
+        {
+            Feedbacks = new HashSet<Feedback>();
+        }
+
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
         public string Id { get; set; } = null!;
         /// <summary>
-        /// Số tiền chi
+        /// Tên dịch vụ
         /// </summary>
-        public float Expense1 { get; set; }
-        /// <summary>
-        /// Nguồn chi
-        /// </summary>
-        public string? ExpenseSource { get; set; }
-        /// <summary>
-        /// Mô tả
-        /// </summary>
-        public string? Description { get; set; }
+        public string Name { get; set; } = null!;
         /// <summary>
         /// Người tạo
         /// </summary>
@@ -44,5 +41,7 @@ namespace ABMS_backend.Models
         /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực
         /// </summary>
         public int Status { get; set; }
+
+        public virtual ICollection<Feedback> Feedbacks { get; set; }
     }
 }

@@ -4,26 +4,30 @@ using System.Collections.Generic;
 namespace ABMS_backend.Models
 {
     /// <summary>
-    /// Chi
+    /// Tòa nhà
     /// </summary>
-    public partial class Expense
+    public partial class Building
     {
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
         public string Id { get; set; } = null!;
         /// <summary>
-        /// Số tiền chi
+        /// Tên tòa nhà
         /// </summary>
-        public float Expense1 { get; set; }
+        public string Name { get; set; } = null!;
         /// <summary>
-        /// Nguồn chi
+        /// Địa chỉ
         /// </summary>
-        public string? ExpenseSource { get; set; }
+        public string Address { get; set; } = null!;
         /// <summary>
-        /// Mô tả
+        /// Số tầng
         /// </summary>
-        public string? Description { get; set; }
+        public int NumberOfFloor { get; set; }
+        /// <summary>
+        /// Số căn mỗi tầng
+        /// </summary>
+        public int RoomEachFloor { get; set; }
         /// <summary>
         /// Người tạo
         /// </summary>
@@ -33,11 +37,11 @@ namespace ABMS_backend.Models
         /// </summary>
         public DateTime CreateTime { get; set; }
         /// <summary>
-        /// Người chỉnh sửa
+        /// Người cập nhật
         /// </summary>
         public string? ModifyUser { get; set; }
         /// <summary>
-        /// Ngày chỉnh sửa
+        /// Ngày cập nhật
         /// </summary>
         public DateTime? ModifyTime { get; set; }
         /// <summary>

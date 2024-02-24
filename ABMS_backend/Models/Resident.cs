@@ -8,6 +8,11 @@ namespace ABMS_backend.Models
     /// </summary>
     public partial class Resident
     {
+        public Resident()
+        {
+            ParkingCards = new HashSet<ParkingCard>();
+        }
+
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
@@ -33,6 +38,10 @@ namespace ABMS_backend.Models
         /// </summary>
         public string Phone { get; set; } = null!;
         /// <summary>
+        /// Chủ căn hộ: true, false
+        /// </summary>
+        public bool IsHouseholder { get; set; }
+        /// <summary>
         /// Người tạo
         /// </summary>
         public string CreateUser { get; set; } = null!;
@@ -52,5 +61,8 @@ namespace ABMS_backend.Models
         /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực
         /// </summary>
         public int Status { get; set; }
+
+        public virtual Room Room { get; set; } = null!;
+        public virtual ICollection<ParkingCard> ParkingCards { get; set; }
     }
 }

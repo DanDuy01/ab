@@ -29,6 +29,10 @@ namespace ABMS_backend.Models
         /// </summary>
         public int? NumberOfPerson { get; set; }
         /// <summary>
+        /// Tổng số tiền
+        /// </summary>
+        public float TotalPrice { get; set; }
+        /// <summary>
         /// Mô tả
         /// </summary>
         public string? Description { get; set; }
@@ -40,5 +44,8 @@ namespace ABMS_backend.Models
         /// Trạng thái: 2 đã gửi, 3 đã duyệt, 4 bị từ chối, 5 đã thanh toán
         /// </summary>
         public int Status { get; set; }
+
+        public virtual Room Room { get; set; } = null!;
+        public virtual Utility Utility { get; set; } = null!;
     }
 }

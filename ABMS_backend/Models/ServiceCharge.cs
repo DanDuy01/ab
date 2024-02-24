@@ -4,22 +4,30 @@ using System.Collections.Generic;
 namespace ABMS_backend.Models
 {
     /// <summary>
-    /// Chi
+    /// Thanh toán dịch vụ
     /// </summary>
-    public partial class Expense
+    public partial class ServiceCharge
     {
         /// <summary>
-        /// Khóa chính của bảng
+        /// Khóa chỉnh của bảng
         /// </summary>
         public string Id { get; set; } = null!;
         /// <summary>
-        /// Số tiền chi
+        /// Mã căn hộ
         /// </summary>
-        public float Expense1 { get; set; }
+        public string RoomId { get; set; } = null!;
         /// <summary>
-        /// Nguồn chi
+        /// Số tiền
         /// </summary>
-        public string? ExpenseSource { get; set; }
+        public float Fee { get; set; }
+        /// <summary>
+        /// Tháng
+        /// </summary>
+        public int Month { get; set; }
+        /// <summary>
+        /// Năm
+        /// </summary>
+        public int Year { get; set; }
         /// <summary>
         /// Mô tả
         /// </summary>
@@ -41,8 +49,10 @@ namespace ABMS_backend.Models
         /// </summary>
         public DateTime? ModifyTime { get; set; }
         /// <summary>
-        /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực
+        /// Trạng thái: 5 đã thanh toán, 6 chưa thanh toán
         /// </summary>
         public int Status { get; set; }
+
+        public virtual Room Room { get; set; } = null!;
     }
 }

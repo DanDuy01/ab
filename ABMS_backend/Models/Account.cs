@@ -8,6 +8,11 @@ namespace ABMS_backend.Models
     /// </summary>
     public partial class Account
     {
+        public Account()
+        {
+            AccountPosts = new HashSet<AccountPost>();
+        }
+
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
@@ -15,7 +20,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Mã tòa nhà
         /// </summary>
-        public string ApartmentId { get; set; } = null!;
+        public string BuildingId { get; set; } = null!;
         /// <summary>
         /// Số điện thoại
         /// </summary>
@@ -36,6 +41,10 @@ namespace ABMS_backend.Models
         /// Họ và tên
         /// </summary>
         public string FullName { get; set; } = null!;
+        /// <summary>
+        /// Vai trò: 1 cmb, 2 lễ tân, 3 room
+        /// </summary>
+        public int Role { get; set; }
         /// <summary>
         /// Avatar
         /// </summary>
@@ -60,5 +69,7 @@ namespace ABMS_backend.Models
         /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực
         /// </summary>
         public int Status { get; set; }
+
+        public virtual ICollection<AccountPost> AccountPosts { get; set; }
     }
 }
