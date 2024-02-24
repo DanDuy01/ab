@@ -13,7 +13,8 @@
             SENT = 2,
             APPROVED = 3,
             REJECTED = 4,
-            PAID = 5
+            PAID = 5,
+            NOT_PAID = 6
         }
     }
 }
