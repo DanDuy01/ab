@@ -38,7 +38,7 @@ namespace ABMS_backend.Services
             {
                 Account account = new Account();
                 account.Id = Guid.NewGuid().ToString();
-                account.ApartmentId = dto.apartmentId;
+                account.BuildingId = dto.building_id;
                 account.PhoneNumber = dto.phone;
                 account.PasswordSalt = dto.pwd_salt;
                 account.PasswordHash = dto.pwd_hash;
@@ -89,7 +89,7 @@ namespace ABMS_backend.Services
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
-                account.ApartmentId = dto.apartmentId;
+                account.BuildingId = dto.building_id;
                 account.PhoneNumber = dto.phone;
                 account.PasswordSalt = dto.pwd_salt;
                 account.PasswordHash = dto.pwd_hash;
@@ -154,7 +154,7 @@ namespace ABMS_backend.Services
                 Where(x => (dto.searchMessage == null || x.PhoneNumber.Contains(dto.searchMessage.ToLower()) 
                 || x.Email.ToLower().Contains(dto.searchMessage.ToLower()) 
                 || x.FullName.ToLower().Contains(dto.searchMessage.ToLower()))
-                && (dto.apartmentId == null || x.ApartmentId.Equals(dto.apartmentId.ToLower()))
+                && (dto.buildingId == null || x.BuildingId.Equals(dto.buildingId.ToLower()))
                 && (dto.status == null || x.Status == dto.status)).ToList();
             return new ResponseData<List<Account>>
             {

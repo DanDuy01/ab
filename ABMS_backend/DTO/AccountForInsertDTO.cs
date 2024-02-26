@@ -5,7 +5,7 @@ namespace ABMS_backend.DTO
 {
     public class AccountForInsertDTO
     {
-        public string apartmentId { get; set; }
+        public string building_id { get; set; }
 
         [Phone]
         public string phone { get; set; }
@@ -31,8 +31,8 @@ namespace ABMS_backend.DTO
 
             Regex regexEmail = new Regex(emailRegexPattern);
 
-            if (String.IsNullOrEmpty(apartmentId)){
-                return "Apartment is required!";
+            if (String.IsNullOrEmpty(building_id)){
+                return "Building is required!";
             }
 
             else if (!regexPhone.IsMatch(phone)) {
