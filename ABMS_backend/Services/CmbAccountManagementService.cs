@@ -40,8 +40,8 @@ namespace ABMS_backend.Services
                 account.Id = Guid.NewGuid().ToString();
                 account.BuildingId = dto.building_id;
                 account.PhoneNumber = dto.phone;
-                account.PasswordSalt = dto.pwd_salt;
-                account.PasswordHash = dto.pwd_hash;
+                //account.PasswordSalt = dto.pwd_salt;
+                //account.PasswordHash = dto.pwd_hash;
                 account.Email = dto.email;
                 account.FullName = dto.full_name;
                 account.Avatar = dto.avatar;
@@ -91,8 +91,8 @@ namespace ABMS_backend.Services
                 }
                 account.BuildingId = dto.building_id;
                 account.PhoneNumber = dto.phone;
-                account.PasswordSalt = dto.pwd_salt;
-                account.PasswordHash = dto.pwd_hash;
+                //account.PasswordSalt = dto.pwd_salt;
+                //account.PasswordHash = dto.pwd_hash;
                 account.Email = dto.email;
                 account.FullName = dto.full_name;
                 account.Avatar = dto.avatar;
