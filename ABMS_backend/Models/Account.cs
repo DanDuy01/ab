@@ -35,6 +35,10 @@ namespace ABMS_backend.Models
         /// </summary>
         public byte[] PasswordHash { get; set; } = null!;
         /// <summary>
+        /// Tên tài khoản
+        /// </summary>
+        public string UserName { get; set; } = null!;
+        /// <summary>
         /// Email
         /// </summary>
         public string Email { get; set; } = null!;

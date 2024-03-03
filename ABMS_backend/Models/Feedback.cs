@@ -9,6 +9,10 @@ namespace ABMS_backend.Models
     public partial class Feedback
     {
         /// <summary>
+        /// Khóa chính của bảng
+        /// </summary>
+        public string Id { get; set; } = null!;
+        /// <summary>
         /// Mã căn hộ
         /// </summary>
         public string RoomId { get; set; } = null!;
@@ -24,6 +28,10 @@ namespace ABMS_backend.Models
         /// Nội dung
         /// </summary>
         public int Content { get; set; }
+        /// <summary>
+        /// Đường dẫn ảnh
+        /// </summary>
+        public string? Image { get; set; }
         /// <summary>
         /// Ngày tạo
         /// </summary>

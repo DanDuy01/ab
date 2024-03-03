@@ -115,6 +115,7 @@ namespace ABMS_backend.Services
         {
             try
             {
+                //xoa tien ich
                 Utility utility = _abmsContext.Utilities.Find(id);
                 if (utility == null)
                 {
@@ -125,6 +126,16 @@ namespace ABMS_backend.Services
                 utility.ModifyTime = DateTime.Now;
                 _abmsContext.Utilities.Update(utility);
                 _abmsContext.SaveChanges();
+                
+                //xoa lich cua tien ich
+                var utility_schedule = _abmsContext.UtilitySchedules.Where(x => x.UtilityId == id && 
+                (x.Status == 2 || x.Status == 3)).ToList();
+                foreach(UtilitySchedule us in utility_schedule)
+                {
+                    us.Status = (int)Constants.STATUS.REJECTED;
+                    _abmsContext.UtilitySchedules.Update(us);
+                    _abmsContext.SaveChanges();
+                }
                 return new ResponseData<string>
                 {
                     Data = utility.Id,
