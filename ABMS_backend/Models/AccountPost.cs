@@ -6,10 +6,6 @@ namespace ABMS_backend.Models
     public partial class AccountPost
     {
         /// <summary>
-        /// Khóa chính của bảng
-        /// </summary>
-        public string Id { get; set; } = null!;
-        /// <summary>
         /// Mã tài khoản
         /// </summary>
         public string AccountId { get; set; } = null!;
