@@ -16,5 +16,12 @@
             PAID = 5,
             NOT_PAID = 6
         }
+
+        public enum ROLE
+        {
+            ADMIN = 1,
+            RECEPTION = 2,
+            ROOM = 3
+        }
     }
 }
