@@ -10,12 +10,7 @@ namespace ABMS_backend.DTO
         [Phone]
         public string phone { get; set; }
 
-
-        public string user_name { get; set; }
-
-
-        public int role { get; set; }
-
+        //public string pwd_salt { get; set; }
 
         public string password { get; set; }
 
@@ -54,11 +49,6 @@ namespace ABMS_backend.DTO
             else if (String.IsNullOrEmpty(password))
             {
                 return "Password salt is required!";
-            }
-
-            else if (String.IsNullOrEmpty(user_name))
-            {
-                return "User name is required!";
             }
 
             else if (String.IsNullOrEmpty(full_name))
