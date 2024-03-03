@@ -29,6 +29,18 @@ namespace ABMS_backend.Models
         /// </summary>
         public string Color { get; set; } = null!;
         /// <summary>
+        /// Đường dẫn ảnh
+        /// </summary>
+        public string? Image { get; set; }
+        /// <summary>
+        /// Ngày hết hạn
+        /// </summary>
+        public DateOnly? ExpireDate { get; set; }
+        /// <summary>
+        /// Ghi chú
+        /// </summary>
+        public string? Note { get; set; }
+        /// <summary>
         /// Người tạo
         /// </summary>
         public string CreateUser { get; set; } = null!;

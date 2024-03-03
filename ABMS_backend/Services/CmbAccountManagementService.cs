@@ -121,11 +121,12 @@ namespace ABMS_backend.Services
         {
             try
             {
+                //xoa account
                 Account account = _abmsContext.Accounts.Find(id);
                 if (account == null)
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
-                }
+                }               
                 account.Status = (int)Constants.STATUS.IN_ACTIVE;
                 account.ModifyUser = "admin";
                 account.ModifyTime = DateTime.Now;
