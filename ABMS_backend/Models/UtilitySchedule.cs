@@ -9,6 +9,10 @@ namespace ABMS_backend.Models
     public partial class UtilitySchedule
     {
         /// <summary>
+        /// Khóa chính của bảng
+        /// </summary>
+        public string Id { get; set; } = null!;
+        /// <summary>
         /// Mã căn hộ
         /// </summary>
         public string RoomId { get; set; } = null!;

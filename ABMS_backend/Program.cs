@@ -20,9 +20,9 @@ builder.Services.AddScoped<ICmbAccountManagementRepository, CmbAccountManagement
 builder.Services.AddScoped<IUtilityManagementRepository, UtilityManagementService>();
 builder.Services.AddScoped<IResidentAccountManagementRepository, ResidentAccountManagementService>();
 builder.Services.AddScoped<ILoginAccount, LoginService>();
-builder.Services.AddScoped<IReservationManagementRepository, ReservationManagementService>();
 builder.Services.AddScoped<IRoomInformationRepository, RoomInformationService>();
 builder.Services.AddScoped<IMemberManagerRepository, MemberManagerService>();
+builder.Services.AddScoped<IReservationManagementRepository, ReservationManagementService>();
 builder.Services.AddControllersWithViews().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new TimeOnlyConverter());

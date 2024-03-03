@@ -2,6 +2,7 @@
 using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Validates;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ABMS_backend.Controllers
@@ -39,6 +40,7 @@ namespace ABMS_backend.Controllers
         }
 
         [HttpGet("utility/get-all")]
+        [Authorize(Roles = "1")]
         public ResponseData<List<Utility>> GetAll(UtilityForSearch dto)
         {
             ResponseData<List<Utility>> response = _repository.getAllUtility(dto);
