@@ -111,6 +111,7 @@ namespace ABMS_backend.Services
                  new Claim(JwtRegisteredClaimNames.Sub, _configuration["JWT:Subject"]),
                  new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                  new Claim("Role", user.Role.ToString()),
+                 new Claim(ClaimTypes.Role, user.Role.ToString()),
                  new Claim("Email", user.Email),
                  new Claim("PhoneNumber", user.PhoneNumber.ToString()),
                  new Claim("FullName", user.FullName),
