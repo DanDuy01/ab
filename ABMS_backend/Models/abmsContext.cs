@@ -125,6 +125,11 @@ namespace ABMS_backend.Models
                     .HasColumnType("int(11)")
                     .HasColumnName("status")
                     .HasComment("Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực");
+
+                entity.Property(e => e.UserName)
+                    .HasMaxLength(100)
+                    .HasColumnName("user_name")
+                    .HasComment("Tên tài khoản");
             });
 
             modelBuilder.Entity<AccountPost>(entity =>
