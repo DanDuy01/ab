@@ -16,7 +16,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program));
-//builder.Services.AddScoped<ICmbAccountManagementRepository, CmbAccountManagementService>();
+builder.Services.AddScoped<ICmbAccountManagementRepository, CmbAccountManagementService>();
 builder.Services.AddScoped<IUtilityManagementRepository, UtilityManagementService>();
 builder.Services.AddScoped<IResidentAccountManagementRepository, ResidentAccountManagementService>();
 builder.Services.AddScoped<ILoginAccount, LoginService>();

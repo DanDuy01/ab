@@ -9,6 +9,6 @@ namespace ABMS_backend.Repositories
         ResponseData<string> updateMember(string id, MemberForInsertDTO dto);
         ResponseData<string> deleteMember(string id);
         ResponseData<Resident> getMemberById(string id);
-        ResponseData<List<Resident>> getAllMember(MemberForSearchDTO dto);
+        ResponseData<List<Resident>> getAllMember(MemberForInsertDTO dto);
     }
 }
