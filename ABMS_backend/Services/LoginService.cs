@@ -154,6 +154,8 @@ namespace ABMS_backend.Services
                 PasswordSalt = passwordSalt,
                 FullName = request.full_name,
                 BuildingId = request.building_id,
+                Role = request.role,
+                UserName = request.user_name,
                 CreateUser = "admin",
                 CreateTime = DateTime.Now,
                 Status = (int)Constants.STATUS.ACTIVE,
