@@ -16,21 +16,29 @@ namespace ABMS_backend.Controllers
         {
             _repository = repository;
         }
-        [HttpPut("account/update/{id}")]
+
+        [HttpPost("cmb-account/create")]
+        public ResponseData<string> Create([FromBody] AccountForInsertDTO dto)
+        {
+            ResponseData<string> response = _repository.createCmbAccount(dto);
+            return response;
+        }
+
+        [HttpPut("cmb-account/update/{id}")]
         public ResponseData<string> Update(String id, [FromBody] AccountForInsertDTO dto)
         {
             ResponseData<string> response = _repository.updateCmbAccount(id, dto);
             return response;
         }
 
-        [HttpDelete("account/delete/{id}")]
+        [HttpDelete("cmb-account/delete/{id}")]
         public ResponseData<string> Delete(String id)
         {
             ResponseData<string> response = _repository.deleteCmbAccount(id);
             return response;
         }
 
-        [HttpGet("account/get")]
+        [HttpGet("cmb-account/get")]
         public ResponseData<List<Account>> Get(AccountForSearchDTO dto)
         {
             ResponseData<List<Account>> response = _repository.getCmbAccount(dto);
@@ -38,7 +46,7 @@ namespace ABMS_backend.Controllers
         }
 
 
-        [HttpGet("account/get/{id}")]
+        [HttpGet("cmb-account/get/{id}")]
         public ResponseData<Account> GetById(String id)
         {
             ResponseData<Account> response = _repository.getCmbAccountById(id);

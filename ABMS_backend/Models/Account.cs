@@ -11,7 +11,6 @@ namespace ABMS_backend.Models
         public Account()
         {
             AccountPosts = new HashSet<AccountPost>();
-            Rooms = new HashSet<Room>();
         }
 
         /// <summary>
@@ -29,15 +28,11 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Mật khẩu salt
         /// </summary>
-        public byte[] PasswordSalt { get; set; } = null!;
+        public string PasswordSalt { get; set; } = null!;
         /// <summary>
         /// Mật khẩu hash
         /// </summary>
-        public byte[] PasswordHash { get; set; } = null!;
-        /// <summary>
-        /// Tên tài khoản
-        /// </summary>
-        public string UserName { get; set; } = null!;
+        public string PasswordHash { get; set; } = null!;
         /// <summary>
         /// Email
         /// </summary>
@@ -76,6 +71,5 @@ namespace ABMS_backend.Models
         public int Status { get; set; }
 
         public virtual ICollection<AccountPost> AccountPosts { get; set; }
-        public virtual ICollection<Room> Rooms { get; set; }
     }
 }

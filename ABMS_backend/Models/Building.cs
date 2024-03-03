@@ -8,11 +8,6 @@ namespace ABMS_backend.Models
     /// </summary>
     public partial class Building
     {
-        public Building()
-        {
-            Rooms = new HashSet<Room>();
-        }
-
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
@@ -53,7 +48,5 @@ namespace ABMS_backend.Models
         /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực
         /// </summary>
         public int Status { get; set; }
-
-        public virtual ICollection<Room> Rooms { get; set; }
     }
 }
