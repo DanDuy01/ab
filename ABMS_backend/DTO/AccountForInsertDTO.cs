@@ -5,14 +5,14 @@ namespace ABMS_backend.DTO
 {
     public class AccountForInsertDTO
     {
-        public string apartmentId { get; set; }
+        public string building_id { get; set; }
 
         [Phone]
         public string phone { get; set; }
 
-        public string pwd_salt { get; set; }
+        public byte[] pwd_salt { get; set; }
 
-        public string pwd_hash { get; set; }
+        public byte[] pwd_hash { get; set; }
 
         [EmailAddress]
         public string email { get; set; }
@@ -31,8 +31,8 @@ namespace ABMS_backend.DTO
 
             Regex regexEmail = new Regex(emailRegexPattern);
 
-            if (String.IsNullOrEmpty(apartmentId)){
-                return "Apartment is required!";
+            if (String.IsNullOrEmpty(building_id)){
+                return "Building is required!";
             }
 
             else if (!regexPhone.IsMatch(phone)) {
@@ -44,15 +44,15 @@ namespace ABMS_backend.DTO
                 return "Wrong email!";
             }
 
-            else if (String.IsNullOrEmpty(pwd_salt))
+/*            else if (String.IsNullOrEmpty(pwd_salt))
             {
                 return "Password salt is required!";
             }
 
-            else if (String.IsNullOrEmpty(pwd_hash))
+            else if (Byte.IsNullOrEmpty(pwd_hash))
             {
                 return "Password hash is required!";
-            }
+            }*/
 
             else if (String.IsNullOrEmpty(full_name))
             {

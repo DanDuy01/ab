@@ -23,6 +23,7 @@ namespace ABMS_backend.Models
         /// Khóa chính của bảng
         /// </summary>
         public string Id { get; set; } = null!;
+        public string AccountId { get; set; } = null!;
         /// <summary>
         /// Mã tòa nhà
         /// </summary>
@@ -60,6 +61,8 @@ namespace ABMS_backend.Models
         /// </summary>
         public int Status { get; set; }
 
+        public virtual Account Account { get; set; } = null!;
+        public virtual Building Building { get; set; } = null!;
         public virtual ICollection<Construction> Constructions { get; set; }
         public virtual ICollection<Elevator> Elevators { get; set; }
         public virtual ICollection<Feedback> Feedbacks { get; set; }
