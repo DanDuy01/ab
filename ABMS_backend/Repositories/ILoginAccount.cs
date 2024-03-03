@@ -7,6 +7,6 @@ namespace ABMS_backend.Repositories
     {
         ResponseData<string> getAccount(Login dto);
         ResponseData<string> getAccountByEmail(LoginWithEmail dto);
-        ResponseData<string> Register(dtotest request);
+        ResponseData<string> Register(RegisterDTO request);
     }
 }

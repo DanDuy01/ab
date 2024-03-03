@@ -17,21 +17,21 @@ namespace ABMS_backend.Controllers
             _repository = repository;
         }
 
-        [HttpPost("create-account/create")]
-        public ResponseData<string> Create([FromBody] dtotest dto)
+        [HttpPost("account/register")]
+        public ResponseData<string> Create([FromBody] RegisterDTO dto)
         {
             ResponseData<string> response = _repository.Register(dto);
             return response;
         }
 
-        [HttpPost("login-account/loginByPhone")]
-        public ResponseData<string> LoginByPhone([FromBody] Login dto)
+        [HttpPost("account/loginByPhone")]
+        public ResponseData<string> LoginByPhone([FromBody] Login dto) 
         {
             ResponseData<string> response = _repository.getAccount(dto);
             return response;
         }
         
-        [HttpPost("login-account/loginByEmail")]
+        [HttpPost("account/loginByEmail")]
         public ResponseData<string> LoginByEmail([FromBody] LoginWithEmail dto)
         {
             ResponseData<string> response = _repository.getAccountByEmail(dto);

@@ -12,6 +12,7 @@ using System.Net;
 using System.Security.Principal;
 using Microsoft.EntityFrameworkCore;
 using ABMS_backend.Utils.Exceptions;
+using System.Collections.Generic;
 
 namespace ABMS_backend.Services
 {
@@ -114,7 +115,7 @@ namespace ABMS_backend.Services
                  new Claim("PhoneNumber", user.PhoneNumber.ToString()),
                  new Claim("FullName", user.FullName),
                  new Claim("BuildingId", user.BuildingId),
-                 new Claim("Id", dto.Id),
+                 //new Claim("Id", dto.Id),
                  new Claim("Id", user.Id.ToString())
             };
 
@@ -132,13 +133,18 @@ namespace ABMS_backend.Services
         }
 
 
-        public ResponseData<string> Register(dtotest request)
+        public ResponseData<string> Register(RegisterDTO request)
         {
-            //var checkExist = _abmsContext.Find(request.phone);
-            //if (checkExist != null)
-            //{
-            //    return BadRequest("Email already exist");
-            //}
+            var checkExist = _abmsContext.Accounts.FirstOrDefault(x => x.PhoneNumber == request.phone || x.Email == request.email);
+            if (checkExist != null)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = "Account existed!"
+                };
+            }
+
             HashPasword(request.password, out byte[] passwordHash, out byte[] passwordSalt);
             Account user = new Account
             {
