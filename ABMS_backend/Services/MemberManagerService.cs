@@ -71,9 +71,9 @@ namespace ABMS_backend.Services
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }               
-                resident.CreateUser = "reception";
-                resident.CreateTime = DateTime.Now;
-                resident.Status = (int)Constants.STATUS.ACTIVE;
+                resident.ModifyUser = "reception";
+                resident.ModifyTime = DateTime.Now;
+                resident.Status = (int)Constants.STATUS.IN_ACTIVE;
                 _abmsContext.Residents.Update(resident);
                 _abmsContext.SaveChanges();
                 return new ResponseData<string>
@@ -93,9 +93,17 @@ namespace ABMS_backend.Services
             }
         }
 
-        public ResponseData<List<Resident>> getAllMember(MemberForInsertDTO dto)
+        public ResponseData<List<Resident>> getAllMember(MemberForSearchDTO dto)
         {
-            throw new NotImplementedException();
+            var list = _abmsContext.Residents.
+                 Where(x => dto.fullName == null || x.FullName.ToLower().Contains(dto.fullName.ToLower())).ToList();
+            return new ResponseData<List<Resident>>
+            {
+                Data = list,
+                StatusCode = HttpStatusCode.OK,
+                ErrMsg = ErrorApp.SUCCESS.description,
+                Count = list.Count
+            };
         }
 
         public ResponseData<Resident> getMemberById(string id)
@@ -139,9 +147,8 @@ namespace ABMS_backend.Services
                 resident.DateOfBirth = dto.dob;
                 resident.Gender = dto.gender;
                 resident.IsHouseholder = dto.isHouseHolder;
-                resident.CreateUser = "reception";
-                resident.CreateTime = DateTime.Now;
-                resident.Status = (int)Constants.STATUS.ACTIVE;
+                resident.ModifyUser = "reception";
+                resident.ModifyTime = DateTime.Now;
                 _abmsContext.Residents.Update(resident);
                 _abmsContext.SaveChanges();
                 return new ResponseData<string>
