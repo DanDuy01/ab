@@ -24,6 +24,7 @@ namespace ABMS_backend.Services
             {
                 Room room = new Room();
                 room.Id = Guid.NewGuid().ToString();
+                room.AccountId = dto.accountId;
                 room.BuildingId = dto.buildingId;
                 room.RoomNumber = dto.roomNumber;
                 room.RoomArea = dto.roomArea;
@@ -60,9 +61,9 @@ namespace ABMS_backend.Services
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }              
-                room.CreateUser = "resident";
-                room.CreateTime = DateTime.Now;
-                room.Status = (int)Constants.STATUS.ACTIVE;
+                room.ModifyUser = "resident";
+                room.ModifyTime = DateTime.Now;
+                room.Status = (int)Constants.STATUS.IN_ACTIVE;
                 _abmsContext.Rooms.Update(room);
                 _abmsContext.SaveChanges();
                 return new ResponseData<string>
@@ -84,7 +85,15 @@ namespace ABMS_backend.Services
 
         public ResponseData<List<Room>> getRoomInformation(RoomForSearchDTO dto)
         {
-            throw new NotImplementedException();
+             var list = _abmsContext.Rooms.
+                 Where(x => dto.roomNumber == null || x.RoomNumber.ToLower().Contains(dto.roomNumber.ToLower())).ToList();
+            return new ResponseData<List<Room>>
+            {
+                Data = list,
+                StatusCode = HttpStatusCode.OK,
+                ErrMsg = ErrorApp.SUCCESS.description,
+                Count = list.Count
+            };
         }
 
         public ResponseData<Room> getRoomInformationById(string id)
@@ -112,13 +121,13 @@ namespace ABMS_backend.Services
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
+                room.AccountId = dto.accountId;
                 room.BuildingId = dto.buildingId;
                 room.RoomNumber = dto.roomNumber;
                 room.RoomArea = dto.roomArea;
                 room.NumberOfResident = dto.numberOfResident;
-                room.CreateUser = "resident";
-                room.CreateTime = DateTime.Now;
-                room.Status = (int)Constants.STATUS.ACTIVE;
+                room.ModifyUser = "resident";
+                room.ModifyTime = DateTime.Now;               
                 _abmsContext.Rooms.Update(room);
                 _abmsContext.SaveChanges();
                 return new ResponseData<string>

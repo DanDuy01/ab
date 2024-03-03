@@ -1,4 +1,5 @@
 ﻿using ABMS_backend.DTO;
+using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Validates;
 using Microsoft.AspNetCore.Http;
@@ -17,6 +18,12 @@ namespace ABMS_backend.Controllers
             _repository = repository;
         }
 
+        [HttpGet("resident-room/get")]
+        public ResponseData<List<Room>> Get(RoomForSearchDTO dto)
+        {
+            ResponseData<List<Room>> response = _repository.getRoomInformation(dto);
+            return response;
+        }
         [HttpPost("resident-room/create")]
         public ResponseData<string> Create([FromBody] RoomForInsertDTO dto)
         {

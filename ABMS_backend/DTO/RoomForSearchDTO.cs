@@ -2,5 +2,6 @@
 {
     public class RoomForSearchDTO
     {
+        public string? roomNumber { get; set; }
     }
 }
