@@ -6,6 +6,7 @@ using System.Net;
 using AutoMapper;
 using ABMS_backend.Utils.Exceptions;
 using System.Collections.Generic;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ABMS_backend.Services
 {
@@ -41,12 +42,17 @@ namespace ABMS_backend.Services
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
+                Account account1 = _abmsContext.Accounts.FirstOrDefault(x => x.PhoneNumber == dto.phone || x.Email == dto.email);
+                if (account1 != null)
+                {
+                    throw new CustomException(ErrorApp.ACCOUNT_EXISTED);
+                }
                 account.BuildingId = dto.building_id;
                 account.PhoneNumber = dto.phone;
-                account.PasswordSalt = dto.pwd_salt;
-                account.PasswordHash = dto.pwd_hash;
                 account.Email = dto.email;
                 account.FullName = dto.full_name;
+                account.Role = dto.role;
+                account.UserName = dto.user_name;
                 account.Avatar = dto.avatar;
                 account.ModifyUser = "admin";
                 account.ModifyTime = DateTime.Now;

@@ -31,7 +31,7 @@ namespace ABMS_backend.Controllers
         }
 
         [HttpGet("account/get")]
-        public ResponseData<List<Account>> Get(AccountForSearchDTO dto)
+        public ResponseData<List<Account>> Get([FromQuery] AccountForSearchDTO dto)
         {
             ResponseData<List<Account>> response = _repository.getCmbAccount(dto);
             return response;

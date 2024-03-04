@@ -10,16 +10,20 @@ namespace ABMS_backend.DTO
         [Phone]
         public string phone { get; set; }
 
-        public byte[] pwd_salt { get; set; }
-
-        public byte[] pwd_hash { get; set; }
-
         [EmailAddress]
         public string email { get; set; }
 
+
+        public string user_name { get; set; }
+
+        public int role { get; set; }
+
+
         public string full_name { get; set; }
 
+
         public string? avatar { get; set; }
+
 
         public string Validate()
         {
@@ -44,17 +48,12 @@ namespace ABMS_backend.DTO
                 return "Wrong email!";
             }
 
-/*            else if (String.IsNullOrEmpty(pwd_salt))
-            {
-                return "Password salt is required!";
-            }
-
-            else if (Byte.IsNullOrEmpty(pwd_hash))
-            {
-                return "Password hash is required!";
-            }*/
-
             else if (String.IsNullOrEmpty(full_name))
+            {
+                return "Full name is required!";
+            }
+            
+            else if (String.IsNullOrEmpty(user_name))
             {
                 return "Full name is required!";
             }

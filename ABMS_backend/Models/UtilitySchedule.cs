@@ -19,11 +19,11 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Mã tiện ích
         /// </summary>
-        public string UtilityId { get; set; } = null!;
+        public string UtilityDetailId { get; set; } = null!;
         /// <summary>
         /// Slot
         /// </summary>
-        public int Slot { get; set; }
+        public string Slot { get; set; } = null!;
         /// <summary>
         /// Đặt ngày
         /// </summary>
@@ -50,6 +50,6 @@ namespace ABMS_backend.Models
         public int Status { get; set; }
 
         public virtual Room Room { get; set; } = null!;
-        public virtual Utility Utility { get; set; } = null!;
+        public virtual UtiliityDetail UtilityDetail { get; set; } = null!;
     }
 }

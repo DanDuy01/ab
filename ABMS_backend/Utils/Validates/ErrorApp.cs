@@ -19,8 +19,7 @@
         public static readonly ErrorApp INTERNAL_SERVER = new ErrorApp(500, "Error in to process. Please try again after!");
 
         public static readonly ErrorApp OBJECT_NOT_FOUND = new ErrorApp(4001, "Object not found");
-        public static readonly ErrorApp ACCOUNT_EXISTED = new ErrorApp(4002, "Account has existed!");
-
-
+        public static readonly ErrorApp ACCOUNT_EXISTED = new ErrorApp(4002, "Account already existed!");
+        public static readonly ErrorApp BOOKING_EXISTED = new ErrorApp(4003, "This slot has been booked!");
     }
 }

@@ -40,15 +40,14 @@ namespace ABMS_backend.Controllers
         }
 
         [HttpGet("utility/get-all")]
-        [Authorize(Roles = "1")]
-        public ResponseData<List<Utility>> GetAll(UtilityForSearch dto)
+        public ResponseData<List<Utility>> GetAll([FromQuery] UtilityForSearch dto)
         {
             ResponseData<List<Utility>> response = _repository.getAllUtility(dto);
             return response;
         }
 
         [HttpGet("utility/get")]
-        public ResponseData<List<UtilityForInsertDTO>> Get(UtilityForSearch dto)
+        public ResponseData<List<UtilityForInsertDTO>> Get([FromQuery] UtilityForSearch dto)
         {
             ResponseData<List<UtilityForInsertDTO>> response = _repository.getUtility(dto);
             return response;

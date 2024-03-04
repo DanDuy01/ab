@@ -32,6 +32,7 @@ namespace ABMS_backend.Models
         public virtual DbSet<Room> Rooms { get; set; } = null!;
         public virtual DbSet<ServiceCharge> ServiceCharges { get; set; } = null!;
         public virtual DbSet<ServiceType> ServiceTypes { get; set; } = null!;
+        public virtual DbSet<UtiliityDetail> UtiliityDetails { get; set; } = null!;
         public virtual DbSet<Utility> Utilities { get; set; } = null!;
         public virtual DbSet<UtilitySchedule> UtilitySchedules { get; set; } = null!;
         public virtual DbSet<Visitor> Visitors { get; set; } = null!;
@@ -996,6 +997,23 @@ namespace ABMS_backend.Models
                     .HasComment("Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực");
             });
 
+            modelBuilder.Entity<UtiliityDetail>(entity =>
+            {
+                entity.ToTable("utiliity_detail");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(100)
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(100)
+                    .HasColumnName("name");
+
+                entity.Property(e => e.UtilityId)
+                    .HasMaxLength(100)
+                    .HasColumnName("utility_id");
+            });
+
             modelBuilder.Entity<Utility>(entity =>
             {
                 entity.ToTable("utility");
@@ -1026,6 +1044,10 @@ namespace ABMS_backend.Models
                     .HasMaxLength(100)
                     .HasColumnName("description")
                     .HasComment("Mô tả");
+
+                entity.Property(e => e.Location)
+                    .HasMaxLength(100)
+                    .HasColumnName("location");
 
                 entity.Property(e => e.ModifyTime)
                     .HasColumnType("datetime")
@@ -1070,7 +1092,7 @@ namespace ABMS_backend.Models
 
                 entity.HasIndex(e => e.RoomId, "utility_schedule_room_FK");
 
-                entity.HasIndex(e => e.UtilityId, "utility_schedule_utility_FK");
+                entity.HasIndex(e => e.UtilityDetailId, "utility_schedule_utiliity_detail_FK");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(100)
@@ -1102,7 +1124,7 @@ namespace ABMS_backend.Models
                     .HasComment("Mã căn hộ");
 
                 entity.Property(e => e.Slot)
-                    .HasColumnType("int(11)")
+                    .HasMaxLength(100)
                     .HasColumnName("slot")
                     .HasComment("Slot");
 
@@ -1115,9 +1137,9 @@ namespace ABMS_backend.Models
                     .HasColumnName("total_price")
                     .HasComment("Tổng số tiền");
 
-                entity.Property(e => e.UtilityId)
+                entity.Property(e => e.UtilityDetailId)
                     .HasMaxLength(100)
-                    .HasColumnName("utility_id")
+                    .HasColumnName("utility_detail_id")
                     .HasComment("Mã tiện ích");
 
                 entity.HasOne(d => d.Room)
@@ -1126,11 +1148,11 @@ namespace ABMS_backend.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("utility_schedule_room_FK");
 
-                entity.HasOne(d => d.Utility)
+                entity.HasOne(d => d.UtilityDetail)
                     .WithMany(p => p.UtilitySchedules)
-                    .HasForeignKey(d => d.UtilityId)
+                    .HasForeignKey(d => d.UtilityDetailId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("utility_schedule_utility_FK");
+                    .HasConstraintName("utility_schedule_utiliity_detail_FK");
             });
 
             modelBuilder.Entity<Visitor>(entity =>

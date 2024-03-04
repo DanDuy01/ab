@@ -39,7 +39,7 @@ namespace ABMS_backend.Controllers
         }
 
         [HttpGet("reservation/get")]
-        public ResponseData<List<ReservationResponseDTO>> GetAll(ResevationForResidentSearchDTO dto)
+        public ResponseData<List<ReservationResponseDTO>> GetAll([FromQuery] ResevationForResidentSearchDTO dto)
         {
             ResponseData<List<ReservationResponseDTO>> response = _repository.getReservation(dto);
             return response;

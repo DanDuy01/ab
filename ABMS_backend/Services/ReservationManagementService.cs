@@ -30,7 +30,11 @@ namespace ABMS_backend.Services
                     ErrMsg = error
                 };
             }
-
+            UtilitySchedule schedule = _abmsContext.UtilitySchedules.FirstOrDefault(x => x.BookingDate == dto.BookingDate && x.Slot == dto.Slot);
+/*            if(schedule != null)
+            {
+                throw new CustomException(ErrorApp.BOOKING_EXISTED);
+            }*/
             try
             {
                 UtilitySchedule utilitySchedule = new UtilitySchedule();

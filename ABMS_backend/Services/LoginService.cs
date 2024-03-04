@@ -6,13 +6,9 @@ using ABMS_backend.DTO;
 using ABMS_backend.Repositories;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Mvc;
 using ABMS_backend.Utils.Validates;
 using System.Net;
-using System.Security.Principal;
 using Microsoft.EntityFrameworkCore;
-using ABMS_backend.Utils.Exceptions;
-using System.Collections.Generic;
 
 namespace ABMS_backend.Services
 {

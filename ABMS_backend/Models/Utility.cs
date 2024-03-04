@@ -8,11 +8,6 @@ namespace ABMS_backend.Models
     /// </summary>
     public partial class Utility
     {
-        public Utility()
-        {
-            UtilitySchedules = new HashSet<UtilitySchedule>();
-        }
-
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
@@ -37,6 +32,7 @@ namespace ABMS_backend.Models
         /// Giá tiện ích
         /// </summary>
         public float PricePerSlot { get; set; }
+        public string? Location { get; set; }
         /// <summary>
         /// Mô tả
         /// </summary>
@@ -61,7 +57,5 @@ namespace ABMS_backend.Models
         /// Trạng thái sử dụng: 0 hết hiệu lực, 1 còn hiệu lực
         /// </summary>
         public int Status { get; set; }
-
-        public virtual ICollection<UtilitySchedule> UtilitySchedules { get; set; }
     }
 }
