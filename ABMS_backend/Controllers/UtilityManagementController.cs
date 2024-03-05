@@ -25,6 +25,13 @@ namespace ABMS_backend.Controllers
             return response;
         }
 
+        [HttpPost("utility/create-utility-detail")]
+        public ResponseData<string> CreateUtilityDetail([FromBody] UtilityDetailDTO dto)
+        {
+            ResponseData<string> response = _repository.createUtilityDetail(dto);
+            return response;
+        }
+
         [HttpPut("utility/update/{id}")]
         public ResponseData<string> Update(String id, [FromBody] UtilityForInsertDTO dto)
         {

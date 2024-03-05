@@ -63,6 +63,59 @@ namespace ABMS_backend.Services
             }
         }
 
+        public ResponseData<string> createUtilityDetail(UtilityDetailDTO dto)
+        {
+            string error = dto.Validate();
+            if (error != null)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = error
+                };
+            }
+            UtiliityDetail utiliityDetail = _abmsContext.UtiliityDetails.FirstOrDefault(x => x.Name.Equals(dto.name) && x.UtilityId.Equals(dto.utility_id));
+            if (utiliityDetail != null)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = ErrorApp.UTILITY_DETAIL_EXISTED.description
+                };
+            }
+            try
+            {
+                Utility utility = _abmsContext.Utilities.Find(dto.utility_id);
+                if(utility == null)
+                {
+                    throw new CustomException(ErrorApp.UTILITY_NOT_EXISTED);
+                }
+                UtiliityDetail utilityDetail = new UtiliityDetail();
+                utilityDetail.Id = Guid.NewGuid().ToString();
+                utilityDetail.Name = dto.name;
+                utilityDetail.UtilityId = dto.utility_id;
+                utilityDetail.CreateUser = "admin";
+                utilityDetail.CreateTime = DateTime.Now;
+                utilityDetail.Status = (int)Constants.STATUS.ACTIVE;
+                _abmsContext.UtiliityDetails.Add(utilityDetail);
+                _abmsContext.SaveChanges();
+                 return new ResponseData<string>
+                {
+                    Data = utilityDetail.Id,
+                    StatusCode = HttpStatusCode.OK,
+                    ErrMsg = ErrorApp.SUCCESS.description
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = "Created failed why " + ex.Message
+                };
+            }
+        }
+
         public ResponseData<string> updateUtility(string id, UtilityForInsertDTO dto)
         {
             //validate
@@ -125,17 +178,7 @@ namespace ABMS_backend.Services
                 utility.ModifyUser = "admin";
                 utility.ModifyTime = DateTime.Now;
                 _abmsContext.Utilities.Update(utility);
-                _abmsContext.SaveChanges();
-                
-                //xoa lich cua tien ich
-                var utility_schedule = _abmsContext.UtilitySchedules.Where(x => x.UtilityId == id && 
-                (x.Status == 2 || x.Status == 3)).ToList();
-                foreach(UtilitySchedule us in utility_schedule)
-                {
-                    us.Status = (int)Constants.STATUS.REJECTED;
-                    _abmsContext.UtilitySchedules.Update(us);
-                    _abmsContext.SaveChanges();
-                }
+                _abmsContext.SaveChanges();                
                 return new ResponseData<string>
                 {
                     Data = utility.Id,
@@ -206,7 +249,5 @@ namespace ABMS_backend.Services
                 ErrMsg = ErrorApp.SUCCESS.description
             };
         }
-
-        
     }
 }

@@ -21,5 +21,8 @@
         public static readonly ErrorApp OBJECT_NOT_FOUND = new ErrorApp(4001, "Object not found");
         public static readonly ErrorApp ACCOUNT_EXISTED = new ErrorApp(4002, "Account already existed!");
         public static readonly ErrorApp BOOKING_EXISTED = new ErrorApp(4003, "This slot has been booked!");
+        public static readonly ErrorApp UTILITY_NOT_EXISTED = new ErrorApp(4004, "Utility not existed!");
+        public static readonly ErrorApp UTILITY_DETAIL_EXISTED = new ErrorApp(4005, "Utility detail existed!");
+
     }
 }

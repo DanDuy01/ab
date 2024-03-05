@@ -113,7 +113,8 @@ namespace ABMS_backend.Services
                 Where(x => (dto.searchMessage == null || x.PhoneNumber.Contains(dto.searchMessage.ToLower()) 
                 || x.Email.ToLower().Contains(dto.searchMessage.ToLower()) 
                 || x.FullName.ToLower().Contains(dto.searchMessage.ToLower()))
-                && (dto.buildingId == null || x.BuildingId.Equals(dto.buildingId.ToLower()))
+                && (dto.buildingId == null || x.BuildingId.Equals(dto.buildingId))
+                && (dto.role == null || x.Role.Equals(dto.role))
                 && (dto.status == null || x.Status == dto.status)).ToList();
             return new ResponseData<List<Account>>
             {

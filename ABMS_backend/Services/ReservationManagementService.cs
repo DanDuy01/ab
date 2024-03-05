@@ -3,7 +3,7 @@ using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Exceptions;
 using ABMS_backend.Utils.Validates;
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 
 namespace ABMS_backend.Services
@@ -30,22 +30,28 @@ namespace ABMS_backend.Services
                     ErrMsg = error
                 };
             }
-            UtilitySchedule schedule = _abmsContext.UtilitySchedules.FirstOrDefault(x => x.BookingDate == dto.BookingDate && x.Slot == dto.Slot);
-/*            if(schedule != null)
+            UtilitySchedule schedule = _abmsContext.UtilitySchedules.FirstOrDefault(
+                x => x.BookingDate == dto.booking_date && x.Slot == dto.slot
+                && x.UtilityDetailId == dto.utility_detail_id);
+            if (schedule != null)
             {
-                throw new CustomException(ErrorApp.BOOKING_EXISTED);
-            }*/
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = ErrorApp.BOOKING_EXISTED.description
+                };
+            }
             try
             {
                 UtilitySchedule utilitySchedule = new UtilitySchedule();
                 utilitySchedule.Id = Guid.NewGuid().ToString();
-                utilitySchedule.RoomId = dto.RoomId;
-                utilitySchedule.UtilityId = dto.UtilityId;
-                utilitySchedule.Slot = dto.Slot;
-                utilitySchedule.BookingDate = dto.BookingDate;
-                utilitySchedule.NumberOfPerson = dto.NumberOfPerson;
-                utilitySchedule.TotalPrice = dto.TotalPrice;
-                utilitySchedule.Description = dto.Description;
+                utilitySchedule.RoomId = dto.room_id;
+                utilitySchedule.UtilityDetailId = dto.utility_detail_id;
+                utilitySchedule.Slot = dto.slot;
+                utilitySchedule.BookingDate = dto.booking_date;
+                utilitySchedule.NumberOfPerson = dto.number_of_person;
+                utilitySchedule.TotalPrice = dto.total_price;
+                utilitySchedule.Description = dto.description;
                 utilitySchedule.ApproveUser = "admin";
                 utilitySchedule.Status = (int)Constants.STATUS.SENT;
                 _abmsContext.UtilitySchedules.Add(utilitySchedule);
@@ -86,13 +92,19 @@ namespace ABMS_backend.Services
                 UtilitySchedule utilitySchedule = _abmsContext.UtilitySchedules.Find(id);
                 if (utilitySchedule == null)
                 {
-                    throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.InternalServerError,
+                        ErrMsg = ErrorApp.OBJECT_NOT_FOUND.description
+                    };
                 }
-                utilitySchedule.Slot = dto.Slot;
-                utilitySchedule.BookingDate = dto.BookingDate;
-                utilitySchedule.NumberOfPerson = dto.NumberOfPerson;
-                utilitySchedule.TotalPrice = dto.TotalPrice;
-                utilitySchedule.Description = dto.Description;
+                utilitySchedule.Slot = dto.slot;
+                utilitySchedule.UtilityDetailId = dto.utility_detail_id;
+                utilitySchedule.Slot = dto.slot;
+                utilitySchedule.BookingDate = dto.booking_date;
+                utilitySchedule.NumberOfPerson = dto.number_of_person;
+                utilitySchedule.TotalPrice = dto.total_price;
+                utilitySchedule.Description = dto.description;
                 _abmsContext.UtilitySchedules.Update(utilitySchedule);
                 _abmsContext.SaveChanges();
                 return new ResponseData<string>
@@ -102,10 +114,13 @@ namespace ABMS_backend.Services
                     ErrMsg = ErrorApp.SUCCESS.description
                 };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = "Updated failed why " + ex.Message
+                };
             }
         }
 
@@ -127,25 +142,30 @@ namespace ABMS_backend.Services
                     ErrMsg = ErrorApp.SUCCESS.description
                 };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = "Deleted failed why " + ex.Message
+                };
             }
         }
 
         public ResponseData<List<ReservationResponseDTO>> getReservation(ResevationForResidentSearchDTO dto)
         {
-            var utilitySchedules = _abmsContext.UtilitySchedules.
+            var utilitySchedules = _abmsContext.UtilitySchedules.Include(x => x.UtilityDetail.Utility).
                 Where(x => (dto.roomId == null || x.RoomId == dto.roomId) &&
-                (dto.utilityId == null || x.UtilityId == dto.utilityId) &&
+                (dto.utilityId == null || x.UtilityDetail.UtilityId == dto.utilityId) &&
+                (dto.utilityDetailName == null || x.UtilityDetail.Name.ToLower().Contains(dto.utilityDetailName.ToLower())) &&
                 (dto.bookingDate == null || x.BookingDate == dto.bookingDate)).ToList();
             List < ReservationResponseDTO > dtoList = new List<ReservationResponseDTO> ();
             foreach (var schedule in utilitySchedules)
             {
                 ReservationResponseDTO response = new ReservationResponseDTO();
                 response.room_id = schedule.RoomId;
-                response.utility_id = schedule.UtilityId;
+                response.utility = schedule.UtilityDetail.Utility.Name;
+                response.utility_detail_name = schedule.UtilityDetail.Name;
                 response.slot = schedule.Slot;
                 response.booking_date = schedule.BookingDate;
                 response.number_of_person = schedule.NumberOfPerson;
@@ -153,7 +173,7 @@ namespace ABMS_backend.Services
                 response.description = schedule.Description;
                 response.approve_user = schedule.ApproveUser;
                 response.status = schedule.Status;
-                dtoList.Add (response);
+                dtoList.Add(response);
             }
             return new ResponseData<List<ReservationResponseDTO>>
             {
@@ -192,7 +212,8 @@ namespace ABMS_backend.Services
             }
             ReservationResponseDTO dto = new ReservationResponseDTO();
             dto.room_id = utilitySchedule.RoomId;
-            dto.utility_id = utilitySchedule.UtilityId;
+            dto.utility = utilitySchedule.UtilityDetail.Utility.Name;
+            dto.utility_detail_name = utilitySchedule.UtilityDetail.Name;
             dto.slot = utilitySchedule.Slot;
             dto.booking_date = utilitySchedule.BookingDate;
             dto.number_of_person = utilitySchedule.NumberOfPerson;

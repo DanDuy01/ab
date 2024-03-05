@@ -7,6 +7,8 @@ namespace ABMS_backend.Repositories
     {
         ResponseData<string> createUtility(UtilityForInsertDTO dto);
 
+        ResponseData<string> createUtilityDetail(UtilityDetailDTO dto);
+
         ResponseData<string> updateUtility(string id, UtilityForInsertDTO dto);
 
         ResponseData<string> deleteUtility(string id);

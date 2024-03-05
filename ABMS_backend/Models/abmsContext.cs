@@ -1001,17 +1001,53 @@ namespace ABMS_backend.Models
             {
                 entity.ToTable("utiliity_detail");
 
+                entity.HasIndex(e => e.UtilityId, "utiliity_detail_utility_FK");
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(100)
-                    .HasColumnName("id");
+                    .HasColumnName("id")
+                    .HasComment("Khóa chính của bảng");
+
+                entity.Property(e => e.CreateTime)
+                    .HasColumnType("datetime")
+                    .HasColumnName("create_time")
+                    .HasComment("Ngày tạo");
+
+                entity.Property(e => e.CreateUser)
+                    .HasMaxLength(100)
+                    .HasColumnName("create_user")
+                    .HasComment("Người tạo");
+
+                entity.Property(e => e.ModifyTime)
+                    .HasColumnType("datetime")
+                    .HasColumnName("modify_time")
+                    .HasComment("Ngày chỉnh sửa");
+
+                entity.Property(e => e.ModifyUser)
+                    .HasMaxLength(100)
+                    .HasColumnName("modify_user")
+                    .HasComment("Người chỉnh sửa");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(100)
-                    .HasColumnName("name");
+                    .HasColumnName("name")
+                    .HasComment("Tên detail");
+
+                entity.Property(e => e.Status)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("status")
+                    .HasComment("Trạng thái: 0 hết hạn sử dụng, 1 còn hạn sử dụng");
 
                 entity.Property(e => e.UtilityId)
                     .HasMaxLength(100)
-                    .HasColumnName("utility_id");
+                    .HasColumnName("utility_id")
+                    .HasComment("Mã tiện ích");
+
+                entity.HasOne(d => d.Utility)
+                    .WithMany(p => p.UtiliityDetails)
+                    .HasForeignKey(d => d.UtilityId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("utiliity_detail_utility_FK");
             });
 
             modelBuilder.Entity<Utility>(entity =>
@@ -1047,7 +1083,8 @@ namespace ABMS_backend.Models
 
                 entity.Property(e => e.Location)
                     .HasMaxLength(100)
-                    .HasColumnName("location");
+                    .HasColumnName("location")
+                    .HasComment("Vị trí");
 
                 entity.Property(e => e.ModifyTime)
                     .HasColumnType("datetime")

@@ -6,6 +6,8 @@
 
         public string? buildingId { get; set; }
 
+        public int? role { get; set; }
+
         public int? status { get; set; }
     }
 }

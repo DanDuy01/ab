@@ -4,9 +4,11 @@
     {
         public string room_id { get; set; }
 
-        public string utility_id { get; set;}
+        public string utility { get; set;}
 
-        public int slot { get; set; }
+        public string utility_detail_name { get; set; }
+
+        public string slot { get; set; }
 
         public DateOnly booking_date { get; set; }
 
