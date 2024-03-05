@@ -12,9 +12,12 @@ namespace ABMS_backend.Services
     {
         private readonly abmsContext _abmsContext;
 
-        public UtilityManagementService(abmsContext abmsContext)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public UtilityManagementService(abmsContext abmsContext, IHttpContextAccessor httpContextAccessor)
         {
             _abmsContext = abmsContext;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public ResponseData<string> createUtility(UtilityForInsertDTO dto)
@@ -41,7 +44,15 @@ namespace ABMS_backend.Services
                 utility.NumberOfSlot = dto.numberOfSlot;
                 utility.PricePerSlot = dto.pricePerSlot;
                 utility.Description = dto.description;
-                utility.CreateUser = "admin";
+                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.Forbidden,
+                        ErrMsg = ErrorApp.FORBIDDEN.description
+                    };
+                }
+                utility.CreateUser = _httpContextAccessor.HttpContext.Session.GetString("user");
                 utility.CreateTime = DateTime.Now;
                 utility.Status = (int)Constants.STATUS.ACTIVE;
                 _abmsContext.Utilities.Add(utility);
@@ -94,7 +105,15 @@ namespace ABMS_backend.Services
                 utilityDetail.Id = Guid.NewGuid().ToString();
                 utilityDetail.Name = dto.name;
                 utilityDetail.UtilityId = dto.utility_id;
-                utilityDetail.CreateUser = "admin";
+                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.Forbidden,
+                        ErrMsg = ErrorApp.FORBIDDEN.description
+                    };
+                }
+                utilityDetail.CreateUser = _httpContextAccessor.HttpContext.Session.GetString("user");
                 utilityDetail.CreateTime = DateTime.Now;
                 utilityDetail.Status = (int)Constants.STATUS.ACTIVE;
                 _abmsContext.UtiliityDetails.Add(utilityDetail);
@@ -143,7 +162,15 @@ namespace ABMS_backend.Services
                 utility.NumberOfSlot = dto.numberOfSlot;
                 utility.PricePerSlot = dto.pricePerSlot;
                 utility.Description = dto.description;
-                utility.ModifyUser = "admin";
+                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.Forbidden,
+                        ErrMsg = ErrorApp.FORBIDDEN.description
+                    };
+                }
+                utility.ModifyUser = _httpContextAccessor.HttpContext.Session.GetString("user");
                 utility.ModifyTime = DateTime.Now;
                 _abmsContext.Utilities.Update(utility);
                 _abmsContext.SaveChanges();
@@ -175,7 +202,15 @@ namespace ABMS_backend.Services
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
                 utility.Status = (int)Constants.STATUS.IN_ACTIVE;
-                utility.ModifyUser = "admin";
+                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.Forbidden,
+                        ErrMsg = ErrorApp.FORBIDDEN.description
+                    };
+                }
+                utility.ModifyUser = _httpContextAccessor.HttpContext.Session.GetString("user");
                 utility.ModifyTime = DateTime.Now;
                 _abmsContext.Utilities.Update(utility);
                 _abmsContext.SaveChanges();                

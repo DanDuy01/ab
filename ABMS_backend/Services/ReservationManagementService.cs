@@ -4,6 +4,7 @@ using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Exceptions;
 using ABMS_backend.Utils.Validates;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Net;
 
 namespace ABMS_backend.Services
@@ -12,9 +13,12 @@ namespace ABMS_backend.Services
     {
         private readonly abmsContext _abmsContext;
 
-        public ReservationManagementService(abmsContext abmsContext)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public ReservationManagementService(abmsContext abmsContext, IHttpContextAccessor httpContextAccessor)
         {
             _abmsContext = abmsContext;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public ResponseData<string> createReservation(ReservationForInsertDTO dto)
@@ -52,7 +56,15 @@ namespace ABMS_backend.Services
                 utilitySchedule.NumberOfPerson = dto.number_of_person;
                 utilitySchedule.TotalPrice = dto.total_price;
                 utilitySchedule.Description = dto.description;
-                utilitySchedule.ApproveUser = "admin";
+                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.Forbidden,
+                        ErrMsg = ErrorApp.FORBIDDEN.description
+                    };
+                }
+                utilitySchedule.ApproveUser = _httpContextAccessor.HttpContext.Session.GetString("user");
                 utilitySchedule.Status = (int)Constants.STATUS.SENT;
                 _abmsContext.UtilitySchedules.Add(utilitySchedule);
                 _abmsContext.SaveChanges();
@@ -192,7 +204,15 @@ namespace ABMS_backend.Services
                 throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
             }
             utilitySchedule.Status = status;
-            utilitySchedule.ApproveUser = "admin";
+            if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                    ErrMsg = ErrorApp.FORBIDDEN.description
+                };
+            }
+            utilitySchedule.ApproveUser = _httpContextAccessor.HttpContext.Session.GetString("user");
             _abmsContext.UtilitySchedules.Update(utilitySchedule);
             _abmsContext.SaveChanges();
             return new ResponseData<string>

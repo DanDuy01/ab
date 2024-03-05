@@ -12,10 +12,13 @@ namespace ABMS_backend.Services
     {
         private readonly abmsContext _abmsContext;
         private IMapper _mapper;
-        public MemberManagerService(abmsContext abmsContext, IMapper mapper)
+
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public MemberManagerService(abmsContext abmsContext, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _abmsContext = abmsContext;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
         public ResponseData<string> createMember(MemberForInsertDTO dto)
         {
@@ -39,7 +42,15 @@ namespace ABMS_backend.Services
                 resident.DateOfBirth = dto.dob;
                 resident.Gender = dto.gender;
                 resident.IsHouseholder = dto.isHouseHolder;
-                resident.CreateUser = "reception";
+                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.Forbidden,
+                        ErrMsg = ErrorApp.FORBIDDEN.description
+                    };
+                }
+                resident.CreateUser = _httpContextAccessor.HttpContext.Session.GetString("user");
                 resident.CreateTime = DateTime.Now;
                 resident.Status = (int)Constants.STATUS.ACTIVE;
                 _abmsContext.Residents.Add(resident);
@@ -70,8 +81,16 @@ namespace ABMS_backend.Services
                 if (r == null)
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
-                }               
-                resident.ModifyUser = "reception";
+                }
+                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.Forbidden,
+                        ErrMsg = ErrorApp.FORBIDDEN.description
+                    };
+                }
+                resident.ModifyUser = _httpContextAccessor.HttpContext.Session.GetString("user");
                 resident.ModifyTime = DateTime.Now;
                 resident.Status = (int)Constants.STATUS.IN_ACTIVE;
                 _abmsContext.Residents.Update(resident);
@@ -147,7 +166,15 @@ namespace ABMS_backend.Services
                 resident.DateOfBirth = dto.dob;
                 resident.Gender = dto.gender;
                 resident.IsHouseholder = dto.isHouseHolder;
-                resident.ModifyUser = "reception";
+                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.Forbidden,
+                        ErrMsg = ErrorApp.FORBIDDEN.description
+                    };
+                }
+                resident.ModifyUser = _httpContextAccessor.HttpContext.Session.GetString("user");
                 resident.ModifyTime = DateTime.Now;
                 _abmsContext.Residents.Update(resident);
                 _abmsContext.SaveChanges();

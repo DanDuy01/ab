@@ -3,22 +3,20 @@ using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Validates;
 using System.Net;
-using AutoMapper;
 using ABMS_backend.Utils.Exceptions;
-using System.Collections.Generic;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Http;
 
 namespace ABMS_backend.Services
 {
     public class CmbAccountManagementService : ICmbAccountManagementRepository
     {
         private readonly abmsContext _abmsContext;
-        private IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CmbAccountManagementService(abmsContext abmsContext, IMapper mapper)
+        public CmbAccountManagementService(abmsContext abmsContext, IHttpContextAccessor httpContext)
         {
             _abmsContext = abmsContext;
-            _mapper = mapper;
+            _httpContextAccessor = httpContext;
         }
 
         ResponseData<string> ICmbAccountManagementRepository.updateCmbAccount(string id, AccountForInsertDTO dto)
@@ -43,7 +41,7 @@ namespace ABMS_backend.Services
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
                 Account account1 = _abmsContext.Accounts.FirstOrDefault(x => x.PhoneNumber == dto.phone || x.Email == dto.email);
-                if (account1 != null)
+                if (account1 != null && account1 != account)
                 {
                     throw new CustomException(ErrorApp.ACCOUNT_EXISTED);
                 }
@@ -54,7 +52,15 @@ namespace ABMS_backend.Services
                 account.Role = dto.role;
                 account.UserName = dto.user_name;
                 account.Avatar = dto.avatar;
-                account.ModifyUser = "admin";
+                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.Forbidden,
+                        ErrMsg = ErrorApp.FORBIDDEN.description
+                    };
+                }
+                account.ModifyUser = _httpContextAccessor.HttpContext.Session.GetString("user");
                 account.ModifyTime = DateTime.Now;
                 _abmsContext.Accounts.Update(account);
                 _abmsContext.SaveChanges();
@@ -86,7 +92,15 @@ namespace ABMS_backend.Services
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }               
                 account.Status = (int)Constants.STATUS.IN_ACTIVE;
-                account.ModifyUser = "admin";
+                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.Forbidden,
+                        ErrMsg = ErrorApp.FORBIDDEN.description
+                    };
+                }
+                account.ModifyUser = _httpContextAccessor.HttpContext.Session.GetString("user");
                 account.ModifyTime = DateTime.Now;
                 _abmsContext.Accounts.Update(account);
                 _abmsContext.SaveChanges();

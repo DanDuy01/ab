@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using ABMS_backend.Utils.Validates;
 using System.Net;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 
 namespace ABMS_backend.Services
 {
@@ -16,10 +16,12 @@ namespace ABMS_backend.Services
     {
         private readonly abmsContext _abmsContext;
         private readonly IConfiguration _configuration;
-        public LoginService(abmsContext abmsContext, IConfiguration configuration)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public LoginService(abmsContext abmsContext, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _abmsContext = abmsContext;
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         ResponseData<string> ILoginAccount.getAccount(Login dto)
@@ -30,13 +32,15 @@ namespace ABMS_backend.Services
                 if (VerifyPassword(dto.password, account.PasswordHash, account.PasswordSalt))
                 {
                     string token = GetToken(account);
+                    _httpContextAccessor.HttpContext.Session.SetString("user", account.UserName);
+                    _httpContextAccessor.HttpContext.Session.SetInt32("role", account.Role);
                     return new ResponseData<string>
                     {
                         Data = token,
                         StatusCode = HttpStatusCode.OK,
                         ErrMsg = ErrorApp.SUCCESS.description
                     };
-                }
+                }              
                 return new ResponseData<string>
                 {
                     StatusCode = HttpStatusCode.InternalServerError,

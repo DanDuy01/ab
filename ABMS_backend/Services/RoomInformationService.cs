@@ -13,10 +13,13 @@ namespace ABMS_backend.Services
         private readonly abmsContext _abmsContext;
         private IMapper _mapper;
 
-        public RoomInformationService(abmsContext abmsContext, IMapper mapper)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public RoomInformationService(abmsContext abmsContext, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _abmsContext = abmsContext;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
         public ResponseData<string> createRoomInformation(RoomForInsertDTO dto)
         {
@@ -28,8 +31,16 @@ namespace ABMS_backend.Services
                 room.BuildingId = dto.buildingId;
                 room.RoomNumber = dto.roomNumber;
                 room.RoomArea = dto.roomArea;
-                room.NumberOfResident = dto.numberOfResident;               
-                room.CreateUser = "resident";
+                room.NumberOfResident = dto.numberOfResident;
+                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.Forbidden,
+                        ErrMsg = ErrorApp.FORBIDDEN.description
+                    };
+                }
+                room.CreateUser = _httpContextAccessor.HttpContext.Session.GetString("user");
                 room.CreateTime = DateTime.Now;
                 room.Status = (int)Constants.STATUS.ACTIVE;
                 _abmsContext.Rooms.Add(room);
@@ -60,8 +71,16 @@ namespace ABMS_backend.Services
                 if (room == null)
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
-                }              
-                room.ModifyUser = "resident";
+                }
+                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.Forbidden,
+                        ErrMsg = ErrorApp.FORBIDDEN.description
+                    };
+                }
+                room.ModifyUser = _httpContextAccessor.HttpContext.Session.GetString("user");
                 room.ModifyTime = DateTime.Now;
                 room.Status = (int)Constants.STATUS.IN_ACTIVE;
                 _abmsContext.Rooms.Update(room);
@@ -127,7 +146,15 @@ namespace ABMS_backend.Services
                 room.RoomNumber = dto.roomNumber;
                 room.RoomArea = dto.roomArea;
                 room.NumberOfResident = dto.numberOfResident;
-                room.ModifyUser = "resident";
+                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.Forbidden,
+                        ErrMsg = ErrorApp.FORBIDDEN.description
+                    };
+                }
+                room.ModifyUser = _httpContextAccessor.HttpContext.Session.GetString("user");
                 room.ModifyTime = DateTime.Now;
                 
                 _abmsContext.Rooms.Update(room);
