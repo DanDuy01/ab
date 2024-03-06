@@ -247,7 +247,7 @@ namespace ABMS_backend.Services
         public ResponseData<List<UtilityForInsertDTO>> getUtility(UtilityForSearch dtoSearch)
         {
             var list = _abmsContext.Utilities.
-                Where((x => dtoSearch.name == null || x.Name.ToLower().Contains(dtoSearch.name.ToLower())
+                Where((x => (dtoSearch.name == null || x.Name.ToLower().Contains(dtoSearch.name.ToLower()))
                 && x.Status == (int)Constants.STATUS.ACTIVE)).ToList();
             List<UtilityForInsertDTO> listDto = new List<UtilityForInsertDTO>();
             foreach (var item in list)
