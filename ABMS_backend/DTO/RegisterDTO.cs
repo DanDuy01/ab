@@ -10,7 +10,6 @@ namespace ABMS_backend.DTO
         [Phone]
         public string phone { get; set; }
 
-
         public string user_name { get; set; }
 
 
