@@ -4,13 +4,13 @@ on:
     branches:
     - BE
 env:
-  AZURE_WEBAPP_NAME: abmscapstone
+  AZURE_WEBAPP_NAME: ABMSCapstone2024
   AZURE_WEBAPP_PACKAGE_PATH: .\publish
   AZURE_APIM_RESOURCE_PATH: /
   AZURE_APIM_RESOURCEGROUP: CapstoneFPT
   AZURE_APIM_SERVICENAME: ABMSbackendapi
   AZURE_APIM_API_ID: ABMSbackend
-  AZURE_APIM_APPSERVICEURL: https://abmscapstone.azurewebsites.net
+  AZURE_APIM_APPSERVICEURL: https://abmscapstone2024.azurewebsites.net
   SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION: 5.6.3
   SWASHBUCKLE_DOTNET_CORE_VERSION: 3.1.x
   API_IMPORT_SPECIFICATION_PATH: .\publish\swagger.json
