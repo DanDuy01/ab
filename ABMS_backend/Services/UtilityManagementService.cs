@@ -3,8 +3,9 @@ using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Exceptions;
 using ABMS_backend.Utils.Validates;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
-using System.Security.Principal;
+using Utility = ABMS_backend.Models.Utility;
 
 namespace ABMS_backend.Services
 {
@@ -14,10 +15,32 @@ namespace ABMS_backend.Services
 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
+
+
         public UtilityManagementService(abmsContext abmsContext, IHttpContextAccessor httpContextAccessor)
         {
             _abmsContext = abmsContext;
             _httpContextAccessor = httpContextAccessor;
+        }
+
+        
+
+        public string GetUserFromToken(string token)
+        {       
+            if(token == null)
+            {
+                throw new CustomException(ErrorApp.FORBIDDEN);
+            }
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(token.Replace("Bearer ", "")) as JwtSecurityToken;
+
+            if (jsonToken == null)
+            {
+                return null;
+            }
+            var userClaim = jsonToken.Claims.FirstOrDefault(claim => claim.Type == "User")?.Value;
+
+            return userClaim;
         }
 
         public ResponseData<string> createUtility(UtilityForInsertDTO dto)
@@ -44,15 +67,8 @@ namespace ABMS_backend.Services
                 utility.NumberOfSlot = dto.numberOfSlot;
                 utility.PricePerSlot = dto.pricePerSlot;
                 utility.Description = dto.description;
-                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
-                {
-                    return new ResponseData<string>
-                    {
-                        StatusCode = HttpStatusCode.Forbidden,
-                        ErrMsg = ErrorApp.FORBIDDEN.description
-                    };
-                }
-                utility.CreateUser = _httpContextAccessor.HttpContext.Session.GetString("user");
+                string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                utility.CreateUser = getUser;
                 utility.CreateTime = DateTime.Now;
                 utility.Status = (int)Constants.STATUS.ACTIVE;
                 _abmsContext.Utilities.Add(utility);
@@ -105,15 +121,8 @@ namespace ABMS_backend.Services
                 utilityDetail.Id = Guid.NewGuid().ToString();
                 utilityDetail.Name = dto.name;
                 utilityDetail.UtilityId = dto.utility_id;
-                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
-                {
-                    return new ResponseData<string>
-                    {
-                        StatusCode = HttpStatusCode.Forbidden,
-                        ErrMsg = ErrorApp.FORBIDDEN.description
-                    };
-                }
-                utilityDetail.CreateUser = _httpContextAccessor.HttpContext.Session.GetString("user");
+                string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                utilityDetail.CreateUser = getUser;
                 utilityDetail.CreateTime = DateTime.Now;
                 utilityDetail.Status = (int)Constants.STATUS.ACTIVE;
                 _abmsContext.UtiliityDetails.Add(utilityDetail);
@@ -162,15 +171,8 @@ namespace ABMS_backend.Services
                 utility.NumberOfSlot = dto.numberOfSlot;
                 utility.PricePerSlot = dto.pricePerSlot;
                 utility.Description = dto.description;
-                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
-                {
-                    return new ResponseData<string>
-                    {
-                        StatusCode = HttpStatusCode.Forbidden,
-                        ErrMsg = ErrorApp.FORBIDDEN.description
-                    };
-                }
-                utility.ModifyUser = _httpContextAccessor.HttpContext.Session.GetString("user");
+                string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                utility.ModifyUser = getUser;
                 utility.ModifyTime = DateTime.Now;
                 _abmsContext.Utilities.Update(utility);
                 _abmsContext.SaveChanges();
@@ -202,15 +204,8 @@ namespace ABMS_backend.Services
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
                 utility.Status = (int)Constants.STATUS.IN_ACTIVE;
-                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
-                {
-                    return new ResponseData<string>
-                    {
-                        StatusCode = HttpStatusCode.Forbidden,
-                        ErrMsg = ErrorApp.FORBIDDEN.description
-                    };
-                }
-                utility.ModifyUser = _httpContextAccessor.HttpContext.Session.GetString("user");
+                string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                utility.ModifyUser = getUser;
                 utility.ModifyTime = DateTime.Now;
                 _abmsContext.Utilities.Update(utility);
                 _abmsContext.SaveChanges();                
@@ -244,32 +239,6 @@ namespace ABMS_backend.Services
             };
         }
 
-        public ResponseData<List<UtilityForInsertDTO>> getUtility(UtilityForSearch dtoSearch)
-        {
-            var list = _abmsContext.Utilities.
-                Where((x => (dtoSearch.name == null || x.Name.ToLower().Contains(dtoSearch.name.ToLower()))
-                && x.Status == (int)Constants.STATUS.ACTIVE)).ToList();
-            List<UtilityForInsertDTO> listDto = new List<UtilityForInsertDTO>();
-            foreach (var item in list)
-            {
-                UtilityForInsertDTO dto = new UtilityForInsertDTO();
-                dto.name = item.Name;
-                dto.openTime = item.OpenTime;
-                dto.closeTime = item.CloseTime;
-                dto.numberOfSlot = item.NumberOfSlot;
-                dto.pricePerSlot = item.PricePerSlot;
-                dto.description = item.Description;
-                listDto.Add(dto);
-            }
-            return new ResponseData<List<UtilityForInsertDTO>>
-            {
-                Data = listDto,
-                StatusCode = HttpStatusCode.OK,
-                ErrMsg = ErrorApp.SUCCESS.description,
-                Count = list.Count
-            };
-        }
-
         public ResponseData<Utility> getUtilityById(string id)
         {
             Utility utility = _abmsContext.Utilities.Find(id);
@@ -282,6 +251,18 @@ namespace ABMS_backend.Services
                 Data = utility,
                 StatusCode = HttpStatusCode.OK,
                 ErrMsg = ErrorApp.SUCCESS.description
+            };
+        }
+
+        public ResponseData<List<UtiliityDetail>> getUtilityDetail()
+        {
+            var utilityDetail = _abmsContext.UtiliityDetails.Where(x => x.Status == (int)Constants.STATUS.ACTIVE).ToList();
+            return new ResponseData<List<UtiliityDetail>>
+            {
+                Data = utilityDetail,
+                StatusCode = HttpStatusCode.OK,
+                ErrMsg = ErrorApp.SUCCESS.description,
+                Count = utilityDetail.Count
             };
         }
     }

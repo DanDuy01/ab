@@ -23,7 +23,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program));
-builder.Services.AddScoped<ICmbAccountManagementRepository, CmbAccountManagementService>();
+builder.Services.AddScoped<IAccountManagementRepository, AccountManagementService>();
 builder.Services.AddScoped<IUtilityManagementRepository, UtilityManagementService>();
 builder.Services.AddScoped<IResidentAccountManagementRepository, ResidentAccountManagementService>();
 builder.Services.AddScoped<ILoginAccount, LoginService>();
@@ -36,6 +36,12 @@ builder.Services.AddControllersWithViews().AddJsonOptions(options =>
     options.JsonSerializerOptions.Converters.Add(new TimeOnlyConverter());
     options.JsonSerializerOptions.Converters.Add(new DateOnlyConverter());
     options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+});
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+    options.CheckConsentNeeded = context => false;
+    options.MinimumSameSitePolicy = SameSiteMode.None;
 });
 
 builder.Services.AddCors(opts =>

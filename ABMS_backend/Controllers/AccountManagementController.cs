@@ -8,11 +8,11 @@ namespace ABMS_backend.Controllers
 {
     [Route(Constants.REQUEST_MAPPING_PREFIX + Constants.VERSION_API_V1)]
     [ApiController]
-    public class CmbAccountManagementController : ControllerBase
+    public class AccountManagementController : ControllerBase
     {
-        private ICmbAccountManagementRepository _repository;
+        private IAccountManagementRepository _repository;
 
-        public CmbAccountManagementController(ICmbAccountManagementRepository repository)
+        public AccountManagementController(IAccountManagementRepository repository)
         {
             _repository = repository;
         }

@@ -3,7 +3,7 @@ using ABMS_backend.Models;
 
 namespace ABMS_backend.Repositories
 {
-    public interface ICmbAccountManagementRepository
+    public interface IAccountManagementRepository
     {
         ResponseData<string> updateCmbAccount(string id, AccountForInsertDTO dto);
 

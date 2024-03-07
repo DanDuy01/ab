@@ -4,7 +4,9 @@ using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Exceptions;
 using ABMS_backend.Utils.Validates;
 using AutoMapper;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Security.Principal;
 
 namespace ABMS_backend.Services
 {
@@ -20,6 +22,25 @@ namespace ABMS_backend.Services
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
         }
+
+        public string GetUserFromToken(string token)
+        {
+            if (token == null)
+            {
+                throw new CustomException(ErrorApp.FORBIDDEN);
+            }
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(token.Replace("Bearer ", "")) as JwtSecurityToken;
+
+            if (jsonToken == null)
+            {
+                return null;
+            }
+            var userClaim = jsonToken.Claims.FirstOrDefault(claim => claim.Type == "User")?.Value;
+
+            return userClaim;
+        }
+
         public ResponseData<string> createMember(MemberForInsertDTO dto)
         {
             string error = dto.Validate();
@@ -42,15 +63,8 @@ namespace ABMS_backend.Services
                 resident.DateOfBirth = dto.dob;
                 resident.Gender = dto.gender;
                 resident.IsHouseholder = dto.isHouseHolder;
-                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
-                {
-                    return new ResponseData<string>
-                    {
-                        StatusCode = HttpStatusCode.Forbidden,
-                        ErrMsg = ErrorApp.FORBIDDEN.description
-                    };
-                }
-                resident.CreateUser = _httpContextAccessor.HttpContext.Session.GetString("user");
+                string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                resident.CreateUser = getUser;
                 resident.CreateTime = DateTime.Now;
                 resident.Status = (int)Constants.STATUS.ACTIVE;
                 _abmsContext.Residents.Add(resident);
@@ -82,15 +96,8 @@ namespace ABMS_backend.Services
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
-                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
-                {
-                    return new ResponseData<string>
-                    {
-                        StatusCode = HttpStatusCode.Forbidden,
-                        ErrMsg = ErrorApp.FORBIDDEN.description
-                    };
-                }
-                resident.ModifyUser = _httpContextAccessor.HttpContext.Session.GetString("user");
+                string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                resident.ModifyUser = getUser;
                 resident.ModifyTime = DateTime.Now;
                 resident.Status = (int)Constants.STATUS.IN_ACTIVE;
                 _abmsContext.Residents.Update(resident);
@@ -107,7 +114,7 @@ namespace ABMS_backend.Services
                 return new ResponseData<string>
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
-                    ErrMsg = "Created failed why " + ex.Message
+                    ErrMsg = "Deleted failed why " + ex.Message
                 };
             }
         }
@@ -166,15 +173,8 @@ namespace ABMS_backend.Services
                 resident.DateOfBirth = dto.dob;
                 resident.Gender = dto.gender;
                 resident.IsHouseholder = dto.isHouseHolder;
-                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
-                {
-                    return new ResponseData<string>
-                    {
-                        StatusCode = HttpStatusCode.Forbidden,
-                        ErrMsg = ErrorApp.FORBIDDEN.description
-                    };
-                }
-                resident.ModifyUser = _httpContextAccessor.HttpContext.Session.GetString("user");
+                string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                resident.ModifyUser = getUser;
                 resident.ModifyTime = DateTime.Now;
                 _abmsContext.Residents.Update(resident);
                 _abmsContext.SaveChanges();
@@ -190,7 +190,7 @@ namespace ABMS_backend.Services
                 return new ResponseData<string>
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
-                    ErrMsg = "Created failed why " + ex.Message
+                    ErrMsg = "Updated failed why " + ex.Message
                 };
             }
         }

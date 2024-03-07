@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using ABMS_backend.Utils.Validates;
 using System.Net;
 using Microsoft.AspNetCore.Http;
+using ABMS_backend.Utils.Exceptions;
 
 namespace ABMS_backend.Services
 {
@@ -22,6 +23,24 @@ namespace ABMS_backend.Services
             _abmsContext = abmsContext;
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
+        }
+
+        public string GetUserFromToken(string token)
+        {
+            if (token == null)
+            {
+                throw new CustomException(ErrorApp.FORBIDDEN);
+            }
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(token.Replace("Bearer ", "")) as JwtSecurityToken;
+
+            if (jsonToken == null)
+            {
+                return null;
+            }
+            var userClaim = jsonToken.Claims.FirstOrDefault(claim => claim.Type == "User")?.Value;
+
+            return userClaim;
         }
 
         ResponseData<string> ILoginAccount.getAccount(Login dto)
@@ -40,7 +59,7 @@ namespace ABMS_backend.Services
                         StatusCode = HttpStatusCode.OK,
                         ErrMsg = ErrorApp.SUCCESS.description
                     };
-                }              
+                }
                 return new ResponseData<string>
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
@@ -112,6 +131,7 @@ namespace ABMS_backend.Services
                  new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                  new Claim("Role", user.Role.ToString()),
                  new Claim(ClaimTypes.Role, user.Role.ToString()),
+                 new Claim("User", user.UserName.ToString()),
                  new Claim("Email", user.Email),
                  new Claim("PhoneNumber", user.PhoneNumber.ToString()),
                  new Claim("FullName", user.FullName),
@@ -147,6 +167,7 @@ namespace ABMS_backend.Services
             }
 
             HashPasword(request.password, out byte[] passwordHash, out byte[] passwordSalt);
+            string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
             Account user = new Account
             {
                 Email = request.email,
@@ -156,8 +177,8 @@ namespace ABMS_backend.Services
                 FullName = request.full_name,
                 BuildingId = request.building_id,
                 Role = request.role,
-                UserName = request.user_name,
-                CreateUser = "admin",
+                UserName = request.user_name,               
+                CreateUser = getUser,
                 CreateTime = DateTime.Now,
                 Status = (int)Constants.STATUS.ACTIVE,
                 Id = Guid.NewGuid().ToString()

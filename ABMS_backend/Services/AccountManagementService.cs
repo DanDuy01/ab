@@ -5,21 +5,41 @@ using ABMS_backend.Utils.Validates;
 using System.Net;
 using ABMS_backend.Utils.Exceptions;
 using Microsoft.AspNetCore.Http;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ABMS_backend.Services
 {
-    public class CmbAccountManagementService : ICmbAccountManagementRepository
+    public class AccountManagementService : IAccountManagementRepository
     {
         private readonly abmsContext _abmsContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CmbAccountManagementService(abmsContext abmsContext, IHttpContextAccessor httpContext)
+        public AccountManagementService(abmsContext abmsContext, IHttpContextAccessor httpContext)
         {
             _abmsContext = abmsContext;
             _httpContextAccessor = httpContext;
         }
 
-        ResponseData<string> ICmbAccountManagementRepository.updateCmbAccount(string id, AccountForInsertDTO dto)
+        public string GetUserFromToken(string token)
+        {
+            if (token == null)
+            {
+                throw new CustomException(ErrorApp.FORBIDDEN);
+            }
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(token.Replace("Bearer ", "")) as JwtSecurityToken;
+
+            if (jsonToken == null)
+            {
+                return null;
+            }
+            var userClaim = jsonToken.Claims.FirstOrDefault(claim => claim.Type == "User")?.Value;
+
+            return userClaim;
+        }
+
+        ResponseData<string> IAccountManagementRepository.updateCmbAccount(string id, AccountForInsertDTO dto)
         {
             //validate
             string error = dto.Validate();
@@ -52,15 +72,8 @@ namespace ABMS_backend.Services
                 account.Role = dto.role;
                 account.UserName = dto.user_name;
                 account.Avatar = dto.avatar;
-                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
-                {
-                    return new ResponseData<string>
-                    {
-                        StatusCode = HttpStatusCode.Forbidden,
-                        ErrMsg = ErrorApp.FORBIDDEN.description
-                    };
-                }
-                account.ModifyUser = _httpContextAccessor.HttpContext.Session.GetString("user");
+                string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                account.ModifyUser = getUser;
                 account.ModifyTime = DateTime.Now;
                 _abmsContext.Accounts.Update(account);
                 _abmsContext.SaveChanges();
@@ -81,7 +94,7 @@ namespace ABMS_backend.Services
             }
         }
 
-        ResponseData<string> ICmbAccountManagementRepository.deleteCmbAccount(string id)
+        ResponseData<string> IAccountManagementRepository.deleteCmbAccount(string id)
         {
             try
             {
@@ -92,15 +105,8 @@ namespace ABMS_backend.Services
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }               
                 account.Status = (int)Constants.STATUS.IN_ACTIVE;
-                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
-                {
-                    return new ResponseData<string>
-                    {
-                        StatusCode = HttpStatusCode.Forbidden,
-                        ErrMsg = ErrorApp.FORBIDDEN.description
-                    };
-                }
-                account.ModifyUser = _httpContextAccessor.HttpContext.Session.GetString("user");
+                string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                account.ModifyUser = getUser;
                 account.ModifyTime = DateTime.Now;
                 _abmsContext.Accounts.Update(account);
                 _abmsContext.SaveChanges();
@@ -121,7 +127,7 @@ namespace ABMS_backend.Services
             }
         }
 
-        ResponseData<List<Account>> ICmbAccountManagementRepository.getCmbAccount(AccountForSearchDTO dto)
+        ResponseData<List<Account>> IAccountManagementRepository.getCmbAccount(AccountForSearchDTO dto)
         {
             var list = _abmsContext.Accounts.
                 Where(x => (dto.searchMessage == null || x.PhoneNumber.Contains(dto.searchMessage.ToLower()) 
@@ -139,7 +145,7 @@ namespace ABMS_backend.Services
             };
         }
 
-        ResponseData<Account> ICmbAccountManagementRepository.getCmbAccountById(string id)
+        ResponseData<Account> IAccountManagementRepository.getCmbAccountById(string id)
         {
             Account account = _abmsContext.Accounts.Find(id);
             if (account == null)

@@ -15,7 +15,7 @@ namespace ABMS_backend.Repositories
 
         ResponseData<List<Utility>> getAllUtility(UtilityForSearch dto);
 
-        ResponseData<List<UtilityForInsertDTO>> getUtility(UtilityForSearch dto);
+        ResponseData<List<UtiliityDetail>> getUtilityDetail();
 
         ResponseData<Utility> getUtilityById(string id);
     }

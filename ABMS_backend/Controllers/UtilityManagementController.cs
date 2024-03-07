@@ -2,7 +2,6 @@
 using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Validates;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ABMS_backend.Controllers
@@ -53,10 +52,10 @@ namespace ABMS_backend.Controllers
             return response;
         }
 
-        [HttpGet("utility/get")]
-        public ResponseData<List<UtilityForInsertDTO>> Get([FromQuery] UtilityForSearch dto)
+        [HttpGet("utility/get-utility-detail")]
+        public ResponseData<List<UtiliityDetail>> GetUtilityDetail()
         {
-            ResponseData<List<UtilityForInsertDTO>> response = _repository.getUtility(dto);
+            ResponseData<List<UtiliityDetail>> response = _repository.getUtilityDetail();
             return response;
         }
 
