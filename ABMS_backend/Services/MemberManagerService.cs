@@ -2,6 +2,7 @@
 using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Exceptions;
+using ABMS_backend.Utils.Token;
 using ABMS_backend.Utils.Validates;
 using AutoMapper;
 using System.IdentityModel.Tokens.Jwt;
@@ -21,24 +22,6 @@ namespace ABMS_backend.Services
             _abmsContext = abmsContext;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
-        }
-
-        public string GetUserFromToken(string token)
-        {
-            if (token == null)
-            {
-                throw new CustomException(ErrorApp.FORBIDDEN);
-            }
-            var handler = new JwtSecurityTokenHandler();
-            var jsonToken = handler.ReadToken(token.Replace("Bearer ", "")) as JwtSecurityToken;
-
-            if (jsonToken == null)
-            {
-                return null;
-            }
-            var userClaim = jsonToken.Claims.FirstOrDefault(claim => claim.Type == "User")?.Value;
-
-            return userClaim;
         }
 
         public ResponseData<string> createMember(MemberForInsertDTO dto)
@@ -63,7 +46,7 @@ namespace ABMS_backend.Services
                 resident.DateOfBirth = dto.dob;
                 resident.Gender = dto.gender;
                 resident.IsHouseholder = dto.isHouseHolder;
-                string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 resident.CreateUser = getUser;
                 resident.CreateTime = DateTime.Now;
                 resident.Status = (int)Constants.STATUS.ACTIVE;
@@ -96,7 +79,7 @@ namespace ABMS_backend.Services
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
-                string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 resident.ModifyUser = getUser;
                 resident.ModifyTime = DateTime.Now;
                 resident.Status = (int)Constants.STATUS.IN_ACTIVE;
@@ -122,7 +105,8 @@ namespace ABMS_backend.Services
         public ResponseData<List<Resident>> getAllMember(MemberForSearchDTO dto)
         {
             var list = _abmsContext.Residents.
-                 Where(x => dto.fullName == null || x.FullName.ToLower().Contains(dto.fullName.ToLower())).ToList();
+                 Where(x => (dto.fullName == null || x.FullName.ToLower().Contains(dto.fullName.ToLower())
+                 && (dto.roomId == null || x.RoomId == dto.roomId))).ToList();
             return new ResponseData<List<Resident>>
             {
                 Data = list,
@@ -173,7 +157,7 @@ namespace ABMS_backend.Services
                 resident.DateOfBirth = dto.dob;
                 resident.Gender = dto.gender;
                 resident.IsHouseholder = dto.isHouseHolder;
-                string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 resident.ModifyUser = getUser;
                 resident.ModifyTime = DateTime.Now;
                 _abmsContext.Residents.Update(resident);

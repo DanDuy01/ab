@@ -25,7 +25,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IAccountManagementRepository, AccountManagementService>();
 builder.Services.AddScoped<IUtilityManagementRepository, UtilityManagementService>();
-builder.Services.AddScoped<IResidentAccountManagementRepository, ResidentAccountManagementService>();
 builder.Services.AddScoped<ILoginAccount, LoginService>();
 builder.Services.AddScoped<IRoomInformationRepository, RoomInformationService>();
 builder.Services.AddScoped<IMemberManagerRepository, MemberManagerService>();

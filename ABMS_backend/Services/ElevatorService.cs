@@ -7,6 +7,7 @@ using ABMS_backend.Utils.Exceptions;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
+using ABMS_backend.Utils.Token;
 
 namespace ABMS_backend.Services
 {
@@ -20,24 +21,6 @@ namespace ABMS_backend.Services
         {
             _abmsContext = abmsContext;
             _httpContextAccessor = httpContextAccessor;
-        }
-
-        public string GetUserFromToken(string token)
-        {
-            if (token == null)
-            {
-                throw new CustomException(ErrorApp.FORBIDDEN);
-            }
-            var handler = new JwtSecurityTokenHandler();
-            var jsonToken = handler.ReadToken(token.Replace("Bearer ", "")) as JwtSecurityToken;
-
-            if (jsonToken == null)
-            {
-                return null;
-            }
-            var userClaim = jsonToken.Claims.FirstOrDefault(claim => claim.Type == "User")?.Value;
-
-            return userClaim;
         }
 
         public ResponseData<string> createElevator(ElevatorForInsertDTO dto)
@@ -150,7 +133,7 @@ namespace ABMS_backend.Services
                     ErrMsg = ErrorApp.FORBIDDEN.description
                 };
             }
-            string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+            string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
             elevator.ApproveUser = getUser;
             _abmsContext.Elevators.Update(elevator);
             _abmsContext.SaveChanges();

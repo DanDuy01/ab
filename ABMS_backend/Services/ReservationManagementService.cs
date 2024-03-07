@@ -2,6 +2,7 @@
 using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Exceptions;
+using ABMS_backend.Utils.Token;
 using ABMS_backend.Utils.Validates;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -21,24 +22,6 @@ namespace ABMS_backend.Services
         {
             _abmsContext = abmsContext;
             _httpContextAccessor = httpContextAccessor;
-        }
-
-        public string GetUserFromToken(string token)
-        {
-            if (token == null)
-            {
-                throw new CustomException(ErrorApp.FORBIDDEN);
-            }
-            var handler = new JwtSecurityTokenHandler();
-            var jsonToken = handler.ReadToken(token.Replace("Bearer ", "")) as JwtSecurityToken;
-
-            if (jsonToken == null)
-            {
-                return null;
-            }
-            var userClaim = jsonToken.Claims.FirstOrDefault(claim => claim.Type == "User")?.Value;
-
-            return userClaim;
         }
 
         public ResponseData<string> createReservation(ReservationForInsertDTO dto)
@@ -76,7 +59,7 @@ namespace ABMS_backend.Services
                 utilitySchedule.NumberOfPerson = dto.number_of_person;
                 utilitySchedule.TotalPrice = dto.total_price;
                 utilitySchedule.Description = dto.description;
-                string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 utilitySchedule.ApproveUser = getUser;
                 utilitySchedule.Status = (int)Constants.STATUS.SENT;
                 _abmsContext.UtilitySchedules.Add(utilitySchedule);
@@ -226,7 +209,7 @@ namespace ABMS_backend.Services
                     ErrMsg = ErrorApp.FORBIDDEN.description
                 };
             }
-            string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+            string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
             utilitySchedule.ApproveUser = getUser;
             _abmsContext.UtilitySchedules.Update(utilitySchedule);
             _abmsContext.SaveChanges();

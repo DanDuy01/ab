@@ -3,6 +3,7 @@ using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Exceptions;
 using ABMS_backend.Utils.Validates;
+using ABMS_backend.Utils.Token;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using Utility = ABMS_backend.Models.Utility;
@@ -21,26 +22,6 @@ namespace ABMS_backend.Services
         {
             _abmsContext = abmsContext;
             _httpContextAccessor = httpContextAccessor;
-        }
-
-        
-
-        public string GetUserFromToken(string token)
-        {       
-            if(token == null)
-            {
-                throw new CustomException(ErrorApp.FORBIDDEN);
-            }
-            var handler = new JwtSecurityTokenHandler();
-            var jsonToken = handler.ReadToken(token.Replace("Bearer ", "")) as JwtSecurityToken;
-
-            if (jsonToken == null)
-            {
-                return null;
-            }
-            var userClaim = jsonToken.Claims.FirstOrDefault(claim => claim.Type == "User")?.Value;
-
-            return userClaim;
         }
 
         public ResponseData<string> createUtility(UtilityForInsertDTO dto)
@@ -67,7 +48,7 @@ namespace ABMS_backend.Services
                 utility.NumberOfSlot = dto.numberOfSlot;
                 utility.PricePerSlot = dto.pricePerSlot;
                 utility.Description = dto.description;
-                string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 utility.CreateUser = getUser;
                 utility.CreateTime = DateTime.Now;
                 utility.Status = (int)Constants.STATUS.ACTIVE;
@@ -121,7 +102,7 @@ namespace ABMS_backend.Services
                 utilityDetail.Id = Guid.NewGuid().ToString();
                 utilityDetail.Name = dto.name;
                 utilityDetail.UtilityId = dto.utility_id;
-                string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 utilityDetail.CreateUser = getUser;
                 utilityDetail.CreateTime = DateTime.Now;
                 utilityDetail.Status = (int)Constants.STATUS.ACTIVE;
@@ -171,7 +152,7 @@ namespace ABMS_backend.Services
                 utility.NumberOfSlot = dto.numberOfSlot;
                 utility.PricePerSlot = dto.pricePerSlot;
                 utility.Description = dto.description;
-                string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 utility.ModifyUser = getUser;
                 utility.ModifyTime = DateTime.Now;
                 _abmsContext.Utilities.Update(utility);
@@ -204,7 +185,7 @@ namespace ABMS_backend.Services
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
                 utility.Status = (int)Constants.STATUS.IN_ACTIVE;
-                string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 utility.ModifyUser = getUser;
                 utility.ModifyTime = DateTime.Now;
                 _abmsContext.Utilities.Update(utility);

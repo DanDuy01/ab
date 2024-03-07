@@ -4,9 +4,7 @@ using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Validates;
 using System.Net;
 using ABMS_backend.Utils.Exceptions;
-using Microsoft.AspNetCore.Http;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
+using ABMS_backend.Utils.Token;
 
 namespace ABMS_backend.Services
 {
@@ -19,24 +17,6 @@ namespace ABMS_backend.Services
         {
             _abmsContext = abmsContext;
             _httpContextAccessor = httpContext;
-        }
-
-        public string GetUserFromToken(string token)
-        {
-            if (token == null)
-            {
-                throw new CustomException(ErrorApp.FORBIDDEN);
-            }
-            var handler = new JwtSecurityTokenHandler();
-            var jsonToken = handler.ReadToken(token.Replace("Bearer ", "")) as JwtSecurityToken;
-
-            if (jsonToken == null)
-            {
-                return null;
-            }
-            var userClaim = jsonToken.Claims.FirstOrDefault(claim => claim.Type == "User")?.Value;
-
-            return userClaim;
         }
 
         ResponseData<string> IAccountManagementRepository.updateCmbAccount(string id, AccountForInsertDTO dto)
@@ -72,7 +52,7 @@ namespace ABMS_backend.Services
                 account.Role = dto.role;
                 account.UserName = dto.user_name;
                 account.Avatar = dto.avatar;
-                string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 account.ModifyUser = getUser;
                 account.ModifyTime = DateTime.Now;
                 _abmsContext.Accounts.Update(account);
@@ -105,7 +85,7 @@ namespace ABMS_backend.Services
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }               
                 account.Status = (int)Constants.STATUS.IN_ACTIVE;
-                string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 account.ModifyUser = getUser;
                 account.ModifyTime = DateTime.Now;
                 _abmsContext.Accounts.Update(account);
