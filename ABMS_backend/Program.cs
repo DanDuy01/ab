@@ -31,6 +31,7 @@ builder.Services.AddScoped<IMemberManagerRepository, MemberManagerService>();
 builder.Services.AddScoped<IReservationManagementRepository, ReservationManagementService>();
 builder.Services.AddScoped<IVisitorManagementRepository, VisitorManagementService>();
 builder.Services.AddScoped<IElevatorRepository, ElevatorService>();
+builder.Services.AddScoped<IConstructionManagementRepository, ConstructionServices>();
 builder.Services.AddScoped<IVisitorManagementRepository, VisitorManagementService>();
 builder.Services.AddControllersWithViews().AddJsonOptions(options =>
 {
