@@ -254,9 +254,10 @@ namespace ABMS_backend.Services
             };
         }
 
-        public ResponseData<List<UtiliityDetail>> getUtilityDetail()
+        public ResponseData<List<UtiliityDetail>> getUtilityDetail(String? utilityId)
         {
-            var utilityDetail = _abmsContext.UtiliityDetails.Where(x => x.Status == (int)Constants.STATUS.ACTIVE).ToList();
+            var utilityDetail = _abmsContext.UtiliityDetails.Where(x => (x.Status == (int)Constants.STATUS.ACTIVE
+            && (utilityId == null || x.UtilityId ==  utilityId))).ToList();
             return new ResponseData<List<UtiliityDetail>>
             {
                 Data = utilityDetail,

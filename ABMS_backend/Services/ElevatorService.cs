@@ -5,6 +5,8 @@ using ABMS_backend.Utils.Validates;
 using System.Net;
 using ABMS_backend.Utils.Exceptions;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ABMS_backend.Services
 {
@@ -18,6 +20,24 @@ namespace ABMS_backend.Services
         {
             _abmsContext = abmsContext;
             _httpContextAccessor = httpContextAccessor;
+        }
+
+        public string GetUserFromToken(string token)
+        {
+            if (token == null)
+            {
+                throw new CustomException(ErrorApp.FORBIDDEN);
+            }
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(token.Replace("Bearer ", "")) as JwtSecurityToken;
+
+            if (jsonToken == null)
+            {
+                return null;
+            }
+            var userClaim = jsonToken.Claims.FirstOrDefault(claim => claim.Type == "User")?.Value;
+
+            return userClaim;
         }
 
         public ResponseData<string> createElevator(ElevatorForInsertDTO dto)
@@ -35,7 +55,17 @@ namespace ABMS_backend.Services
             }
             try
             {
+                bool hasConflict = _abmsContext.Elevators.Any(elevator =>
+            (dto.start_time < elevator.EndTime && dto.end_time > elevator.StartTime));
 
+                if (hasConflict)
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.Conflict,
+                        ErrMsg = "Time slot conflict"
+                    };
+                }
                 Elevator elevator = new Elevator();
                 elevator.Id = Guid.NewGuid().ToString();
                 elevator.RoomId = dto.room_id;
@@ -78,7 +108,7 @@ namespace ABMS_backend.Services
             try
             {
                 Elevator elevator = _abmsContext.Elevators.Find(id);
-                if(elevator == null)
+                if (elevator == null)
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
@@ -120,7 +150,8 @@ namespace ABMS_backend.Services
                     ErrMsg = ErrorApp.FORBIDDEN.description
                 };
             }
-            elevator.ApproveUser = _httpContextAccessor.HttpContext.Session.GetString("user");
+            string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+            elevator.ApproveUser = getUser;
             _abmsContext.Elevators.Update(elevator);
             _abmsContext.SaveChanges();
             return new ResponseData<string>
@@ -163,7 +194,7 @@ namespace ABMS_backend.Services
         public ResponseData<List<Elevator>> getElevator(ElevatorForSearchDTO dto)
         {
             var list = _abmsContext.Elevators.
-                Where(x => (dto.room_id == null || x.RoomId == dto.room_id) 
+                Where(x => (dto.room_id == null || x.RoomId == dto.room_id)
                 && (dto.time == null || (x.StartTime <= dto.time && dto.time <= x.EndTime))
                 && (dto.status == null || x.Status == dto.status)).ToList();
             return new ResponseData<List<Elevator>>

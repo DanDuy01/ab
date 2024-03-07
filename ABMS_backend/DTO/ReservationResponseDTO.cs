@@ -6,6 +6,8 @@
 
         public string utility { get; set;}
 
+        public string utility_detail_id { get; set; }
+
         public string utility_detail_name { get; set; }
 
         public string slot { get; set; }

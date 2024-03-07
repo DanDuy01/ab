@@ -53,9 +53,9 @@ namespace ABMS_backend.Controllers
         }
 
         [HttpGet("utility/get-utility-detail")]
-        public ResponseData<List<UtiliityDetail>> GetUtilityDetail()
+        public ResponseData<List<UtiliityDetail>> GetUtilityDetail(String? utilityId)
         {
-            ResponseData<List<UtiliityDetail>> response = _repository.getUtilityDetail();
+            ResponseData<List<UtiliityDetail>> response = _repository.getUtilityDetail(utilityId);
             return response;
         }
 

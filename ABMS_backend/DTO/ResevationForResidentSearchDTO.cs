@@ -6,7 +6,7 @@
 
         public string? utilityId { get; set; }
 
-        public string? utilityDetailName { get; set; }
+        public string? utilityDetailId { get; set; }
 
         public DateOnly? bookingDate { get; set; }
 

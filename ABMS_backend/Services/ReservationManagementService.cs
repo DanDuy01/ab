@@ -182,7 +182,7 @@ namespace ABMS_backend.Services
             var utilitySchedules = _abmsContext.UtilitySchedules.Include(x => x.UtilityDetail.Utility).
                 Where(x => (dto.roomId == null || x.RoomId == dto.roomId) &&
                 (dto.utilityId == null || x.UtilityDetail.UtilityId == dto.utilityId) &&
-                (dto.utilityDetailName == null || x.UtilityDetail.Name.ToLower().Contains(dto.utilityDetailName.ToLower())) &&
+                (dto.utilityDetailId == null || x.UtilityDetailId == dto.utilityDetailId) &&
                 (dto.bookingDate == null || x.BookingDate == dto.bookingDate)).ToList();
             List < ReservationResponseDTO > dtoList = new List<ReservationResponseDTO> ();
             foreach (var schedule in utilitySchedules)
@@ -190,6 +190,7 @@ namespace ABMS_backend.Services
                 ReservationResponseDTO response = new ReservationResponseDTO();
                 response.room_id = schedule.RoomId;
                 response.utility = schedule.UtilityDetail.Utility.Name;
+                response.utility_detail_id = schedule.UtilityDetailId;
                 response.utility_detail_name = schedule.UtilityDetail.Name;
                 response.slot = schedule.Slot;
                 response.booking_date = schedule.BookingDate;
