@@ -26,6 +26,13 @@ namespace ABMS_backend.Controllers
             return response;
         }
 
+        [HttpPut("visitor/manage/{id}")]
+        public ResponseData<string> Manage(String id, int status)
+        {
+            ResponseData<string> response = _repository.manageVisitor(id, status);
+            return response;
+        }
+
         [HttpDelete("visitor/delete/{id}")]
         public ResponseData<string> Delete(String id)
         {

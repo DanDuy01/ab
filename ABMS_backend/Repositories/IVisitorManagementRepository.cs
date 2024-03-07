@@ -8,8 +8,12 @@ namespace ABMS_backend.Repositories
         ResponseData<string> createRequestVisitor(VisitorForInsertDTO dto);
         
         ResponseData<string> deleteRequestVisitor(string id);
-       
+        ResponseData<string> updateRequestVisitor(string id, VisitorForInsertDTO dto);
+
         ResponseData<List<Visitor>> getAllRequestVisitor(VisitorForSearchDTO dto);
+
+        ResponseData<Visitor> getRequestVisitorById(string id);
+        ResponseData<string> manageVisitor(string id, int status);
 
     }
 }

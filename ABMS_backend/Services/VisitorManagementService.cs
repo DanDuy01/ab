@@ -2,6 +2,7 @@
 using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Exceptions;
+using ABMS_backend.Utils.Token;
 using ABMS_backend.Utils.Validates;
 using AutoMapper;
 using System.Collections.Generic;
@@ -47,17 +48,8 @@ namespace ABMS_backend.Services
                 visitor.IdentityNumber= dto.identityNumber;
                 visitor.IdentityCardImgUrl= dto.identityCardImgUrl;
                 visitor.Description= dto.description;
-
-                if (_httpContextAccessor.HttpContext.Session.GetString("reception") == null)
-                {
-                    return new ResponseData<string>
-                    {
-                        StatusCode = HttpStatusCode.Forbidden,
-                        ErrMsg = ErrorApp.FORBIDDEN.description
-                    };
-                }
-
-                visitor.ApproveUser= _httpContextAccessor.HttpContext.Session.GetString("reception");
+                string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                visitor.ApproveUser= getUser;
                 visitor.Status = (int)Constants.STATUS.SENT;
                 _abmsContext.Visitors.Add(visitor);
                 _abmsContext.SaveChanges();
@@ -108,7 +100,7 @@ namespace ABMS_backend.Services
                 return new ResponseData<string>
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
-                    ErrMsg = "Created failed why " + ex.Message
+                    ErrMsg = "Delete failed why " + ex.Message
                 };
 
             }
@@ -129,6 +121,99 @@ namespace ABMS_backend.Services
                 Count = list.Count
             };
 
+        }
+        public ResponseData<string> manageVisitor(string id, int status)
+        {
+            Visitor visitor = _abmsContext.Visitors.Find(id);
+            if (visitor == null)
+            {
+                throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
+            }
+            visitor.Status = status;
+            if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                    ErrMsg = ErrorApp.FORBIDDEN.description
+                };
+            }
+            string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+            visitor.ApproveUser = getUser;
+            _abmsContext.Visitors.Update(visitor);
+            _abmsContext.SaveChanges();
+            return new ResponseData<string>
+            {
+                Data = visitor.Id,
+                StatusCode = HttpStatusCode.OK,
+                ErrMsg = ErrorApp.SUCCESS.description
+            };
+        }
+
+        public ResponseData<string> updateRequestVisitor(string id, VisitorForInsertDTO dto)
+        {
+            string error = dto.Validate();
+
+            if (error != null)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = error
+                };
+            }
+
+            try
+            {
+                Visitor visitor = _abmsContext.Visitors.Find(id);
+
+                if (visitor == null)
+                {
+                    throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
+                }
+                visitor.RoomId = dto.roomId;
+                visitor.FullName = dto.fullName;
+                visitor.ArrivalTime = dto.arrivalTime;
+                visitor.DepartureTime = dto.departureTime;
+                visitor.Gender = dto.gender;
+                visitor.PhoneNumber = dto.phoneNumber;
+                visitor.IdentityNumber = dto.identityNumber;
+                visitor.IdentityCardImgUrl = dto.identityCardImgUrl;
+                visitor.Description = dto.description;               
+                string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                visitor.ApproveUser = getUser;
+                _abmsContext.Visitors.Update(visitor);
+                _abmsContext.SaveChanges();
+                return new ResponseData<string>
+                {
+                    Data = visitor.Id,
+                    StatusCode = HttpStatusCode.OK,
+                    ErrMsg = ErrorApp.SUCCESS.description
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = "Update failed why " + ex.Message
+                };
+            }
+        }
+
+        public ResponseData<Visitor> getRequestVisitorById(string id)
+        {
+            Visitor visitor = _abmsContext.Visitors.Find(id);
+            if (visitor == null)
+            {
+                throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
+            }
+            return new ResponseData<Visitor>
+            {
+                Data = visitor,
+                StatusCode = HttpStatusCode.OK,
+                ErrMsg = ErrorApp.SUCCESS.description
+            };
         }
     }
 }
