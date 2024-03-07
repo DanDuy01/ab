@@ -210,7 +210,6 @@ namespace ABMS_backend.Services
             }
             return new ResponseData<Visitor>
             {
-
                 Data = visitor,
                 StatusCode = HttpStatusCode.OK,
                 ErrMsg = ErrorApp.SUCCESS.description
