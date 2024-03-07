@@ -27,6 +27,16 @@ namespace ABMS_backend.Services
 
         public ResponseData<string> createRoomInformation(RoomForInsertDTO dto)
         {
+            string error = dto.Validate();
+
+            if (error != null)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = error
+                };
+            }
             try
             {
                 Room room = new Room();
@@ -103,7 +113,9 @@ namespace ABMS_backend.Services
         public ResponseData<List<Room>> getRoomInformation(RoomForSearchDTO dto)
         {
             var list = _abmsContext.Rooms.
-                 Where(x => dto.roomNumber == null || x.RoomNumber.ToLower().Contains(dto.roomNumber.ToLower())).ToList();
+                 Where(x => (dto.accountId == null || x.AccountId == dto.accountId)
+                 && (dto.roomNumber == null || x.RoomNumber.ToLower()
+                 .Contains(dto.roomNumber.ToLower()))).ToList();
             return new ResponseData<List<Room>>
             {
                 Data = list,
@@ -131,6 +143,17 @@ namespace ABMS_backend.Services
 
         public ResponseData<string> updateRoomInformation(string id, RoomForInsertDTO dto)
         {
+            string error = dto.Validate();
+
+            if (error != null)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = error
+                };
+            }
+
             try
             {
                 Room room = _abmsContext.Rooms.Find(id);

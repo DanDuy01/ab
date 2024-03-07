@@ -18,18 +18,23 @@ namespace ABMS_backend.DTO
         {
             string phoneRegexPattern = @"(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b";
             Regex regexPhone = new Regex(phoneRegexPattern);
+            var regexFomatDate = new Regex(@"^\d{1,2}/\d{1,2}/\d{4} \d{1,2}:\d{1,2}$");
 
             if (String.IsNullOrEmpty(roomId))
             {
                 return "Room is required!";
             }
-            else if (!regexPhone.IsMatch(phone))
+            if (!regexPhone.IsMatch(phone))
             {
                 return "Wrong phone!";
             }
-            else if (String.IsNullOrEmpty(fullName))
+            if (String.IsNullOrEmpty(fullName))
             {
                 return "Full name is required!";
+            }
+            if (!regexFomatDate.IsMatch(dob.ToString()))
+            {
+                return "Wrong fomat date! ";
             }
 
             return null;

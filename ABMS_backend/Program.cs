@@ -29,7 +29,9 @@ builder.Services.AddScoped<ILoginAccount, LoginService>();
 builder.Services.AddScoped<IRoomInformationRepository, RoomInformationService>();
 builder.Services.AddScoped<IMemberManagerRepository, MemberManagerService>();
 builder.Services.AddScoped<IReservationManagementRepository, ReservationManagementService>();
+builder.Services.AddScoped<IVisitorManagementRepository, VisitorManagementService>();
 builder.Services.AddScoped<IElevatorRepository, ElevatorService>();
+builder.Services.AddScoped<IVisitorManagementRepository, VisitorManagementService>();
 builder.Services.AddControllersWithViews().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new TimeOnlyConverter());
