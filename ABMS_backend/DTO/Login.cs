@@ -1,10 +1,12 @@
-﻿using System.Numerics;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Numerics;
 using System.Text.RegularExpressions;
 
 namespace ABMS_backend.DTO
 {
     public class Login
     {
+        [Phone]
         public string phoneNumber {  get; set; }
         public string password { get; set; }
         public string Validate()
