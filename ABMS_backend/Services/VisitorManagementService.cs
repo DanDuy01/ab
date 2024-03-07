@@ -130,14 +130,6 @@ namespace ABMS_backend.Services
                 throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
             }
             visitor.Status = status;
-            if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
-            {
-                return new ResponseData<string>
-                {
-                    StatusCode = HttpStatusCode.Forbidden,
-                    ErrMsg = ErrorApp.FORBIDDEN.description
-                };
-            }
             string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
             visitor.ApproveUser = getUser;
             _abmsContext.Visitors.Update(visitor);
