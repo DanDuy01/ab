@@ -19,7 +19,7 @@ namespace ABMS_backend.Controllers
         }
 
         [HttpGet("resident-room/get")]
-        public ResponseData<List<Room>> Get(RoomForSearchDTO dto)
+        public ResponseData<List<Room>> Get([FromQuery]RoomForSearchDTO dto)
         {
             ResponseData<List<Room>> response = _repository.getRoomInformation(dto);
             return response;
