@@ -2,7 +2,7 @@ name: Build and deploy .NET Core application to Web App abmscapstone with API Ma
 on:
   push:
     branches:
-    - BE
+    - deploy
 env:
   AZURE_WEBAPP_NAME: ABMSCapstone2024
   AZURE_WEBAPP_PACKAGE_PATH: .\publish
