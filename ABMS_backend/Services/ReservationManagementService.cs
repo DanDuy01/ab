@@ -171,6 +171,7 @@ namespace ABMS_backend.Services
             foreach (var schedule in utilitySchedules)
             {
                 ReservationResponseDTO response = new ReservationResponseDTO();
+                response.id = schedule.Id;
                 response.room_id = schedule.RoomId;
                 response.utility = schedule.UtilityDetail.Utility.Name;
                 response.utility_detail_id = schedule.UtilityDetailId;
