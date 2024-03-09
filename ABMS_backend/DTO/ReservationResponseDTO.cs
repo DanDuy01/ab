@@ -2,6 +2,7 @@
 {
     public class ReservationResponseDTO
     {
+        public string id { get; set; }
         public string room_id { get; set; }
 
         public string utility { get; set;}
