@@ -19,9 +19,16 @@ namespace ABMS_backend.Controllers
         }
 
         [HttpGet("resident-room-member/get")]
-        public ResponseData<List<Resident>> GetAllMember(MemberForSearchDTO dto)
+        public ResponseData<List<Resident>> GetAllMember([FromQuery]MemberForSearchDTO dto)
         {
             ResponseData<List<Resident>> response = _repository.getAllMember(dto);
+            return response;
+        }
+
+        [HttpGet("resident-room-member/get/{id}")]
+        public ResponseData<Resident> GetMemberById(String id)
+        {
+            ResponseData<Resident> response = _repository.getMemberById(id);
             return response;
         }
 
