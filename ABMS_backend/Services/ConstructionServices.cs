@@ -44,7 +44,6 @@ namespace ABMS_backend.Services
                 c.EndTime = dto.endTime;
                 c.Description = dto.description;
                 c.CreateTime = DateTime.Now;
-                c.ApproveUser = dto.approveUser;
                 c.Status = (int)Constants.STATUS.SENT;
                 _abmsContext.Constructions.Add(c);
                 _abmsContext.SaveChanges();
