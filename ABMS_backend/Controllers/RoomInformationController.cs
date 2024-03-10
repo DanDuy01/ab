@@ -25,6 +25,13 @@ namespace ABMS_backend.Controllers
             return response;
         }
 
+        [HttpGet("resident-room/get/{id}")]
+        public ResponseData<Room> GetRoomById(String id)
+        {
+            ResponseData<Room> response = _repository.getRoomInformationById(id);
+            return response;
+        }
+
 
         [HttpPost("resident-room/create")]
         public ResponseData<string> Create([FromBody] RoomForInsertDTO dto)
