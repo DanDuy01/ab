@@ -213,6 +213,7 @@ namespace ABMS_backend.Services
             var list = _abmsContext.Utilities.
                 Where(x => dtoSearch.name == null || x.Name.ToLower().Contains(dtoSearch.name.ToLower())
                 && (dtoSearch.buildingId == null || x.BuildingId == dtoSearch.buildingId)).ToList();
+
             return new ResponseData<List<Utility>>
             {
                 Data = list,
