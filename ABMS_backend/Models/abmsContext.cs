@@ -42,20 +42,22 @@ namespace ABMS_backend.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseMySql("server=127.0.0.1;port=3307;database=abms;user=root;password=123", Microsoft.EntityFrameworkCore.ServerVersion.Parse("11.2.3-mariadb"));
+                optionsBuilder.UseMySql("server=haidang.c344c4u4ocam.ap-southeast-2.rds.amazonaws.com;port=3306;database=abms;user=admin;password=Haidang4837", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.11.6-mariadb"));
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.UseCollation("utf8mb4_general_ci")
-                .HasCharSet("utf8mb4");
+            modelBuilder.UseCollation("latin1_swedish_ci")
+                .HasCharSet("latin1");
 
             modelBuilder.Entity<Account>(entity =>
             {
                 entity.ToTable("account");
 
-                entity.HasComment("Tài khoản");
+                entity.HasComment("Tài khoản")
+                    .HasCharSet("utf8mb4")
+                    .UseCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(100)
@@ -120,7 +122,7 @@ namespace ABMS_backend.Models
                 entity.Property(e => e.Role)
                     .HasColumnType("int(11)")
                     .HasColumnName("role")
-                    .HasComment("Vai trò: 1 cmb, 2 lễ tân, 3 room");
+                    .HasComment("Vai trò: 0 admin, 1 cmb, 2 lễ tân, 3 room");
 
                 entity.Property(e => e.Status)
                     .HasColumnType("int(11)")
@@ -136,6 +138,9 @@ namespace ABMS_backend.Models
             modelBuilder.Entity<AccountPost>(entity =>
             {
                 entity.ToTable("account_post");
+
+                entity.HasCharSet("utf8mb4")
+                    .UseCollation("utf8mb4_general_ci");
 
                 entity.HasIndex(e => e.AccountId, "account_post_account_FK");
 
@@ -178,7 +183,9 @@ namespace ABMS_backend.Models
             {
                 entity.ToTable("building");
 
-                entity.HasComment("Tòa nhà");
+                entity.HasComment("Tòa nhà")
+                    .HasCharSet("utf8mb4")
+                    .UseCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(100)
@@ -235,7 +242,9 @@ namespace ABMS_backend.Models
             {
                 entity.ToTable("construction");
 
-                entity.HasComment("Thi công");
+                entity.HasComment("Thi công")
+                    .HasCharSet("utf8mb4")
+                    .UseCollation("utf8mb4_general_ci");
 
                 entity.HasIndex(e => e.RoomId, "construction_room_FK");
 
@@ -305,7 +314,9 @@ namespace ABMS_backend.Models
             {
                 entity.ToTable("elevator");
 
-                entity.HasComment("Thang chuyển đồ");
+                entity.HasComment("Thang chuyển đồ")
+                    .HasCharSet("utf8mb4")
+                    .UseCollation("utf8mb4_general_ci");
 
                 entity.HasIndex(e => e.RoomId, "elevator_room_FK");
 
@@ -355,7 +366,9 @@ namespace ABMS_backend.Models
             {
                 entity.ToTable("expense");
 
-                entity.HasComment("Chi");
+                entity.HasComment("Chi")
+                    .HasCharSet("utf8mb4")
+                    .UseCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(100)
@@ -406,7 +419,9 @@ namespace ABMS_backend.Models
             {
                 entity.ToTable("fee");
 
-                entity.HasComment("Giá dịch vụ");
+                entity.HasComment("Giá dịch vụ")
+                    .HasCharSet("utf8mb4")
+                    .UseCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(100)
@@ -471,7 +486,9 @@ namespace ABMS_backend.Models
             {
                 entity.ToTable("feedback");
 
-                entity.HasComment("phản hồi");
+                entity.HasComment("phản hồi")
+                    .HasCharSet("utf8mb4")
+                    .UseCollation("utf8mb4_general_ci");
 
                 entity.HasIndex(e => e.RoomId, "feedback_room_FK");
 
@@ -533,7 +550,9 @@ namespace ABMS_backend.Models
             {
                 entity.ToTable("fund");
 
-                entity.HasComment("Quỹ");
+                entity.HasComment("Quỹ")
+                    .HasCharSet("utf8mb4")
+                    .UseCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(100)
@@ -584,7 +603,9 @@ namespace ABMS_backend.Models
             {
                 entity.ToTable("hotline");
 
-                entity.HasComment("Đường dây nóng");
+                entity.HasComment("Đường dây nóng")
+                    .HasCharSet("utf8mb4")
+                    .UseCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(100)
@@ -611,7 +632,9 @@ namespace ABMS_backend.Models
             {
                 entity.ToTable("parking_card");
 
-                entity.HasComment("Thẻ gửi xe");
+                entity.HasComment("Thẻ gửi xe")
+                    .HasCharSet("utf8mb4")
+                    .UseCollation("utf8mb4_general_ci");
 
                 entity.HasIndex(e => e.ResidentId, "parking_card_resident_FK");
 
@@ -690,7 +713,9 @@ namespace ABMS_backend.Models
             {
                 entity.ToTable("post");
 
-                entity.HasComment("Bài viết");
+                entity.HasComment("Bài viết")
+                    .HasCharSet("utf8mb4")
+                    .UseCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(100)
@@ -742,7 +767,9 @@ namespace ABMS_backend.Models
             {
                 entity.ToTable("resident");
 
-                entity.HasComment("Cư dân");
+                entity.HasComment("Cư dân")
+                    .HasCharSet("utf8mb4")
+                    .UseCollation("utf8mb4_general_ci");
 
                 entity.HasIndex(e => e.RoomId, "resident_room_FK");
 
@@ -814,7 +841,9 @@ namespace ABMS_backend.Models
             {
                 entity.ToTable("room");
 
-                entity.HasComment("Căn hộ");
+                entity.HasComment("Căn hộ")
+                    .HasCharSet("utf8mb4")
+                    .UseCollation("utf8mb4_general_ci");
 
                 entity.HasIndex(e => e.AccountId, "room_account_FK");
 
@@ -890,7 +919,9 @@ namespace ABMS_backend.Models
             {
                 entity.ToTable("service_charge");
 
-                entity.HasComment("Thanh toán dịch vụ");
+                entity.HasComment("Thanh toán dịch vụ")
+                    .HasCharSet("utf8mb4")
+                    .UseCollation("utf8mb4_general_ci");
 
                 entity.HasIndex(e => e.RoomId, "service_charge_room_FK");
 
@@ -959,7 +990,9 @@ namespace ABMS_backend.Models
             {
                 entity.ToTable("service_type");
 
-                entity.HasComment("Loại dịch vụ");
+                entity.HasComment("Loại dịch vụ")
+                    .HasCharSet("utf8mb4")
+                    .UseCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(100)
@@ -1000,6 +1033,9 @@ namespace ABMS_backend.Models
             modelBuilder.Entity<UtiliityDetail>(entity =>
             {
                 entity.ToTable("utiliity_detail");
+
+                entity.HasCharSet("utf8mb4")
+                    .UseCollation("utf8mb4_general_ci");
 
                 entity.HasIndex(e => e.UtilityId, "utiliity_detail_utility_FK");
 
@@ -1054,12 +1090,20 @@ namespace ABMS_backend.Models
             {
                 entity.ToTable("utility");
 
-                entity.HasComment("Tiện ích");
+                entity.HasComment("Tiện ích")
+                    .HasCharSet("utf8mb4")
+                    .UseCollation("utf8mb4_general_ci");
+
+                entity.HasIndex(e => e.BuildingId, "utility_building_FK");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(100)
                     .HasColumnName("id")
                     .HasComment("Khóa chính của bảng");
+
+                entity.Property(e => e.BuildingId)
+                    .HasMaxLength(100)
+                    .HasColumnName("building_id");
 
                 entity.Property(e => e.CloseTime)
                     .HasColumnType("time")
@@ -1119,13 +1163,21 @@ namespace ABMS_backend.Models
                     .HasColumnType("int(11)")
                     .HasColumnName("status")
                     .HasComment("Trạng thái sử dụng: 0 hết hiệu lực, 1 còn hiệu lực");
+
+                entity.HasOne(d => d.Building)
+                    .WithMany(p => p.Utilities)
+                    .HasForeignKey(d => d.BuildingId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("utility_building_FK");
             });
 
             modelBuilder.Entity<UtilitySchedule>(entity =>
             {
                 entity.ToTable("utility_schedule");
 
-                entity.HasComment("Lịch tiện ích");
+                entity.HasComment("Lịch tiện ích")
+                    .HasCharSet("utf8mb4")
+                    .UseCollation("utf8mb4_general_ci");
 
                 entity.HasIndex(e => e.RoomId, "utility_schedule_room_FK");
 
@@ -1196,7 +1248,9 @@ namespace ABMS_backend.Models
             {
                 entity.ToTable("visitor");
 
-                entity.HasComment("Khách thăm");
+                entity.HasComment("Khách thăm")
+                    .HasCharSet("utf8mb4")
+                    .UseCollation("utf8mb4_general_ci");
 
                 entity.HasIndex(e => e.RoomId, "visitor_room_FK");
 

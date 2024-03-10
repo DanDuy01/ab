@@ -11,6 +11,7 @@ namespace ABMS_backend.Models
         public Building()
         {
             Rooms = new HashSet<Room>();
+            Utilities = new HashSet<Utility>();
         }
 
         /// <summary>
@@ -55,5 +56,6 @@ namespace ABMS_backend.Models
         public int Status { get; set; }
 
         public virtual ICollection<Room> Rooms { get; set; }
+        public virtual ICollection<Utility> Utilities { get; set; }
     }
 }

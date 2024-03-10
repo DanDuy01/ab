@@ -47,7 +47,7 @@ namespace ABMS_backend.Models
         /// </summary>
         public string FullName { get; set; } = null!;
         /// <summary>
-        /// Vai trò: 1 cmb, 2 lễ tân, 3 room
+        /// Vai trò: 0 admin, 1 cmb, 2 lễ tân, 3 room
         /// </summary>
         public int Role { get; set; }
         /// <summary>

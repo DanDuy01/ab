@@ -43,6 +43,7 @@ namespace ABMS_backend.Services
                 Utility utility = new Utility();
                 utility.Id = Guid.NewGuid().ToString();
                 utility.Name = dto.name;
+                utility.BuildingId = dto.buildingId;
                 utility.OpenTime = dto.openTime;
                 utility.CloseTime = dto.closeTime;
                 utility.NumberOfSlot = dto.numberOfSlot;
@@ -210,7 +211,8 @@ namespace ABMS_backend.Services
         public ResponseData<List<Utility>> getAllUtility(UtilityForSearch dtoSearch)
         {
             var list = _abmsContext.Utilities.
-                Where(x => dtoSearch.name == null || x.Name.ToLower().Contains(dtoSearch.name.ToLower())).ToList();
+                Where(x => dtoSearch.name == null || x.Name.ToLower().Contains(dtoSearch.name.ToLower())
+                && (dtoSearch.buildingId == null || x.BuildingId == dtoSearch.buildingId)).ToList();
             return new ResponseData<List<Utility>>
             {
                 Data = list,
