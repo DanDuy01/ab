@@ -10,6 +10,7 @@ namespace ABMS_backend.DTO
         [Phone]
         public string? phone { get; set; }
 
+
         public DateTime? time { get; set; }
         public int? status { get; set; }
     }
