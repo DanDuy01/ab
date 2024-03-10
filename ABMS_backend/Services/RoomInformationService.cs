@@ -113,6 +113,7 @@ namespace ABMS_backend.Services
         public ResponseData<List<Room>> getRoomInformation(RoomForSearchDTO dto)
         {
             var list = _abmsContext.Rooms.
+
                  Where(x => (dto.accountId == null || x.AccountId == dto.accountId)
                  && (dto.roomNumber == null || x.RoomNumber.ToLower()
                  .Contains(dto.roomNumber.ToLower()))).ToList();
