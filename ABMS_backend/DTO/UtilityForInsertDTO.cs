@@ -6,6 +6,8 @@ namespace ABMS_backend.DTO
     {
         public string name { get; set; }
 
+        public string buildingId { get; set; }
+
         public TimeOnly openTime { get; set; }
 
         public TimeOnly closeTime { get; set; }
@@ -21,6 +23,11 @@ namespace ABMS_backend.DTO
             if (String.IsNullOrEmpty(name))
             {
                 return "Name is required!";
+            }
+
+            else if (String.IsNullOrEmpty(buildingId))
+            {
+                return "Building is required!";
             }
 
             else if (openTime == null)

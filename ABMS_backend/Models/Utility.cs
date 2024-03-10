@@ -17,6 +17,7 @@ namespace ABMS_backend.Models
         /// Khóa chính của bảng
         /// </summary>
         public string Id { get; set; } = null!;
+        public string BuildingId { get; set; } = null!;
         /// <summary>
         /// Tên tiện ích
         /// </summary>
@@ -66,6 +67,7 @@ namespace ABMS_backend.Models
         /// </summary>
         public int Status { get; set; }
 
+        public virtual Building Building { get; set; } = null!;
         public virtual ICollection<UtiliityDetail> UtiliityDetails { get; set; }
     }
 }
