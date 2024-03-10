@@ -13,8 +13,6 @@ namespace ABMS_backend.DTO
         public DateTime startTime { get; set; }
         public DateTime endTime { get; set; }
         public string? description { get; set; }
-        public DateTime createTime { get; set; }
-        public string? approveUser { get; set; }
 
         public string Validate()
         {

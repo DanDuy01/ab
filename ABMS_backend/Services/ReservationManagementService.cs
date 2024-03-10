@@ -170,7 +170,8 @@ namespace ABMS_backend.Services
             List < ReservationResponseDTO > dtoList = new List<ReservationResponseDTO> ();
             foreach (var schedule in utilitySchedules)
             {
-                ReservationResponseDTO response = new ReservationResponseDTO();
+                ReservationResponseDTO response = new   ();
+                response.id = schedule.Id;
                 response.room_id = schedule.RoomId;
                 response.utility = schedule.UtilityDetail.Utility.Name;
                 response.utility_detail_id = schedule.UtilityDetailId;
@@ -223,12 +224,18 @@ namespace ABMS_backend.Services
 
         public ResponseData<ReservationResponseDTO> getReservationById(string id)
         {
-            UtilitySchedule utilitySchedule = _abmsContext.UtilitySchedules.Find(id);
+            var utilitySchedule = _abmsContext.UtilitySchedules
+                        .Where(us => us.Id == id)
+                        .Include(us => us.UtilityDetail)
+                            .ThenInclude(ud => ud.Utility)
+                        .FirstOrDefault();
             if (utilitySchedule == null)
             {
                 throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
             }
             ReservationResponseDTO dto = new ReservationResponseDTO();
+            dto.id = utilitySchedule.Id;
+            dto.utility_detail_id = utilitySchedule.UtilityDetail.UtilityId;
             dto.room_id = utilitySchedule.RoomId;
             dto.utility = utilitySchedule.UtilityDetail.Utility.Name;
             dto.utility_detail_name = utilitySchedule.UtilityDetail.Name;
