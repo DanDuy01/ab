@@ -39,7 +39,8 @@ namespace ABMS_backend.Services
             try
             {
                 bool hasConflict = _abmsContext.Elevators.Any(elevator =>
-            (dto.start_time < elevator.EndTime && dto.end_time > elevator.StartTime));
+    elevator.Status == 3 &&
+    (dto.start_time < elevator.EndTime && dto.end_time > elevator.StartTime));
 
                 if (hasConflict)
                 {
