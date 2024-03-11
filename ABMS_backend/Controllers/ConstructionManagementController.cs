@@ -31,7 +31,7 @@ namespace ABMS_backend.Controllers
             return response;
         }
 
-        [HttpGet("constuction/get")]
+        [HttpGet("construction/get")]
         public ResponseData<List<Construction>> Get([FromQuery] ConstructionForSearchDTO dto)
         {
             ResponseData<List<Construction>> response = _repository.getConstruction(dto);
