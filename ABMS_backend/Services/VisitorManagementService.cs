@@ -108,6 +108,7 @@ namespace ABMS_backend.Services
 
         public ResponseData<List<Visitor>> getAllRequestVisitor(VisitorForSearchDTO dto)
         {
+
             var list = _abmsContext.Visitors
                 .Where(x => (dto.roomId== null || x.RoomId== dto.roomId)
                 && (dto.fullName== null || x.FullName== dto.fullName)
