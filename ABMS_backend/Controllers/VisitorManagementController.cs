@@ -33,6 +33,13 @@ namespace ABMS_backend.Controllers
             return response;
         }
 
+        [HttpPut("visitor/update/{id}")]
+        public ResponseData<string> Update(String id, [FromBody] VisitorForInsertDTO dto)
+        {
+            ResponseData<string> response = _repository.updateRequestVisitor(id, dto);
+            return response;
+        }
+
         [HttpDelete("visitor/delete/{id}")]
         public ResponseData<string> Delete(String id)
         {
@@ -44,6 +51,13 @@ namespace ABMS_backend.Controllers
         public ResponseData<List<Visitor>> GetAll([FromQuery] VisitorForSearchDTO dto)
         {
             ResponseData<List<Visitor>> response = _repository.getAllRequestVisitor(dto);
+            return response;
+        }
+        
+        [HttpGet("visitor/getVisitorbyId/{id}")]
+        public ResponseData<Visitor> GetVisitorById(String id)
+        {
+            ResponseData<Visitor> response = _repository.getRequestVisitorById(id);
             return response;
         }
 
