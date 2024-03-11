@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using ABMS_backend.Utils.Token;
+using Microsoft.EntityFrameworkCore;
 
 namespace ABMS_backend.Services
 {
@@ -172,10 +173,20 @@ namespace ABMS_backend.Services
 
         public ResponseData<List<Elevator>> getElevator(ElevatorForSearchDTO dto)
         {
-            var list = _abmsContext.Elevators.
+            var list = _abmsContext.Elevators.Include(x=>x.Room).
                 Where(x => (dto.room_id == null || x.RoomId == dto.room_id)
                 && (dto.time == null || (x.StartTime <= dto.time && dto.time <= x.EndTime))
-                && (dto.status == null || x.Status == dto.status)).ToList();
+                && (dto.status == null || x.Status == dto.status)).Select(x=> new Elevator
+                {
+                    Id = x.Id,
+                    StartTime = x.StartTime,
+                    EndTime = x.EndTime,
+                    Description = x.Description,
+                    Status = x.Status,
+                    RoomId = x.RoomId,
+                    Room = x.Room,
+                    ApproveUser = x.ApproveUser
+                }).ToList();
             return new ResponseData<List<Elevator>>
             {
                 Data = list,
