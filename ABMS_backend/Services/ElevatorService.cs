@@ -117,7 +117,7 @@ namespace ABMS_backend.Services
             }
             bool hasConflict = _abmsContext.Elevators.Any(otherElevator =>
          otherElevator.Id != id &&
-         otherElevator.Status == 3 &&
+         otherElevator.Status == 3 && status !=4 &&
          (elevator.StartTime < otherElevator.EndTime && elevator.EndTime > otherElevator.StartTime));
 
             if (hasConflict)
