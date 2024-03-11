@@ -4,25 +4,24 @@ using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Exceptions;
 using ABMS_backend.Utils.Token;
 using ABMS_backend.Utils.Validates;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using System.Net;
+using System.Reflection.Metadata;
 
 namespace ABMS_backend.Services
 {
-    public class ParkingCardService : IParkingCardRepository
+    public class BuildingService : IBuildingRepository
     {
         private readonly abmsContext _abmsContext;
 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ParkingCardService(abmsContext abmsContext, IHttpContextAccessor httpContextAccessor)
+        public BuildingService(abmsContext abmsContext, IHttpContextAccessor httpContextAccessor)
         {
             _abmsContext = abmsContext;
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public ResponseData<string> createParkingCard(ParkingCardForInsertDTO dto)
+        public ResponseData<string> createBuilding(BuildingForInsertDTO dto)
         {
             //validate
             string error = dto.Validate();
@@ -38,24 +37,21 @@ namespace ABMS_backend.Services
 
             try
             {
-                ParkingCard card = new ParkingCard();
-                card.Id = Guid.NewGuid().ToString();
-                card.ResidentId = dto.resident_id;
-                card.LicensePlate = dto.license_plate;
-                card.Brand = dto.brand;
-                card.Color = dto.color;
-                card.Image = dto.image;
-                card.ExpireDate = dto.expire_date;
-                card.Note = dto.note;
-                card.Status = (int)Constants.STATUS.SENT;
+                Building building = new Building();
+                building.Id = Guid.NewGuid().ToString();
+                building.Name = dto.name;
+                building.Address = dto.address;
+                building.NumberOfFloor = dto.number_of_floor;
+                building.RoomEachFloor = dto.room_each_floor;
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
-                card.CreateUser = getUser;
-                card.CreateTime = DateTime.Now;
-                _abmsContext.ParkingCards.Add(card);
+                building.CreateUser = getUser;
+                building.CreateTime = DateTime.Now;
+                building.Status = (int)Constants.STATUS.ACTIVE;
+                _abmsContext.Buildings.Add(building);
                 _abmsContext.SaveChanges();
                 return new ResponseData<string>
                 {
-                    Data = card.Id,
+                    Data = building.Id,
                     StatusCode = HttpStatusCode.OK,
                     ErrMsg = ErrorApp.SUCCESS.description
                 };
@@ -70,7 +66,7 @@ namespace ABMS_backend.Services
             }
         }
 
-        public ResponseData<string> updateParkingCard(string id, ParkingCardForEditDTO dto)
+        public ResponseData<string> updateBuilding(string id, BuildingForInsertDTO dto)
         {
             //validate
             string error = dto.Validate();
@@ -86,26 +82,23 @@ namespace ABMS_backend.Services
 
             try
             {
-                ParkingCard card = _abmsContext.ParkingCards.Find(id);
-                if(card == null)
+                Building building = _abmsContext.Buildings.Find(id);
+                if(building == null)
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
-                card.ResidentId = dto.resident_id;
-                card.Brand = dto.brand;
-                card.Color = dto.color;
-                card.Image = dto.image;
-                card.ExpireDate = dto.expire_date;
-                card.Note = dto.note;
-                card.Status = dto.status;
+                building.Name = dto.name;
+                building.Address = dto.address;
+                building.NumberOfFloor = dto.number_of_floor;
+                building.RoomEachFloor = dto.room_each_floor;
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
-                card.ModifyUser = getUser;
-                card.ModifyTime = DateTime.Now;
-                _abmsContext.ParkingCards.Update(card);
+                building.ModifyUser = getUser;
+                building.ModifyTime = DateTime.Now;
+                _abmsContext.Buildings.Update(building);
                 _abmsContext.SaveChanges();
                 return new ResponseData<string>
                 {
-                    Data = card.Id,
+                    Data = building.Id,
                     StatusCode = HttpStatusCode.OK,
                     ErrMsg = ErrorApp.SUCCESS.description
                 };
@@ -120,24 +113,24 @@ namespace ABMS_backend.Services
             }
         }
 
-        public ResponseData<string> deleteParkingCard(string id)
+        public ResponseData<string> deleteBuilding(string id)
         {
             try
             {
-                ParkingCard card = _abmsContext.ParkingCards.Find(id);
-                if (card == null)
+                Building building = _abmsContext.Buildings.Find(id);
+                if (building == null)
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
-                card.Status = (int)Constants.STATUS.IN_ACTIVE;
+                building.Status = (int)Constants.STATUS.IN_ACTIVE;
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
-                card.ModifyUser = getUser;
-                card.ModifyTime = DateTime.Now;
-                _abmsContext.ParkingCards.Update(card);
+                building.ModifyUser = getUser;
+                building.ModifyTime = DateTime.Now;
+                _abmsContext.Buildings.Update(building);
                 _abmsContext.SaveChanges();
                 return new ResponseData<string>
                 {
-                    Data = card.Id,
+                    Data = building.Id,
                     StatusCode = HttpStatusCode.OK,
                     ErrMsg = ErrorApp.SUCCESS.description
                 };
@@ -147,20 +140,17 @@ namespace ABMS_backend.Services
                 return new ResponseData<string>
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
-                    ErrMsg = "Deleted failed why " + ex.Message
+                    ErrMsg = "Delete failed why " + ex.Message
                 };
             }
-            
         }
 
-        public ResponseData<List<ParkingCard>> getParkingCard(ParkingCardForSearchDTO dto)
+        public ResponseData<List<Building>> getBuilding(BuildingForSearchDTO dto)
         {
-            var list = _abmsContext.ParkingCards.
-                Where(x => (dto.resident_id == null || x.ResidentId == dto.resident_id)
-                && (dto.expire_date == null || x.ExpireDate == dto.expire_date)
-                && (dto.status == null || x.Status == dto.status)
-                && (dto.room_id == null || x.Resident.RoomId == dto.room_id)).ToList();
-            return new ResponseData<List<ParkingCard>>
+            var list = _abmsContext.Buildings.
+                Where(x => dto.name == null || x.Name.ToLower().Contains(dto.name.ToLower())
+                && (dto.address == null || x.Address.ToLower().Contains(dto.address.ToLower()))).ToList();
+            return new ResponseData<List<Building>>
             {
                 Data = list,
                 StatusCode = HttpStatusCode.OK,
@@ -169,16 +159,16 @@ namespace ABMS_backend.Services
             };
         }
 
-        public ResponseData<ParkingCard> getParkingCardById(string id)
+        public ResponseData<Building> getBuildingById(string id)
         {
-            ParkingCard card = _abmsContext.ParkingCards.Find(id);
-            if (card == null)
+            Building utility = _abmsContext.Buildings.Find(id);
+            if (utility == null)
             {
                 throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
             }
-            return new ResponseData<ParkingCard>
+            return new ResponseData<Building>
             {
-                Data = card,
+                Data = utility,
                 StatusCode = HttpStatusCode.OK,
                 ErrMsg = ErrorApp.SUCCESS.description
             };
