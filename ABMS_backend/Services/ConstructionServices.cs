@@ -2,6 +2,7 @@
 using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Exceptions;
+using ABMS_backend.Utils.Token;
 using ABMS_backend.Utils.Validates;
 using System.Net;
 
@@ -144,15 +145,8 @@ namespace ABMS_backend.Services
                 throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
             }
             c.Status = status;
-            if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
-            {
-                return new ResponseData<string>
-                {
-                    StatusCode = HttpStatusCode.Forbidden,
-                    ErrMsg = ErrorApp.FORBIDDEN.description
-                };
-            }
-            c.ApproveUser = _httpContextAccessor.HttpContext.Session.GetString("user");
+            string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+            c.ApproveUser = getUser;
             _abmsContext.Constructions.Update(c);
             _abmsContext.SaveChanges();
             return new ResponseData<string>
