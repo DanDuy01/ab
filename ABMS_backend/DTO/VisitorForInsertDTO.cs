@@ -26,8 +26,6 @@ namespace ABMS_backend.DTO
             string phoneRegexPattern = @"(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b";
             Regex regexPhone = new Regex(phoneRegexPattern);
 
-            var regexFomatDate = new Regex(@"^\d{1,2}/\d{1,2}/\d{4} \d{1,2}:\d{1,2}$");
-
             if (string.IsNullOrEmpty(fullName))
             {
                 return "Name is required!";
@@ -35,15 +33,7 @@ namespace ABMS_backend.DTO
             if (!regexPhone.IsMatch(phoneNumber))
             {
                 return "Wrong phone!";
-            }
-            if (!regexFomatDate.IsMatch(arrivalTime.ToString()))
-            {
-                return "Wrong fomat date! ";
-            }
-            if(!regexFomatDate.IsMatch(departureTime.ToString()) && departureTime < arrivalTime)
-            {
-                return "Wrong fomat date and departure time is greater than arrival time! ";
-            }
+            }          
 
             if (identityNumber.Length != 9 && identityNumber.Length != 12)
             {

@@ -36,7 +36,6 @@ namespace ABMS_backend.Services
                     ErrMsg = error
                 };
             }
-
             try
             {
                 Resident resident = new Resident();
@@ -45,6 +44,7 @@ namespace ABMS_backend.Services
                 resident.FullName = dto.fullName;
                 resident.DateOfBirth = dto.dob;
                 resident.Gender = dto.gender;
+                resident.Phone= dto.phone;
                 resident.IsHouseholder = dto.isHouseHolder;
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 resident.CreateUser = getUser;

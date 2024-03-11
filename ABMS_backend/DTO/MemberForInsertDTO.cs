@@ -17,9 +17,7 @@ namespace ABMS_backend.DTO
         public string Validate()
         {
             string phoneRegexPattern = @"(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b";
-            Regex regexPhone = new Regex(phoneRegexPattern);
-            var regexFomatDate = new Regex(@"^\d{1,2}/\d{1,2}/\d{4} \d{1,2}:\d{1,2}$");
-
+            Regex regexPhone = new Regex(phoneRegexPattern);           
             if (String.IsNullOrEmpty(roomId))
             {
                 return "Room is required!";
@@ -31,10 +29,6 @@ namespace ABMS_backend.DTO
             if (String.IsNullOrEmpty(fullName))
             {
                 return "Full name is required!";
-            }
-            if (!regexFomatDate.IsMatch(dob.ToString()))
-            {
-                return "Wrong fomat date! ";
             }
 
             return null;
