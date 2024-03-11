@@ -4,6 +4,7 @@ using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Exceptions;
 using ABMS_backend.Utils.Token;
 using ABMS_backend.Utils.Validates;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 
 namespace ABMS_backend.Services
@@ -101,14 +102,28 @@ namespace ABMS_backend.Services
 
         public ResponseData<List<Construction>> getConstruction(ConstructionForSearchDTO dto)
         {
-            var list = _abmsContext.Constructions.
+            var list = _abmsContext.Constructions.Include(x=>x.Room).
                 Where(x =>
                     (dto.roomId == null || x.RoomId == dto.roomId)
                     && (dto.name == null || x.Name == dto.name)
                     && (dto.constructionOrganization == null || x.ConstructionOrganization == dto.constructionOrganization)
                     && (dto.phone == null || x.PhoneContact == dto.phone)
                     && (dto.time == null || (x.StartTime <= dto.time && dto.time <= x.EndTime))
-                    && (dto.status == null || x.Status == dto.status))
+                    && (dto.status == null || x.Status == dto.status)).Select(x=> new Construction
+                    {
+                        StartTime = x.StartTime,
+                        EndTime = x.EndTime,
+                        Name = x.Name,
+                          ConstructionOrganization = x.ConstructionOrganization,
+                          PhoneContact = x.PhoneContact,
+                          Description = x.Description,
+                          CreateTime = x.CreateTime,
+                          Status = x.Status,
+                          Id = x.Id,
+                    RoomId= x.RoomId,
+                    Room=x.Room,
+                    ApproveUser=x.ApproveUser
+                    })
                 .ToList();
             return new ResponseData<List<Construction>>
             {
