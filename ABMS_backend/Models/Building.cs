@@ -17,15 +17,15 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
-        public string Id { get; set; }
+        public string Id { get; set; } = null!;
         /// <summary>
         /// Tên tòa nhà
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
         /// <summary>
         /// Địa chỉ
         /// </summary>
-        public string Address { get; set; }
+        public string Address { get; set; } = null!;
         /// <summary>
         /// Số tầng
         /// </summary>
@@ -37,7 +37,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Người tạo
         /// </summary>
-        public string CreateUser { get; set; }
+        public string CreateUser { get; set; } = null!;
         /// <summary>
         /// Ngày tạo
         /// </summary>
@@ -45,7 +45,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Người cập nhật
         /// </summary>
-        public string ModifyUser { get; set; }
+        public string? ModifyUser { get; set; }
         /// <summary>
         /// Ngày cập nhật
         /// </summary>

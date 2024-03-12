@@ -11,15 +11,15 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
-        public string Id { get; set; }
+        public string Id { get; set; } = null!;
         /// <summary>
         /// Số điện thoại
         /// </summary>
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; } = null!;
         /// <summary>
         /// Tên
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
         /// <summary>
         /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực
         /// </summary>
