@@ -13,19 +13,19 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
-        public string Id { get; set; }
+        public string Id { get; set; } = null!;
         /// <summary>
         /// Tên detail
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
         /// <summary>
         /// Mã tiện ích
         /// </summary>
-        public string UtilityId { get; set; }
+        public string UtilityId { get; set; } = null!;
         /// <summary>
         /// Người tạo
         /// </summary>
-        public string CreateUser { get; set; }
+        public string CreateUser { get; set; } = null!;
         /// <summary>
         /// Ngày tạo
         /// </summary>
@@ -33,7 +33,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Người chỉnh sửa
         /// </summary>
-        public string ModifyUser { get; set; }
+        public string? ModifyUser { get; set; }
         /// <summary>
         /// Ngày chỉnh sửa
         /// </summary>
@@ -43,7 +43,7 @@ namespace ABMS_backend.Models
         /// </summary>
         public int Status { get; set; }
 
-        public virtual Utility Utility { get; set; }
+        public virtual Utility Utility { get; set; } = null!;
         public virtual ICollection<UtilitySchedule> UtilitySchedules { get; set; }
     }
 }

@@ -16,15 +16,15 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
-        public string Id { get; set; }
+        public string Id { get; set; } = null!;
         /// <summary>
         /// Mã căn hộ
         /// </summary>
-        public string RoomId { get; set; }
+        public string RoomId { get; set; } = null!;
         /// <summary>
         /// Họ và tên
         /// </summary>
-        public string FullName { get; set; }
+        public string FullName { get; set; } = null!;
         /// <summary>
         /// Ngày sinh
         /// </summary>
@@ -36,7 +36,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Số điện thoại
         /// </summary>
-        public string Phone { get; set; }
+        public string Phone { get; set; } = null!;
         /// <summary>
         /// Chủ căn hộ: true, false
         /// </summary>
@@ -44,7 +44,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Người tạo
         /// </summary>
-        public string CreateUser { get; set; }
+        public string CreateUser { get; set; } = null!;
         /// <summary>
         /// Ngày tạo
         /// </summary>
@@ -52,7 +52,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Người cập nhật
         /// </summary>
-        public string ModifyUser { get; set; }
+        public string? ModifyUser { get; set; }
         /// <summary>
         /// Ngày cập nhật
         /// </summary>
@@ -62,7 +62,7 @@ namespace ABMS_backend.Models
         /// </summary>
         public int Status { get; set; }
 
-        public virtual Room Room { get; set; }
+        public virtual Room Room { get; set; } = null!;
         public virtual ICollection<ParkingCard> ParkingCards { get; set; }
     }
 }

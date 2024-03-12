@@ -22,16 +22,16 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
-        public string Id { get; set; }
-        public string AccountId { get; set; }
+        public string Id { get; set; } = null!;
+        public string AccountId { get; set; } = null!;
         /// <summary>
         /// Mã tòa nhà
         /// </summary>
-        public string BuildingId { get; set; }
+        public string BuildingId { get; set; } = null!;
         /// <summary>
         /// Số nhà
         /// </summary>
-        public string RoomNumber { get; set; }
+        public string RoomNumber { get; set; } = null!;
         /// <summary>
         /// Diện tích căn hộ
         /// </summary>
@@ -43,7 +43,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Người tạo
         /// </summary>
-        public string CreateUser { get; set; }
+        public string CreateUser { get; set; } = null!;
         /// <summary>
         /// Ngày tạo
         /// </summary>
@@ -51,7 +51,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Người cập nhật
         /// </summary>
-        public string ModifyUser { get; set; }
+        public string? ModifyUser { get; set; }
         /// <summary>
         /// Ngày cập nhật
         /// </summary>
@@ -61,8 +61,8 @@ namespace ABMS_backend.Models
         /// </summary>
         public int Status { get; set; }
 
-        public virtual Account Account { get; set; }
-        public virtual Building Building { get; set; }
+        public virtual Account Account { get; set; } = null!;
+        public virtual Building Building { get; set; } = null!;
         public virtual ICollection<Construction> Constructions { get; set; }
         public virtual ICollection<Elevator> Elevators { get; set; }
         public virtual ICollection<Feedback> Feedbacks { get; set; }

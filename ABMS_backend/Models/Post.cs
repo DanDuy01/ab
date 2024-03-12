@@ -16,23 +16,23 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
-        public string Id { get; set; }
+        public string Id { get; set; } = null!;
         /// <summary>
         /// Tiêu đề
         /// </summary>
-        public string Title { get; set; }
+        public string Title { get; set; } = null!;
         /// <summary>
         /// Nội dung
         /// </summary>
-        public string Content { get; set; }
+        public string Content { get; set; } = null!;
         /// <summary>
         /// Ảnh đính kèm
         /// </summary>
-        public string Image { get; set; }
+        public string? Image { get; set; }
         /// <summary>
         /// Người tạo
         /// </summary>
-        public string CreateUser { get; set; }
+        public string CreateUser { get; set; } = null!;
         /// <summary>
         /// Ngày tạo
         /// </summary>
@@ -40,7 +40,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Người cập nhật
         /// </summary>
-        public string ModifyUser { get; set; }
+        public string? ModifyUser { get; set; }
         /// <summary>
         /// Ngày cập nhật
         /// </summary>
