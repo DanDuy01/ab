@@ -11,11 +11,11 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
-        public string Id { get; set; }
+        public string Id { get; set; } = null!;
         /// <summary>
         /// Tên dịch vụ
         /// </summary>
-        public string FeeName { get; set; }
+        public string FeeName { get; set; } = null!;
         /// <summary>
         /// Giá
         /// </summary>
@@ -23,7 +23,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Đơn vị
         /// </summary>
-        public string Unit { get; set; }
+        public string Unit { get; set; } = null!;
         /// <summary>
         /// Ngày có hiệu lực
         /// </summary>
@@ -35,23 +35,23 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Mô tả
         /// </summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
         /// <summary>
         /// Người tạo
         /// </summary>
-        public string CreateUser { get; set; }
+        public string CreateUser { get; set; } = null!;
         /// <summary>
         /// Ngày tạo
         /// </summary>
-        public DateTime CreateTime { get; set; }
+        public string CreateTime { get; set; } = null!;
         /// <summary>
         /// Người chỉnh sửa
         /// </summary>
-        public string ModifyUser { get; set; }
+        public string? ModifyUser { get; set; }
         /// <summary>
         /// Ngày chỉnh sửa
         /// </summary>
-        public DateTime? ModifyTime { get; set; }
+        public string? ModifyTime { get; set; }
         /// <summary>
         /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực
         /// </summary>

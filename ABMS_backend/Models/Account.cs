@@ -17,35 +17,35 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
-        public string Id { get; set; }
+        public string Id { get; set; } = null!;
         /// <summary>
         /// Mã tòa nhà
         /// </summary>
-        public string BuildingId { get; set; }
+        public string BuildingId { get; set; } = null!;
         /// <summary>
         /// Số điện thoại
         /// </summary>
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; } = null!;
         /// <summary>
         /// Mật khẩu salt
         /// </summary>
-        public byte[] PasswordSalt { get; set; }
+        public byte[] PasswordSalt { get; set; } = null!;
         /// <summary>
         /// Mật khẩu hash
         /// </summary>
-        public byte[] PasswordHash { get; set; }
+        public byte[] PasswordHash { get; set; } = null!;
         /// <summary>
         /// Tên tài khoản
         /// </summary>
-        public string UserName { get; set; }
+        public string UserName { get; set; } = null!;
         /// <summary>
         /// Email
         /// </summary>
-        public string Email { get; set; }
+        public string Email { get; set; } = null!;
         /// <summary>
         /// Họ và tên
         /// </summary>
-        public string FullName { get; set; }
+        public string FullName { get; set; } = null!;
         /// <summary>
         /// Vai trò: 0 admin, 1 cmb, 2 lễ tân, 3 room
         /// </summary>
@@ -53,11 +53,11 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Avatar
         /// </summary>
-        public string Avatar { get; set; }
+        public string? Avatar { get; set; }
         /// <summary>
         /// Người tạo
         /// </summary>
-        public string CreateUser { get; set; }
+        public string CreateUser { get; set; } = null!;
         /// <summary>
         /// Ngày tạo
         /// </summary>
@@ -65,7 +65,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Người cập nhật
         /// </summary>
-        public string ModifyUser { get; set; }
+        public string? ModifyUser { get; set; }
         /// <summary>
         /// Ngày cập nhật
         /// </summary>

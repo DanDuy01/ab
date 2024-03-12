@@ -79,6 +79,14 @@ namespace ABMS_backend.Services
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
+                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.Forbidden,
+                        ErrMsg = ErrorApp.FORBIDDEN.description
+                    };
+                }
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 room.ModifyUser = getUser;
                 room.ModifyTime = DateTime.Now;
@@ -160,6 +168,14 @@ namespace ABMS_backend.Services
                 room.RoomNumber = dto.roomNumber;
                 room.RoomArea = dto.roomArea;
                 room.NumberOfResident = dto.numberOfResident;
+                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.Forbidden,
+                        ErrMsg = ErrorApp.FORBIDDEN.description
+                    };
+                }
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 room.ModifyUser = getUser;
                 room.ModifyTime = DateTime.Now;

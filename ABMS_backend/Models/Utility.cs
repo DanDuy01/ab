@@ -16,12 +16,12 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
-        public string Id { get; set; }
-        public string BuildingId { get; set; }
+        public string Id { get; set; } = null!;
+        public string BuildingId { get; set; } = null!;
         /// <summary>
         /// Tên tiện ích
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
         /// <summary>
         /// Giờ mở cửa
         /// </summary>
@@ -41,15 +41,15 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Vị trí
         /// </summary>
-        public string Location { get; set; }
+        public string? Location { get; set; }
         /// <summary>
         /// Mô tả
         /// </summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
         /// <summary>
         /// Người đưa vào hệ thống
         /// </summary>
-        public string CreateUser { get; set; }
+        public string CreateUser { get; set; } = null!;
         /// <summary>
         /// Ngày đưa vào hệ thống
         /// </summary>
@@ -57,7 +57,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Người cập nhật
         /// </summary>
-        public string ModifyUser { get; set; }
+        public string? ModifyUser { get; set; }
         /// <summary>
         /// Ngày cập nhật
         /// </summary>
@@ -67,7 +67,7 @@ namespace ABMS_backend.Models
         /// </summary>
         public int Status { get; set; }
 
-        public virtual Building Building { get; set; }
+        public virtual Building Building { get; set; } = null!;
         public virtual ICollection<UtiliityDetail> UtiliityDetails { get; set; }
     }
 }

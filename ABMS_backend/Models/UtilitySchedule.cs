@@ -11,19 +11,19 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
-        public string Id { get; set; }
+        public string Id { get; set; } = null!;
         /// <summary>
         /// Mã căn hộ
         /// </summary>
-        public string RoomId { get; set; }
+        public string RoomId { get; set; } = null!;
         /// <summary>
         /// Mã tiện ích
         /// </summary>
-        public string UtilityDetailId { get; set; }
+        public string UtilityDetailId { get; set; } = null!;
         /// <summary>
         /// Slot
         /// </summary>
-        public string Slot { get; set; }
+        public string Slot { get; set; } = null!;
         /// <summary>
         /// Đặt ngày
         /// </summary>
@@ -39,17 +39,17 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Mô tả
         /// </summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
         /// <summary>
         /// Người phê duyệt
         /// </summary>
-        public string ApproveUser { get; set; }
+        public string? ApproveUser { get; set; }
         /// <summary>
         /// Trạng thái: 2 đã gửi, 3 đã duyệt, 4 bị từ chối, 5 đã thanh toán
         /// </summary>
         public int Status { get; set; }
 
-        public virtual Room Room { get; set; }
-        public virtual UtiliityDetail UtilityDetail { get; set; }
+        public virtual Room Room { get; set; } = null!;
+        public virtual UtiliityDetail UtilityDetail { get; set; } = null!;
     }
 }
