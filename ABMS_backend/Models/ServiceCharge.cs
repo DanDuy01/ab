@@ -11,11 +11,11 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Khóa chỉnh của bảng
         /// </summary>
-        public string Id { get; set; } = null!;
+        public string Id { get; set; }
         /// <summary>
         /// Mã căn hộ
         /// </summary>
-        public string RoomId { get; set; } = null!;
+        public string RoomId { get; set; }
         /// <summary>
         /// Số tiền
         /// </summary>
@@ -31,11 +31,11 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Mô tả
         /// </summary>
-        public string? Description { get; set; }
+        public string Description { get; set; }
         /// <summary>
         /// Người tạo
         /// </summary>
-        public string CreateUser { get; set; } = null!;
+        public string CreateUser { get; set; }
         /// <summary>
         /// Ngày tạo
         /// </summary>
@@ -43,7 +43,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Người chỉnh sửa
         /// </summary>
-        public string? ModifyUser { get; set; }
+        public string ModifyUser { get; set; }
         /// <summary>
         /// Ngày chỉnh sửa
         /// </summary>
@@ -53,6 +53,6 @@ namespace ABMS_backend.Models
         /// </summary>
         public int Status { get; set; }
 
-        public virtual Room Room { get; set; } = null!;
+        public virtual Room Room { get; set; }
     }
 }

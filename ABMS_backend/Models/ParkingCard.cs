@@ -11,27 +11,27 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
-        public string Id { get; set; } = null!;
+        public string Id { get; set; }
         /// <summary>
         /// Mã cư dân
         /// </summary>
-        public string ResidentId { get; set; } = null!;
+        public string ResidentId { get; set; }
         /// <summary>
         /// Biển số xe
         /// </summary>
-        public string LicensePlate { get; set; } = null!;
+        public string LicensePlate { get; set; }
         /// <summary>
         /// Nhãn hiệu
         /// </summary>
-        public string Brand { get; set; } = null!;
+        public string Brand { get; set; }
         /// <summary>
         /// Màu
         /// </summary>
-        public string Color { get; set; } = null!;
+        public string Color { get; set; }
         /// <summary>
         /// Đường dẫn ảnh
         /// </summary>
-        public string? Image { get; set; }
+        public string Image { get; set; }
         /// <summary>
         /// Ngày hết hạn
         /// </summary>
@@ -39,11 +39,11 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Ghi chú
         /// </summary>
-        public string? Note { get; set; }
+        public string Note { get; set; }
         /// <summary>
         /// Người tạo
         /// </summary>
-        public string CreateUser { get; set; } = null!;
+        public string CreateUser { get; set; }
         /// <summary>
         /// Ngày tạo
         /// </summary>
@@ -51,16 +51,16 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Người cập nhật
         /// </summary>
-        public string? ModifyUser { get; set; }
+        public string ModifyUser { get; set; }
         /// <summary>
         /// Ngày cập nhật
         /// </summary>
         public DateTime? ModifyTime { get; set; }
         /// <summary>
-        /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực, 2 đã gửi, 5 chưa thanh toán
+        /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực, 2 đã gửi, 6 chưa thanh toán
         /// </summary>
         public int Status { get; set; }
 
-        public virtual Resident Resident { get; set; } = null!;
+        public virtual Resident Resident { get; set; }
     }
 }

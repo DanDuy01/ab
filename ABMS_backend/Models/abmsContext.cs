@@ -16,26 +16,26 @@ namespace ABMS_backend.Models
         {
         }
 
-        public virtual DbSet<Account> Accounts { get; set; } = null!;
-        public virtual DbSet<AccountPost> AccountPosts { get; set; } = null!;
-        public virtual DbSet<Building> Buildings { get; set; } = null!;
-        public virtual DbSet<Construction> Constructions { get; set; } = null!;
-        public virtual DbSet<Elevator> Elevators { get; set; } = null!;
-        public virtual DbSet<Expense> Expenses { get; set; } = null!;
-        public virtual DbSet<Fee> Fees { get; set; } = null!;
-        public virtual DbSet<Feedback> Feedbacks { get; set; } = null!;
-        public virtual DbSet<Fund> Funds { get; set; } = null!;
-        public virtual DbSet<Hotline> Hotlines { get; set; } = null!;
-        public virtual DbSet<ParkingCard> ParkingCards { get; set; } = null!;
-        public virtual DbSet<Post> Posts { get; set; } = null!;
-        public virtual DbSet<Resident> Residents { get; set; } = null!;
-        public virtual DbSet<Room> Rooms { get; set; } = null!;
-        public virtual DbSet<ServiceCharge> ServiceCharges { get; set; } = null!;
-        public virtual DbSet<ServiceType> ServiceTypes { get; set; } = null!;
-        public virtual DbSet<UtiliityDetail> UtiliityDetails { get; set; } = null!;
-        public virtual DbSet<Utility> Utilities { get; set; } = null!;
-        public virtual DbSet<UtilitySchedule> UtilitySchedules { get; set; } = null!;
-        public virtual DbSet<Visitor> Visitors { get; set; } = null!;
+        public virtual DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<AccountPost> AccountPosts { get; set; }
+        public virtual DbSet<Building> Buildings { get; set; }
+        public virtual DbSet<Construction> Constructions { get; set; }
+        public virtual DbSet<Elevator> Elevators { get; set; }
+        public virtual DbSet<Expense> Expenses { get; set; }
+        public virtual DbSet<Fee> Fees { get; set; }
+        public virtual DbSet<Feedback> Feedbacks { get; set; }
+        public virtual DbSet<Fund> Funds { get; set; }
+        public virtual DbSet<Hotline> Hotlines { get; set; }
+        public virtual DbSet<ParkingCard> ParkingCards { get; set; }
+        public virtual DbSet<Post> Posts { get; set; }
+        public virtual DbSet<Resident> Residents { get; set; }
+        public virtual DbSet<Room> Rooms { get; set; }
+        public virtual DbSet<ServiceCharge> ServiceCharges { get; set; }
+        public virtual DbSet<ServiceType> ServiceTypes { get; set; }
+        public virtual DbSet<UtiliityDetail> UtiliityDetails { get; set; }
+        public virtual DbSet<Utility> Utilities { get; set; }
+        public virtual DbSet<UtilitySchedule> UtilitySchedules { get; set; }
+        public virtual DbSet<Visitor> Visitors { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -70,6 +70,7 @@ namespace ABMS_backend.Models
                     .HasComment("Avatar");
 
                 entity.Property(e => e.BuildingId)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("building_id")
                     .HasComment("Mã tòa nhà");
@@ -80,16 +81,19 @@ namespace ABMS_backend.Models
                     .HasComment("Ngày tạo");
 
                 entity.Property(e => e.CreateUser)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("create_user")
                     .HasComment("Người tạo");
 
                 entity.Property(e => e.Email)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("email")
                     .HasComment("Email");
 
                 entity.Property(e => e.FullName)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("full_name")
                     .HasComment("Họ và tên");
@@ -105,16 +109,19 @@ namespace ABMS_backend.Models
                     .HasComment("Người cập nhật");
 
                 entity.Property(e => e.PasswordHash)
+                    .IsRequired()
                     .HasMaxLength(64)
                     .HasColumnName("password_hash")
                     .HasComment("Mật khẩu hash");
 
                 entity.Property(e => e.PasswordSalt)
+                    .IsRequired()
                     .HasMaxLength(64)
                     .HasColumnName("password_salt")
                     .HasComment("Mật khẩu salt");
 
                 entity.Property(e => e.PhoneNumber)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("phone_number")
                     .HasComment("Số điện thoại");
@@ -130,6 +137,7 @@ namespace ABMS_backend.Models
                     .HasComment("Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực");
 
                 entity.Property(e => e.UserName)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("user_name")
                     .HasComment("Tên tài khoản");
@@ -152,6 +160,7 @@ namespace ABMS_backend.Models
                     .HasComment("Khóa chính của bảng");
 
                 entity.Property(e => e.AccountId)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("account_id")
                     .HasComment("Mã tài khoản");
@@ -162,6 +171,7 @@ namespace ABMS_backend.Models
                     .HasComment("Đã đọc: true, false");
 
                 entity.Property(e => e.PostId)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("post_id")
                     .HasComment("Mã bài đăng");
@@ -193,6 +203,7 @@ namespace ABMS_backend.Models
                     .HasComment("Khóa chính của bảng");
 
                 entity.Property(e => e.Address)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("address")
                     .HasComment("Địa chỉ");
@@ -203,6 +214,7 @@ namespace ABMS_backend.Models
                     .HasComment("Ngày tạo");
 
                 entity.Property(e => e.CreateUser)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("create_user")
                     .HasComment("Người tạo");
@@ -218,6 +230,7 @@ namespace ABMS_backend.Models
                     .HasComment("Người cập nhật");
 
                 entity.Property(e => e.Name)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("name")
                     .HasComment("Tên tòa nhà");
@@ -259,6 +272,7 @@ namespace ABMS_backend.Models
                     .HasComment("Người phê duyệt");
 
                 entity.Property(e => e.ConstructionOrganization)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("construction_organization")
                     .HasComment("Đơn vị thi công");
@@ -279,16 +293,19 @@ namespace ABMS_backend.Models
                     .HasComment("Giờ kết thúc");
 
                 entity.Property(e => e.Name)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("name")
                     .HasComment("Tên thi công");
 
                 entity.Property(e => e.PhoneContact)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("phone_contact")
                     .HasComment("Số điện thoại liên hệ");
 
                 entity.Property(e => e.RoomId)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("room_id")
                     .HasComment("Mã căn hộ");
@@ -341,6 +358,7 @@ namespace ABMS_backend.Models
                     .HasComment("Ngày, giờ kết thúc");
 
                 entity.Property(e => e.RoomId)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("room_id")
                     .HasComment("Mã căn hộ");
@@ -381,6 +399,7 @@ namespace ABMS_backend.Models
                     .HasComment("Ngày tạo");
 
                 entity.Property(e => e.CreateUser)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("create_user")
                     .HasComment("Người tạo");
@@ -429,11 +448,12 @@ namespace ABMS_backend.Models
                     .HasComment("Khóa chính của bảng");
 
                 entity.Property(e => e.CreateTime)
-                    .HasMaxLength(100)
+                    .HasColumnType("datetime")
                     .HasColumnName("create_time")
                     .HasComment("Ngày tạo");
 
                 entity.Property(e => e.CreateUser)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("create_user")
                     .HasComment("Người tạo");
@@ -452,12 +472,13 @@ namespace ABMS_backend.Models
                     .HasComment("Ngày hết hiệu lực");
 
                 entity.Property(e => e.FeeName)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("fee_name")
                     .HasComment("Tên dịch vụ");
 
                 entity.Property(e => e.ModifyTime)
-                    .HasMaxLength(100)
+                    .HasColumnType("datetime")
                     .HasColumnName("modify_time")
                     .HasComment("Ngày chỉnh sửa");
 
@@ -477,6 +498,7 @@ namespace ABMS_backend.Models
                     .HasComment("Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực");
 
                 entity.Property(e => e.Unit)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("unit")
                     .HasComment("Đơn vị");
@@ -515,11 +537,13 @@ namespace ABMS_backend.Models
                     .HasComment("Đường dẫn ảnh");
 
                 entity.Property(e => e.RoomId)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("room_id")
                     .HasComment("Mã căn hộ");
 
                 entity.Property(e => e.ServiceTypeId)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("service_type_id")
                     .HasComment("Mã loại dịch vụ");
@@ -565,6 +589,7 @@ namespace ABMS_backend.Models
                     .HasComment("Ngày tạo");
 
                 entity.Property(e => e.CreateUser)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("create_user")
                     .HasComment("Người tạo");
@@ -613,11 +638,13 @@ namespace ABMS_backend.Models
                     .HasComment("Khóa chính của bảng");
 
                 entity.Property(e => e.Name)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("name")
                     .HasComment("Tên");
 
                 entity.Property(e => e.PhoneNumber)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("phone_number")
                     .HasComment("Số điện thoại");
@@ -644,11 +671,13 @@ namespace ABMS_backend.Models
                     .HasComment("Khóa chính của bảng");
 
                 entity.Property(e => e.Brand)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("brand")
                     .HasComment("Nhãn hiệu");
 
                 entity.Property(e => e.Color)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("color")
                     .HasComment("Màu");
@@ -659,6 +688,7 @@ namespace ABMS_backend.Models
                     .HasComment("Ngày tạo");
 
                 entity.Property(e => e.CreateUser)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("create_user")
                     .HasComment("Người tạo");
@@ -673,6 +703,7 @@ namespace ABMS_backend.Models
                     .HasComment("Đường dẫn ảnh");
 
                 entity.Property(e => e.LicensePlate)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("license_plate")
                     .HasComment("Biển số xe");
@@ -693,6 +724,7 @@ namespace ABMS_backend.Models
                     .HasComment("Ghi chú");
 
                 entity.Property(e => e.ResidentId)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("resident_id")
                     .HasComment("Mã cư dân");
@@ -700,7 +732,7 @@ namespace ABMS_backend.Models
                 entity.Property(e => e.Status)
                     .HasColumnType("int(11)")
                     .HasColumnName("status")
-                    .HasComment("Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực, 2 đã gửi, 5 chưa thanh toán");
+                    .HasComment("Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực, 2 đã gửi, 6 chưa thanh toán");
 
                 entity.HasOne(d => d.Resident)
                     .WithMany(p => p.ParkingCards)
@@ -723,6 +755,7 @@ namespace ABMS_backend.Models
                     .HasComment("Khóa chính của bảng");
 
                 entity.Property(e => e.Content)
+                    .IsRequired()
                     .HasMaxLength(200)
                     .HasColumnName("content")
                     .HasComment("Nội dung");
@@ -733,6 +766,7 @@ namespace ABMS_backend.Models
                     .HasComment("Ngày tạo");
 
                 entity.Property(e => e.CreateUser)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("create_user")
                     .HasComment("Người tạo");
@@ -758,6 +792,7 @@ namespace ABMS_backend.Models
                     .HasComment("Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực, 2 đã gửi, 4 bị từ chối");
 
                 entity.Property(e => e.Title)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("title")
                     .HasComment("Tiêu đề");
@@ -784,6 +819,7 @@ namespace ABMS_backend.Models
                     .HasComment("Ngày tạo");
 
                 entity.Property(e => e.CreateUser)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("create_user")
                     .HasComment("Người tạo");
@@ -793,6 +829,7 @@ namespace ABMS_backend.Models
                     .HasComment("Ngày sinh");
 
                 entity.Property(e => e.FullName)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("full_name")
                     .HasComment("Họ và tên");
@@ -816,11 +853,13 @@ namespace ABMS_backend.Models
                     .HasComment("Người cập nhật");
 
                 entity.Property(e => e.Phone)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("phone")
                     .HasComment("Số điện thoại");
 
                 entity.Property(e => e.RoomId)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("room_id")
                     .HasComment("Mã căn hộ");
@@ -855,10 +894,12 @@ namespace ABMS_backend.Models
                     .HasComment("Khóa chính của bảng");
 
                 entity.Property(e => e.AccountId)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("account_id");
 
                 entity.Property(e => e.BuildingId)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("building_id")
                     .HasComment("Mã tòa nhà");
@@ -869,6 +910,7 @@ namespace ABMS_backend.Models
                     .HasComment("Ngày tạo");
 
                 entity.Property(e => e.CreateUser)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("create_user")
                     .HasComment("Người tạo");
@@ -893,6 +935,7 @@ namespace ABMS_backend.Models
                     .HasComment("Diện tích căn hộ");
 
                 entity.Property(e => e.RoomNumber)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("room_number")
                     .HasComment("Số nhà");
@@ -936,6 +979,7 @@ namespace ABMS_backend.Models
                     .HasComment("Ngày tạo");
 
                 entity.Property(e => e.CreateUser)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("create_user")
                     .HasComment("Người tạo");
@@ -965,6 +1009,7 @@ namespace ABMS_backend.Models
                     .HasComment("Tháng");
 
                 entity.Property(e => e.RoomId)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("room_id")
                     .HasComment("Mã căn hộ");
@@ -1005,6 +1050,7 @@ namespace ABMS_backend.Models
                     .HasComment("Ngày tạo");
 
                 entity.Property(e => e.CreateUser)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("create_user")
                     .HasComment("Người tạo");
@@ -1020,6 +1066,7 @@ namespace ABMS_backend.Models
                     .HasComment("Người chỉnh sửa");
 
                 entity.Property(e => e.Name)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("name")
                     .HasComment("Tên dịch vụ");
@@ -1050,6 +1097,7 @@ namespace ABMS_backend.Models
                     .HasComment("Ngày tạo");
 
                 entity.Property(e => e.CreateUser)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("create_user")
                     .HasComment("Người tạo");
@@ -1065,6 +1113,7 @@ namespace ABMS_backend.Models
                     .HasComment("Người chỉnh sửa");
 
                 entity.Property(e => e.Name)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("name")
                     .HasComment("Tên detail");
@@ -1075,6 +1124,7 @@ namespace ABMS_backend.Models
                     .HasComment("Trạng thái: 0 hết hạn sử dụng, 1 còn hạn sử dụng");
 
                 entity.Property(e => e.UtilityId)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("utility_id")
                     .HasComment("Mã tiện ích");
@@ -1102,6 +1152,7 @@ namespace ABMS_backend.Models
                     .HasComment("Khóa chính của bảng");
 
                 entity.Property(e => e.BuildingId)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("building_id");
 
@@ -1116,6 +1167,7 @@ namespace ABMS_backend.Models
                     .HasComment("Ngày đưa vào hệ thống");
 
                 entity.Property(e => e.CreateUser)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("create_user")
                     .HasComment("Người đưa vào hệ thống");
@@ -1141,6 +1193,7 @@ namespace ABMS_backend.Models
                     .HasComment("Người cập nhật");
 
                 entity.Property(e => e.Name)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("name")
                     .HasComment("Tên tiện ích");
@@ -1208,11 +1261,13 @@ namespace ABMS_backend.Models
                     .HasComment("Số người tham gia");
 
                 entity.Property(e => e.RoomId)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("room_id")
                     .HasComment("Mã căn hộ");
 
                 entity.Property(e => e.Slot)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("slot")
                     .HasComment("Slot");
@@ -1227,6 +1282,7 @@ namespace ABMS_backend.Models
                     .HasComment("Tổng số tiền");
 
                 entity.Property(e => e.UtilityDetailId)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("utility_detail_id")
                     .HasComment("Mã tiện ích");
@@ -1280,6 +1336,7 @@ namespace ABMS_backend.Models
                     .HasComment("Mô tả");
 
                 entity.Property(e => e.FullName)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("full_name")
                     .HasComment("Họ và tên");
@@ -1289,21 +1346,25 @@ namespace ABMS_backend.Models
                     .HasComment("Giới tính");
 
                 entity.Property(e => e.IdentityCardImgUrl)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("identity_card_img_url")
                     .HasComment("Ảnh cccd");
 
                 entity.Property(e => e.IdentityNumber)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("identity_number")
                     .HasComment("Số cccd");
 
                 entity.Property(e => e.PhoneNumber)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("phone_number")
                     .HasComment("Số điện thoại");
 
                 entity.Property(e => e.RoomId)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("room_id")
                     .HasComment("Mã căn hộ");
