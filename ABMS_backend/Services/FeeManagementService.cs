@@ -6,26 +6,25 @@ using ABMS_backend.Utils.Token;
 using ABMS_backend.Utils.Validates;
 using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+using System.Collections.Generic;
 using System.Net;
 
 namespace ABMS_backend.Services
 {
-    public class RoomInformationService : IRoomInformationRepository
+    public class FeeManagementService : IFeeManagementRepository
     {
         private readonly abmsContext _abmsContext;
         private IMapper _mapper;
 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public RoomInformationService(abmsContext abmsContext, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        public FeeManagementService(abmsContext abmsContext, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _abmsContext = abmsContext;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
         }
-
-        public ResponseData<string> createRoomInformation(RoomForInsertDTO dto)
+        public ResponseData<string> createFee(FeeForInsertDTO dto)
         {
             string error = dto.Validate();
 
@@ -39,27 +38,26 @@ namespace ABMS_backend.Services
             }
             try
             {
-                Room room = new Room();
-                room.Id = Guid.NewGuid().ToString();
-                room.AccountId = dto.accountId;
-                room.BuildingId = dto.buildingId;
-                room.RoomNumber = dto.roomNumber;
-                room.RoomArea = dto.roomArea;
-                room.NumberOfResident = dto.numberOfResident;
+                Fee fee = new Fee();
+                fee.Id = Guid.NewGuid().ToString();
+                fee.FeeName = dto.feeName;
+                fee.Price= dto.price;
+                fee.Unit = dto.unit;
+                fee.EffectiveDate = dto.effectiveDate;
+                fee.Description= dto.description;
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
-                room.CreateUser = getUser;
-                room.CreateTime = DateTime.Now;
-                room.Status = (int)Constants.STATUS.ACTIVE;
-                _abmsContext.Rooms.Add(room);
-                _abmsContext.SaveChanges();
+                fee.CreateUser = getUser;
+                fee.CreateTime = DateTime.Now;
+                fee.Status = (int)Constants.STATUS.ACTIVE;
                 return new ResponseData<string>
                 {
-                    Data = room.Id,
+                    Data = fee.Id,
                     StatusCode = HttpStatusCode.OK,
                     ErrMsg = ErrorApp.SUCCESS.description
                 };
+
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 return new ResponseData<string>
                 {
@@ -69,75 +67,75 @@ namespace ABMS_backend.Services
             }
         }
 
-        public ResponseData<string> deleteRoomInformation(string id)
+        public ResponseData<string> deleteFee(string id)
         {
             try
             {
-                Room room = _abmsContext.Rooms.Find(id);
-
-                if (room == null)
+                Fee fee = _abmsContext.Fees.Find(id);
+                if (fee == null)
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
+                fee.Status = (int)Constants.STATUS.IN_ACTIVE;
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
-                room.ModifyUser = getUser;
-                room.ModifyTime = DateTime.Now;
-                room.Status = (int)Constants.STATUS.IN_ACTIVE;
-                _abmsContext.Rooms.Update(room);
+                fee.ModifyUser = getUser;
+                fee.ModifyTime = DateTime.Now;
+                _abmsContext.Fees.Update(fee);
                 _abmsContext.SaveChanges();
                 return new ResponseData<string>
                 {
-                    Data = room.Id,
+                    Data = fee.Id,
                     StatusCode = HttpStatusCode.OK,
                     ErrMsg = ErrorApp.SUCCESS.description
                 };
+
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 return new ResponseData<string>
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
-                    ErrMsg = "Update failed why " + ex.Message
+                    ErrMsg = "Deleted failed why " + ex.Message
                 };
             }
         }
 
-        public ResponseData<List<Room>> getRoomInformation(RoomForSearchDTO dto)
+        public ResponseData<List<Fee>> getAllFee(FeeForSearchDTO dto)
         {
-            var list = _abmsContext.Rooms.
-                 Where(x => (dto.accountId == null || x.AccountId == dto.accountId)
-                 &&(dto.buildingId == null || x.BuildingId == dto.buildingId)
-                 && (dto.roomNumber == null || x.RoomNumber.ToLower()
-                 .Contains(dto.roomNumber.ToLower()))).ToList();
-            return new ResponseData<List<Room>>
+            var list = _abmsContext.Fees.Where(x => 
+            (dto.feeName == null || x.FeeName.ToLower()
+                 .Contains(dto.feeName.ToLower()))
+            &&(dto.price == null || x.Price == dto.price)
+            && (dto.unit == null || x.Unit == dto.unit)
+            && (dto.dob == null || (x.EffectiveDate <= dto.dob && dto.dob <= x.ExpireDate))).ToList();
+            
+            return new ResponseData<List<Fee>>
             {
                 Data = list,
                 StatusCode = HttpStatusCode.OK,
                 ErrMsg = ErrorApp.SUCCESS.description,
                 Count = list.Count
             };
-
         }
 
-        public ResponseData<Room> getRoomInformationById(string id)
+        public ResponseData<Fee> getFeeById(string id)
         {
-            Room room = _abmsContext.Rooms.Find(id);
-            if (room == null)
+            Fee fee = _abmsContext.Fees.Find(id);
+            if (fee == null)
             {
                 throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
             }
-            return new ResponseData<Room>
+            return new ResponseData<Fee>
             {
-                Data = room,
+                Data = fee,
                 StatusCode = HttpStatusCode.OK,
                 ErrMsg = ErrorApp.SUCCESS.description
             };
         }
 
-        public ResponseData<string> updateRoomInformation(string id, RoomForInsertDTO dto)
+        public ResponseData<string> updateFee(string id, FeeForInsertDTO dto)
         {
             string error = dto.Validate();
-
             if (error != null)
             {
                 return new ResponseData<string>
@@ -146,29 +144,26 @@ namespace ABMS_backend.Services
                     ErrMsg = error
                 };
             }
-
             try
             {
-                Room room = _abmsContext.Rooms.Find(id);
-               
-                if (room == null)
+                Fee fee = _abmsContext.Fees.Find(id);
+                if (fee == null)
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
-                room.AccountId = dto.accountId;
-                room.BuildingId = dto.buildingId;
-                room.RoomNumber = dto.roomNumber;
-                room.RoomArea = dto.roomArea;
-                room.NumberOfResident = dto.numberOfResident;
+                fee.FeeName = dto.feeName;
+                fee.Price = dto.price;
+                fee.Unit = dto.unit;
+                fee.EffectiveDate = dto.effectiveDate;
+                fee.Description = dto.description;
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
-                room.ModifyUser = getUser;
-                room.ModifyTime = DateTime.Now;
-                
-                _abmsContext.Rooms.Update(room);
+                fee.ModifyUser = getUser;
+                fee.ModifyTime = DateTime.Now;
+                _abmsContext.Fees.Update(fee);
                 _abmsContext.SaveChanges();
                 return new ResponseData<string>
                 {
-                    Data = room.Id,
+                    Data = fee.Id,
                     StatusCode = HttpStatusCode.OK,
                     ErrMsg = ErrorApp.SUCCESS.description
                 };

@@ -11,7 +11,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
-        public string Id { get; set; } = null!;
+        public string Id { get; set; }
         /// <summary>
         /// Số tiền chi
         /// </summary>
@@ -19,15 +19,15 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Nguồn chi
         /// </summary>
-        public string? ExpenseSource { get; set; }
+        public string ExpenseSource { get; set; }
         /// <summary>
         /// Mô tả
         /// </summary>
-        public string? Description { get; set; }
+        public string Description { get; set; }
         /// <summary>
         /// Người tạo
         /// </summary>
-        public string CreateUser { get; set; } = null!;
+        public string CreateUser { get; set; }
         /// <summary>
         /// Ngày tạo
         /// </summary>
@@ -35,7 +35,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Người chỉnh sửa
         /// </summary>
-        public string? ModifyUser { get; set; }
+        public string ModifyUser { get; set; }
         /// <summary>
         /// Ngày chỉnh sửa
         /// </summary>

@@ -8,21 +8,21 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
-        public string Id { get; set; } = null!;
+        public string Id { get; set; }
         /// <summary>
         /// Mã tài khoản
         /// </summary>
-        public string AccountId { get; set; } = null!;
+        public string AccountId { get; set; }
         /// <summary>
         /// Mã bài đăng
         /// </summary>
-        public string PostId { get; set; } = null!;
+        public string PostId { get; set; }
         /// <summary>
         /// Đã đọc: true, false
         /// </summary>
         public sbyte IsRead { get; set; }
 
-        public virtual Account Account { get; set; } = null!;
-        public virtual Post Post { get; set; } = null!;
+        public virtual Account Account { get; set; }
+        public virtual Post Post { get; set; }
     }
 }
