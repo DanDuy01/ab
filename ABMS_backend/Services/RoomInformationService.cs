@@ -74,19 +74,10 @@ namespace ABMS_backend.Services
             try
             {
                 Room room = _abmsContext.Rooms.Find(id);
-
                 if (room == null)
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
-                }
-                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
-                {
-                    return new ResponseData<string>
-                    {
-                        StatusCode = HttpStatusCode.Forbidden,
-                        ErrMsg = ErrorApp.FORBIDDEN.description
-                    };
-                }
+                }          
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 room.ModifyUser = getUser;
                 room.ModifyTime = DateTime.Now;
@@ -105,7 +96,7 @@ namespace ABMS_backend.Services
                 return new ResponseData<string>
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
-                    ErrMsg = "Update failed why " + ex.Message
+                    ErrMsg = "Delete failed why " + ex.Message
                 };
             }
         }
@@ -167,15 +158,7 @@ namespace ABMS_backend.Services
                 room.BuildingId = dto.buildingId;
                 room.RoomNumber = dto.roomNumber;
                 room.RoomArea = dto.roomArea;
-                room.NumberOfResident = dto.numberOfResident;
-                if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
-                {
-                    return new ResponseData<string>
-                    {
-                        StatusCode = HttpStatusCode.Forbidden,
-                        ErrMsg = ErrorApp.FORBIDDEN.description
-                    };
-                }
+                room.NumberOfResident = dto.numberOfResident;               
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 room.ModifyUser = getUser;
                 room.ModifyTime = DateTime.Now;
