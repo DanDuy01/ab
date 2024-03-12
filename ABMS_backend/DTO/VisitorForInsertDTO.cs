@@ -19,7 +19,7 @@ namespace ABMS_backend.DTO
         public string identityNumber { get; set; } 
         public string identityCardImgUrl { get; set; } 
         public string? description { get; set; }
-        public string? approveUser { get; set; }
+        //public string? approveUser { get; set; }
 
         public string Validate()
         {

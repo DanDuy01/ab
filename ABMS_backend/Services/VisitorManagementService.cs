@@ -48,8 +48,8 @@ namespace ABMS_backend.Services
                 visitor.IdentityNumber= dto.identityNumber;
                 visitor.IdentityCardImgUrl= dto.identityCardImgUrl;
                 visitor.Description= dto.description;
-                string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
-                visitor.ApproveUser= getUser;
+                //string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                //visitor.ApproveUser= getUser;
                 visitor.Status = (int)Constants.STATUS.SENT;
                 _abmsContext.Visitors.Add(visitor);
                 _abmsContext.SaveChanges();
