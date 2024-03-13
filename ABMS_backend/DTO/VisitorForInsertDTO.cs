@@ -35,10 +35,7 @@ namespace ABMS_backend.DTO
                 return "Wrong phone!";
             }          
 
-            if (identityNumber.Length != 9 && identityNumber.Length != 12)
-            {
-                return "Invalid! please input identity number is length from 9 to 12 number !";
-            }
+           
 
             return null;
         }
