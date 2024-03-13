@@ -38,12 +38,19 @@ namespace ABMS_backend.Services
 
             try
             {
+
+                ParkingCard parkingCard = _abmsContext.ParkingCards.FirstOrDefault(x => x.LicensePlate == dto.license_plate);
+                if (parkingCard != null)
+                {
+                    throw new CustomException(ErrorApp.VEHICE_EXISTED);
+                }
                 ParkingCard card = new ParkingCard();
                 card.Id = Guid.NewGuid().ToString();
                 card.ResidentId = dto.resident_id;
                 card.LicensePlate = dto.license_plate;
                 card.Brand = dto.brand;
                 card.Color = dto.color;
+                card.Type = dto.type;
                 card.Image = dto.image;
                 card.ExpireDate = dto.expire_date;
                 card.Note = dto.note;
@@ -91,9 +98,15 @@ namespace ABMS_backend.Services
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
+                ParkingCard parkingCard = _abmsContext.ParkingCards.FirstOrDefault(x => x.LicensePlate == dto.license_plate);
+                if (parkingCard != null && parkingCard != card)
+                {
+                    throw new CustomException(ErrorApp.VEHICE_EXISTED);
+                }
                 card.ResidentId = dto.resident_id;
                 card.Brand = dto.brand;
                 card.Color = dto.color;
+                card.Type = dto.type;
                 card.Image = dto.image;
                 card.ExpireDate = dto.expire_date;
                 card.Note = dto.note;

@@ -84,7 +84,7 @@ namespace ABMS_backend.Services
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
 
-                visitor.Status = (int)Constants.STATUS.REJECTED;
+                visitor.Status = (int)Constants.STATUS.IN_ACTIVE;
                 _abmsContext.Visitors.Update(visitor);
                 _abmsContext.SaveChanges();
                 return new ResponseData<string>

@@ -10,6 +10,8 @@
 
         public string color { get; set; }
 
+        public int type { get; set; }
+
         public string? image { get; set; }
 
         public DateOnly? expire_date { get; set; }
