@@ -77,19 +77,20 @@ namespace ABMS_backend.Services
         {
             try
             {
-                Visitor visitor = new Visitor();
                 Visitor visitor_ = _abmsContext.Visitors.Find(id);
                 if (visitor_ == null)
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
 
-                visitor.Status = (int)Constants.STATUS.REJECTED;
-                _abmsContext.Visitors.Update(visitor);
+                // Use visitor_ with the correct Id for updating:
+                visitor_.Status = (int)Constants.STATUS.REJECTED;
+                _abmsContext.Visitors.Update(visitor_);
                 _abmsContext.SaveChanges();
+
                 return new ResponseData<string>
                 {
-                    Data = visitor.Id,
+                    Data = visitor_.Id,
                     StatusCode = HttpStatusCode.OK,
                     ErrMsg = ErrorApp.SUCCESS.description
                 };
@@ -100,12 +101,11 @@ namespace ABMS_backend.Services
                 return new ResponseData<string>
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
-                    ErrMsg = "Delete failed why " + ex.Message
+                    ErrMsg = "Delete failed: " + ex.Message
                 };
 
             }
         }
-
         public ResponseData<List<Visitor>> getAllRequestVisitor(VisitorForSearchDTO dto)
         {
 
