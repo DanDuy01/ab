@@ -73,9 +73,8 @@ namespace ABMS_backend.Services
         {
             try
             {
-                Resident resident = new Resident();
-                Resident r = _abmsContext.Residents.Find(id);
-                if (r == null)
+                Resident resident = _abmsContext.Residents.Find(id);
+                if (resident == null)
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
@@ -146,9 +145,8 @@ namespace ABMS_backend.Services
             }
             try
             {
-                Resident resident = new Resident();
-                Resident r = _abmsContext.Residents.Find(id);
-                if (r == null)
+                Resident resident = _abmsContext.Residents.Find(id);
+                if (resident == null)
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
@@ -156,6 +154,7 @@ namespace ABMS_backend.Services
                 resident.FullName = dto.fullName;
                 resident.DateOfBirth = dto.dob;
                 resident.Gender = dto.gender;
+                resident.Phone= dto.phone;
                 resident.IsHouseholder = dto.isHouseHolder;
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 resident.ModifyUser = getUser;
