@@ -5,6 +5,7 @@ using ABMS_backend.Utils.Exceptions;
 using ABMS_backend.Utils.Token;
 using ABMS_backend.Utils.Validates;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Net;
 
@@ -109,11 +110,26 @@ namespace ABMS_backend.Services
         public ResponseData<List<Visitor>> getAllRequestVisitor(VisitorForSearchDTO dto)
         {
 
-            var list = _abmsContext.Visitors
+            var list = _abmsContext.Visitors.Include(x=>x.Room)
                 .Where(x => (dto.roomId== null || x.RoomId== dto.roomId)
                 && (dto.fullName== null || x.FullName== dto.fullName)
                 &&(dto.time == null || (x.ArrivalTime <= dto.time && dto.time <= x.DepartureTime ))
-                &&(dto.status== null || x.Status == dto.status)).ToList();           
+                &&(dto.status== null || x.Status == dto.status)).Select(x=> new Visitor
+                {
+                    RoomId = x.RoomId,
+                    FullName = x.FullName,
+                    ArrivalTime = x.ArrivalTime,
+                    DepartureTime = x.DepartureTime,
+                    Status = x.Status,
+                    Room =x.Room,
+                    Id = x.Id,
+                    PhoneNumber=x.PhoneNumber,
+                    IdentityNumber=x.IdentityNumber,
+                    IdentityCardImgUrl=x.IdentityCardImgUrl,
+                    Description=x.Description,
+                    ApproveUser=x.ApproveUser,
+                    Gender=x.Gender,
+                }).ToList();           
             return new ResponseData<List<Visitor>>
             {
                 Data = list,
