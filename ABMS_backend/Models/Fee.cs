@@ -43,7 +43,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Ngày tạo
         /// </summary>
-        public string CreateTime { get; set; } = null!;
+        public DateTime CreateTime { get; set; }
         /// <summary>
         /// Người chỉnh sửa
         /// </summary>
@@ -51,7 +51,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Ngày chỉnh sửa
         /// </summary>
-        public string? ModifyTime { get; set; }
+        public DateTime? ModifyTime { get; set; }
         /// <summary>
         /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực
         /// </summary>

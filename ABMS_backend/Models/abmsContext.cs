@@ -429,7 +429,7 @@ namespace ABMS_backend.Models
                     .HasComment("Khóa chính của bảng");
 
                 entity.Property(e => e.CreateTime)
-                    .HasMaxLength(100)
+                    .HasColumnType("datetime")
                     .HasColumnName("create_time")
                     .HasComment("Ngày tạo");
 
@@ -457,7 +457,7 @@ namespace ABMS_backend.Models
                     .HasComment("Tên dịch vụ");
 
                 entity.Property(e => e.ModifyTime)
-                    .HasMaxLength(100)
+                    .HasColumnType("datetime")
                     .HasColumnName("modify_time")
                     .HasComment("Ngày chỉnh sửa");
 
@@ -700,7 +700,12 @@ namespace ABMS_backend.Models
                 entity.Property(e => e.Status)
                     .HasColumnType("int(11)")
                     .HasColumnName("status")
-                    .HasComment("Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực, 2 đã gửi, 5 chưa thanh toán");
+                    .HasComment("Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực, 2 đã gửi, 6 chưa thanh toán");
+
+                entity.Property(e => e.Type)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("type")
+                    .HasComment("Loại xe: 1 xe máy, 2 ô tô, 3 xe đạp(xe điện)");
 
                 entity.HasOne(d => d.Resident)
                     .WithMany(p => p.ParkingCards)
@@ -1289,7 +1294,7 @@ namespace ABMS_backend.Models
                     .HasComment("Giới tính");
 
                 entity.Property(e => e.IdentityCardImgUrl)
-                    .HasMaxLength(100)
+                    .HasMaxLength(300)
                     .HasColumnName("identity_card_img_url")
                     .HasComment("Ảnh cccd");
 
