@@ -85,7 +85,7 @@ namespace ABMS_backend.Services
                 }
 
                 // Use visitor_ with the correct Id for updating:
-                visitor_.Status = (int)Constants.STATUS.REJECTED;
+                visitor_.Status = (int)Constants.STATUS.IN_ACTIVE;
                 _abmsContext.Visitors.Update(visitor_);
                 _abmsContext.SaveChanges();
 
