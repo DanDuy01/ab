@@ -102,11 +102,11 @@ namespace ABMS_backend.Services
                         ErrMsg = "Parking card not found."
                     };
                 }
-                bool isDuplicateLicensePlate = _abmsContext.ParkingCards.Any(x => x.LicensePlate == dto.license_plate && x.Id != id);
-                if (isDuplicateLicensePlate)
-                {
-                    throw new CustomException(ErrorApp.VEHICE_EXISTED);
-                }
+                //bool isDuplicateLicensePlate = _abmsContext.ParkingCards.Any(x => x.LicensePlate == dto.license_plate && x.Id != id);
+                //if (isDuplicateLicensePlate)
+                //{
+                //    throw new CustomException(ErrorApp.VEHICE_EXISTED);
+                //}
                 cardToUpdate.ResidentId = dto.resident_id;
                 cardToUpdate.Brand = dto.brand;
                 cardToUpdate.Color = dto.color;
@@ -115,6 +115,7 @@ namespace ABMS_backend.Services
                 cardToUpdate.ExpireDate = dto.expire_date;
                 cardToUpdate.Note = dto.note;
                 cardToUpdate.Status = dto.status;
+                cardToUpdate.LicensePlate = dto.license_plate;
 
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 cardToUpdate.ModifyUser = getUser;
@@ -130,14 +131,14 @@ namespace ABMS_backend.Services
                     ErrMsg = "Update successful."
                 };
             }
-            catch (CustomException ce)
-            {
-                return new ResponseData<string>
-                {
-                    StatusCode = HttpStatusCode.Conflict,
-                    ErrMsg = ce.Message
-                };
-            }
+            //catch (CustomException ce)
+            //{
+            //    return new ResponseData<string>
+            //    {
+            //        StatusCode = HttpStatusCode.Conflict,
+            //        ErrMsg = ce.Message
+            //    };
+            //}
             catch (Exception ex)
             {
                 return new ResponseData<string>
