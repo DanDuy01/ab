@@ -79,48 +79,63 @@ namespace ABMS_backend.Services
 
         public ResponseData<string> updateParkingCard(string id, ParkingCardForEditDTO dto)
         {
-            //validate
+            // Validate DTO
             string error = dto.Validate();
-
             if (error != null)
             {
                 return new ResponseData<string>
                 {
-                    StatusCode = HttpStatusCode.InternalServerError,
+                    StatusCode = HttpStatusCode.BadRequest, // Use BadRequest for validation errors
                     ErrMsg = error
                 };
             }
 
             try
             {
-                ParkingCard card = _abmsContext.ParkingCards.Find(id);
-                if(card == null)
+                // Find the existing card by ID
+                ParkingCard cardToUpdate = _abmsContext.ParkingCards.Find(id);
+                if (cardToUpdate == null)
                 {
-                    throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.NotFound, 
+                        ErrMsg = "Parking card not found."
+                    };
                 }
-                ParkingCard parkingCard = _abmsContext.ParkingCards.FirstOrDefault(x => x.LicensePlate == dto.license_plate);
-                if (parkingCard != null && parkingCard != card)
+                bool isDuplicateLicensePlate = _abmsContext.ParkingCards.Any(x => x.LicensePlate == dto.license_plate && x.Id != id);
+                if (isDuplicateLicensePlate)
                 {
                     throw new CustomException(ErrorApp.VEHICE_EXISTED);
                 }
-                card.ResidentId = dto.resident_id;
-                card.Brand = dto.brand;
-                card.Color = dto.color;
-                card.Type = dto.type;
-                card.Image = dto.image;
-                card.ExpireDate = dto.expire_date;
-                card.Note = dto.note;
-                card.Status = dto.status;
+                cardToUpdate.ResidentId = dto.resident_id;
+                cardToUpdate.Brand = dto.brand;
+                cardToUpdate.Color = dto.color;
+                cardToUpdate.Type = dto.type;
+                cardToUpdate.Image = dto.image;
+                cardToUpdate.ExpireDate = dto.expire_date;
+                cardToUpdate.Note = dto.note;
+                cardToUpdate.Status = dto.status;
+
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
-                card.ModifyUser = getUser;
-                card.ModifyTime = DateTime.Now;
-                _abmsContext.ParkingCards.Update(card);
+                cardToUpdate.ModifyUser = getUser;
+                cardToUpdate.ModifyTime = DateTime.Now;
+
+                _abmsContext.ParkingCards.Update(cardToUpdate);
                 _abmsContext.SaveChanges();
+
                 return new ResponseData<string>
                 {
-                    Data = card.Id,
+                    Data = cardToUpdate.Id,
                     StatusCode = HttpStatusCode.OK,
-                    ErrMsg = ErrorApp.SUCCESS.description
+                    ErrMsg = "Update successful."
+                };
+            }
+            catch (CustomException ce)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.Conflict,
+                    ErrMsg = ce.Message
                 };
             }
             catch (Exception ex)
@@ -128,7 +143,7 @@ namespace ABMS_backend.Services
                 return new ResponseData<string>
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
-                    ErrMsg = "Update failed why " + ex.Message
+                    ErrMsg = "Update failed due to an error: " + ex.Message
                 };
             }
         }
