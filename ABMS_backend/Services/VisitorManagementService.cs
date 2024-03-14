@@ -113,7 +113,8 @@ namespace ABMS_backend.Services
             var list = _abmsContext.Visitors.Include(x=>x.Room)
                 .Where(x => (dto.roomId== null || x.RoomId== dto.roomId)
                 && (dto.fullName== null || x.FullName== dto.fullName)
-                &&(dto.time == null || (x.ArrivalTime <= dto.time && dto.time <= x.DepartureTime ))
+                && (dto.building_id == null || x.Room.BuildingId == dto.building_id)
+                && (dto.time == null || (x.ArrivalTime <= dto.time && dto.time <= x.DepartureTime ))
                 &&(dto.status== null || x.Status == dto.status)).Select(x=> new Visitor
                 {
                     RoomId = x.RoomId,

@@ -172,6 +172,7 @@ namespace ABMS_backend.Services
                 Where(x => (dto.resident_id == null || x.ResidentId == dto.resident_id)
                 && (dto.expire_date == null || x.ExpireDate == dto.expire_date)
                 && (dto.status == null || x.Status == dto.status)
+                && (dto.building_id == null || x.Resident.Room.BuildingId== dto.building_id)
                 && (dto.room_id == null || x.Resident.RoomId == dto.room_id)).Select(x=>new ParkingCard
                 {
                     Id=x.Id,

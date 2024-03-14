@@ -107,7 +107,7 @@ namespace ABMS_backend.Services
             var list = _abmsContext.Rooms.Include(x=>x.Residents).
                  Where(x => (dto.accountId == null || x.AccountId == dto.accountId)
                  &&(dto.buildingId == null || x.BuildingId == dto.buildingId)
-                 && (dto.roomNumber == null || x.RoomNumber.ToLower()
+                 && (dto.roomNumber == null || x.RoomNumber.ToLower() 
                  .Contains(dto.roomNumber.ToLower()))).Select(x=> new Room
                  {
                        Residents=x.Residents,
