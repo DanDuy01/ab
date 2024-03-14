@@ -41,8 +41,8 @@ namespace ABMS_backend.Services
                 building.Id = Guid.NewGuid().ToString();
                 building.Name = dto.name;
                 building.Address = dto.address;
-                building.NumberOfFloor = dto.number_of_floor;
-                building.RoomEachFloor = dto.room_each_floor;
+                building.NumberOfFloor = (int)dto.number_of_floor;
+                building.RoomEachFloor = (int)dto.room_each_floor;
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 building.CreateUser = getUser;
                 building.CreateTime = DateTime.Now;
