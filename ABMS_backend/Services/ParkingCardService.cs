@@ -168,7 +168,7 @@ namespace ABMS_backend.Services
 
         public ResponseData<List<ParkingCard>> getParkingCard(ParkingCardForSearchDTO dto)
         {
-            var list = _abmsContext.ParkingCards.Include(x=>x.Resident).
+            var list = _abmsContext.ParkingCards.Include(x=>x.Resident).ThenInclude(r=>r.Room).
                 Where(x => (dto.resident_id == null || x.ResidentId == dto.resident_id)
                 && (dto.expire_date == null || x.ExpireDate == dto.expire_date)
                 && (dto.status == null || x.Status == dto.status)
@@ -188,7 +188,14 @@ namespace ABMS_backend.Services
                     CreateTime=x.CreateTime,
                     ModifyUser=x.ModifyUser,
                     ModifyTime=x.ModifyTime,
-                    Resident=x.Resident,
+                    Resident= new Resident
+                    {
+                        Id=x.Resident.Id,
+                        FullName = x.Resident.FullName,
+                        Room = x.Resident.Room
+                    },
+                    
+                    
                 }).ToList();
             return new ResponseData<List<ParkingCard>>
             {
