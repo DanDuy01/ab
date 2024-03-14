@@ -24,16 +24,16 @@ namespace ABMS_backend.Services
         public ResponseData<string> createBuilding(BuildingForInsertDTO dto)
         {
             //validate
-            string error = dto.Validate();
+            //string error = dto.Validate();
 
-            if (error != null)
-            {
-                return new ResponseData<string>
-                {
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    ErrMsg = error
-                };
-            }
+            //if (error != null)
+            //{
+            //    return new ResponseData<string>
+            //    {
+            //        StatusCode = HttpStatusCode.InternalServerError,
+            //        ErrMsg = error
+            //    };
+            //}
 
             try
             {
@@ -69,16 +69,16 @@ namespace ABMS_backend.Services
         public ResponseData<string> updateBuilding(string id, BuildingForInsertDTO dto)
         {
             //validate
-            string error = dto.Validate();
+            //string error = dto.Validate();
 
-            if (error != null)
-            {
-                return new ResponseData<string>
-                {
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    ErrMsg = error
-                };
-            }
+            //if (error != null)
+            //{
+            //    return new ResponseData<string>
+            //    {
+            //        StatusCode = HttpStatusCode.InternalServerError,
+            //        ErrMsg = error
+            //    };
+            //}
 
             try
             {
@@ -89,8 +89,8 @@ namespace ABMS_backend.Services
                 }
                 building.Name = dto.name;
                 building.Address = dto.address;
-                building.NumberOfFloor = dto.number_of_floor;
-                building.RoomEachFloor = dto.room_each_floor;
+                building.NumberOfFloor = (int)dto.number_of_floor;
+                building.RoomEachFloor = (int)dto.room_each_floor;
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 building.ModifyUser = getUser;
                 building.ModifyTime = DateTime.Now;
