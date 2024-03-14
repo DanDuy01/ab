@@ -5,6 +5,7 @@ using ABMS_backend.Utils.Exceptions;
 using ABMS_backend.Utils.Token;
 using ABMS_backend.Utils.Validates;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
@@ -103,11 +104,27 @@ namespace ABMS_backend.Services
 
         public ResponseData<List<Room>> getRoomInformation(RoomForSearchDTO dto)
         {
-            var list = _abmsContext.Rooms.
+            var list = _abmsContext.Rooms.Include(x=>x.Residents).
                  Where(x => (dto.accountId == null || x.AccountId == dto.accountId)
                  &&(dto.buildingId == null || x.BuildingId == dto.buildingId)
                  && (dto.roomNumber == null || x.RoomNumber.ToLower()
-                 .Contains(dto.roomNumber.ToLower()))).ToList();
+                 .Contains(dto.roomNumber.ToLower()))).Select(x=> new Room
+                 {
+                       Residents=x.Residents,
+                       AccountId=x.AccountId,
+                       BuildingId=x.BuildingId,
+                       CreateTime=x.CreateTime,
+                       Id=x.Id,
+                       ModifyUser=x.ModifyUser,
+                       Feedbacks=x.Feedbacks,
+                       CreateUser=x.CreateUser,
+                       RoomArea=x.RoomArea,
+                       Status=x.Status,
+                       ModifyTime=x.ModifyTime,
+                       NumberOfResident=x.NumberOfResident,
+                       RoomNumber=x.RoomNumber,
+                       
+                 }).ToList();
             return new ResponseData<List<Room>>
             {
                 Data = list,
