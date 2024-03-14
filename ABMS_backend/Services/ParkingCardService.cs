@@ -209,7 +209,32 @@ namespace ABMS_backend.Services
 
         public ResponseData<ParkingCard> getParkingCardById(string id)
         {
-            ParkingCard card = _abmsContext.ParkingCards.Find(id);
+            ParkingCard card = _abmsContext.ParkingCards.Include(x => x.Resident).ThenInclude(r => r.Room).Where(x=>x.Id == id)
+                .Select(x => new ParkingCard
+                {
+                    Id = x.Id,
+                    ResidentId = x.ResidentId,
+                    LicensePlate = x.LicensePlate,
+                    Brand = x.Brand,
+                    Color = x.Color,
+                    Type = x.Type,
+                    Image = x.Image,
+                    ExpireDate = x.ExpireDate,
+                    Status = x.Status,
+                    Note = x.Note,
+                    CreateUser = x.CreateUser,
+                    CreateTime = x.CreateTime,
+                    ModifyUser = x.ModifyUser,
+                    ModifyTime = x.ModifyTime,
+                    Resident = new Resident
+                    {
+                        Id = x.Resident.Id,
+                        FullName = x.Resident.FullName,
+                        Room = x.Resident.Room
+                    },
+
+
+                }).FirstOrDefault();
             if (card == null)
             {
                 throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
