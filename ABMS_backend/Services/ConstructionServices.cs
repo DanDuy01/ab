@@ -106,6 +106,7 @@ namespace ABMS_backend.Services
                 Where(x =>
                     (dto.roomId == null || x.RoomId == dto.roomId)
                     && (dto.name == null || x.Name == dto.name)
+                    && (dto.building_id == null || x.Room.BuildingId == dto.building_id)
                     && (dto.constructionOrganization == null || x.ConstructionOrganization == dto.constructionOrganization)
                     && (dto.phone == null || x.PhoneContact == dto.phone)
                     && (dto.time == null || (x.StartTime <= dto.time && dto.time <= x.EndTime))

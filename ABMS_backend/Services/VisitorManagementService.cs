@@ -5,6 +5,7 @@ using ABMS_backend.Utils.Exceptions;
 using ABMS_backend.Utils.Token;
 using ABMS_backend.Utils.Validates;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Net;
 
@@ -48,8 +49,8 @@ namespace ABMS_backend.Services
                 visitor.IdentityNumber= dto.identityNumber;
                 visitor.IdentityCardImgUrl= dto.identityCardImgUrl;
                 visitor.Description= dto.description;
-                string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
-                visitor.ApproveUser= getUser;
+                //string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                //visitor.ApproveUser= getUser;
                 visitor.Status = (int)Constants.STATUS.SENT;
                 _abmsContext.Visitors.Add(visitor);
                 _abmsContext.SaveChanges();
@@ -77,19 +78,20 @@ namespace ABMS_backend.Services
         {
             try
             {
-                Visitor visitor = new Visitor();
                 Visitor visitor_ = _abmsContext.Visitors.Find(id);
                 if (visitor_ == null)
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
 
-                visitor.Status = (int)Constants.STATUS.IN_ACTIVE;
-                _abmsContext.Visitors.Update(visitor);
+                // Use visitor_ with the correct Id for updating:
+                visitor_.Status = (int)Constants.STATUS.IN_ACTIVE;
+                _abmsContext.Visitors.Update(visitor_);
                 _abmsContext.SaveChanges();
+
                 return new ResponseData<string>
                 {
-                    Data = visitor.Id,
+                    Data = visitor_.Id,
                     StatusCode = HttpStatusCode.OK,
                     ErrMsg = ErrorApp.SUCCESS.description
                 };
@@ -100,19 +102,35 @@ namespace ABMS_backend.Services
                 return new ResponseData<string>
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
-                    ErrMsg = "Delete failed why " + ex.Message
+                    ErrMsg = "Delete failed: " + ex.Message
                 };
 
             }
         }
-
         public ResponseData<List<Visitor>> getAllRequestVisitor(VisitorForSearchDTO dto)
         {
-            var list = _abmsContext.Visitors
+
+            var list = _abmsContext.Visitors.Include(x=>x.Room)
                 .Where(x => (dto.roomId== null || x.RoomId== dto.roomId)
                 && (dto.fullName== null || x.FullName== dto.fullName)
-                &&(dto.time == null || (x.ArrivalTime <= dto.time && dto.time <= x.DepartureTime ))
-                &&(dto.status== null || x.Status == dto.status)).ToList();           
+                && (dto.building_id == null || x.Room.BuildingId == dto.building_id)
+                && (dto.time == null || (x.ArrivalTime <= dto.time && dto.time <= x.DepartureTime ))
+                &&(dto.status== null || x.Status == dto.status)).Select(x=> new Visitor
+                {
+                    RoomId = x.RoomId,
+                    FullName = x.FullName,
+                    ArrivalTime = x.ArrivalTime,
+                    DepartureTime = x.DepartureTime,
+                    Status = x.Status,
+                    Room =x.Room,
+                    Id = x.Id,
+                    PhoneNumber=x.PhoneNumber,
+                    IdentityNumber=x.IdentityNumber,
+                    IdentityCardImgUrl=x.IdentityCardImgUrl,
+                    Description=x.Description,
+                    ApproveUser=x.ApproveUser,
+                    Gender=x.Gender,
+                }).ToList();           
             return new ResponseData<List<Visitor>>
             {
                 Data = list,

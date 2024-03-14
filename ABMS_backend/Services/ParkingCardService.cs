@@ -168,11 +168,36 @@ namespace ABMS_backend.Services
 
         public ResponseData<List<ParkingCard>> getParkingCard(ParkingCardForSearchDTO dto)
         {
-            var list = _abmsContext.ParkingCards.
+            var list = _abmsContext.ParkingCards.Include(x=>x.Resident).ThenInclude(r=>r.Room).
                 Where(x => (dto.resident_id == null || x.ResidentId == dto.resident_id)
                 && (dto.expire_date == null || x.ExpireDate == dto.expire_date)
                 && (dto.status == null || x.Status == dto.status)
-                && (dto.room_id == null || x.Resident.RoomId == dto.room_id)).ToList();
+                && (dto.building_id == null || x.Resident.Room.BuildingId== dto.building_id)
+                && (dto.room_id == null || x.Resident.RoomId == dto.room_id)).Select(x=>new ParkingCard
+                {
+                    Id=x.Id,
+                    ResidentId=x.ResidentId,
+                    LicensePlate=x.LicensePlate,
+                    Brand=x.Brand,
+                    Color=x.Color, 
+                    Type=x.Type,
+                    Image=x.Image,      
+                    ExpireDate=x.ExpireDate,
+                    Status=x.Status,
+                    Note = x.Note,
+                    CreateUser=x.CreateUser,
+                    CreateTime=x.CreateTime,
+                    ModifyUser=x.ModifyUser,
+                    ModifyTime=x.ModifyTime,
+                    Resident= new Resident
+                    {
+                        Id=x.Resident.Id,
+                        FullName = x.Resident.FullName,
+                        Room = x.Resident.Room
+                    },
+                    
+                    
+                }).ToList();
             return new ResponseData<List<ParkingCard>>
             {
                 Data = list,

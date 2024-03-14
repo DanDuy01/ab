@@ -19,7 +19,7 @@ namespace ABMS_backend.DTO
         public string identityNumber { get; set; } 
         public string identityCardImgUrl { get; set; } 
         public string? description { get; set; }
-        public string? approveUser { get; set; }
+        //public string? approveUser { get; set; }
 
         public string Validate()
         {
@@ -35,10 +35,7 @@ namespace ABMS_backend.DTO
                 return "Wrong phone!";
             }          
 
-            if (identityNumber.Length != 9 && identityNumber.Length != 12)
-            {
-                return "Invalid! please input identity number is length from 9 to 12 number !";
-            }
+           
 
             return null;
         }
