@@ -429,7 +429,7 @@ namespace ABMS_backend.Models
                     .HasComment("Khóa chính của bảng");
 
                 entity.Property(e => e.CreateTime)
-                    .HasMaxLength(100)
+                    .HasColumnType("datetime")
                     .HasColumnName("create_time")
                     .HasComment("Ngày tạo");
 
@@ -457,7 +457,7 @@ namespace ABMS_backend.Models
                     .HasComment("Tên dịch vụ");
 
                 entity.Property(e => e.ModifyTime)
-                    .HasMaxLength(100)
+                    .HasColumnType("datetime")
                     .HasColumnName("modify_time")
                     .HasComment("Ngày chỉnh sửa");
 
