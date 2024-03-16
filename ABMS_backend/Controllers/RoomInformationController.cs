@@ -1,4 +1,5 @@
 ﻿using ABMS_backend.DTO;
+using ABMS_backend.DTO.RoomDTO;
 using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Validates;
@@ -19,9 +20,9 @@ namespace ABMS_backend.Controllers
         }
 
         [HttpGet("resident-room/get")]
-        public ResponseData<List<Room>> Get([FromQuery]RoomForSearchDTO dto)
+        public ResponseData<List<RoomBuildingResponseDTO>> Get([FromQuery]RoomForSearchDTO dto)
         {
-            ResponseData<List<Room>> response = _repository.getRoomInformation(dto);
+            ResponseData<List<RoomBuildingResponseDTO>> response = _repository.getRoomInformation(dto);
             return response;
         }
 
@@ -34,7 +35,7 @@ namespace ABMS_backend.Controllers
 
 
         [HttpPost("resident-room/create")]
-        public ResponseData<string> Create([FromBody] RoomForInsertDTO dto)
+        public ResponseData<string> Create([FromBody] RoomForCreateDTO dto)
         {
             ResponseData<string> response = _repository.createRoomInformation(dto);
             return response;

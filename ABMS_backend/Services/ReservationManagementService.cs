@@ -1,4 +1,5 @@
 ﻿using ABMS_backend.DTO;
+using ABMS_backend.DTO.ReservationDTO;
 using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Exceptions;
@@ -199,7 +200,7 @@ namespace ABMS_backend.Services
             UtilitySchedule utilitySchedule = _abmsContext.UtilitySchedules.Find(id);
             if (utilitySchedule == null)
             {
-                throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
+                throw new CustomException(ErrorApp.OBJECT_NOT_FOUND); 
             }
             utilitySchedule.Status = status;
             string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);

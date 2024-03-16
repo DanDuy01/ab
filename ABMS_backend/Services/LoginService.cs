@@ -188,7 +188,7 @@ namespace ABMS_backend.Services
             _abmsContext.SaveChanges();
             return new ResponseData<string>
             {
-                Data = user.PhoneNumber,
+                Data = user.Id,
                 StatusCode = HttpStatusCode.OK,
                 ErrMsg = ErrorApp.SUCCESS.description
             };
