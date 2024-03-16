@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
-namespace ABMS_backend.DTO
+namespace ABMS_backend.DTO.MemberDTO
 {
     public class MemberForInsertDTO
     {
@@ -17,8 +17,8 @@ namespace ABMS_backend.DTO
         public string Validate()
         {
             string phoneRegexPattern = @"(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b";
-            Regex regexPhone = new Regex(phoneRegexPattern);           
-            if (String.IsNullOrEmpty(roomId))
+            Regex regexPhone = new Regex(phoneRegexPattern);
+            if (string.IsNullOrEmpty(roomId))
             {
                 return "Room is required!";
             }
@@ -26,7 +26,7 @@ namespace ABMS_backend.DTO
             {
                 return "Wrong phone!";
             }
-            if (String.IsNullOrEmpty(fullName))
+            if (string.IsNullOrEmpty(fullName))
             {
                 return "Full name is required!";
             }

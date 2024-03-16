@@ -1,6 +1,6 @@
 ﻿using ABMS_backend.Models;
 
-namespace ABMS_backend.DTO
+namespace ABMS_backend.DTO.UtilityDTO
 {
     public class UtilityDetailDTO
     {
@@ -10,12 +10,12 @@ namespace ABMS_backend.DTO
 
         public string Validate()
         {
-            if (String.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(name))
             {
                 return "Name is required!";
             }
 
-            else if (String.IsNullOrEmpty(utility_id))
+            else if (string.IsNullOrEmpty(utility_id))
             {
                 return "Utility is required!";
             }

@@ -1,6 +1,6 @@
 ﻿using ABMS_backend.Models;
 
-namespace ABMS_backend.DTO
+namespace ABMS_backend.DTO.RoomDTO
 {
     public class RoomBuildingResponseDTO
     {
@@ -15,7 +15,7 @@ namespace ABMS_backend.DTO
         public string? ModifyUser { get; set; }
         public DateTime? ModifyTime { get; set; }
 
-        public  ICollection<Resident> Residents { get; set; }
+        public ICollection<Resident> Residents { get; set; }
         public int Status { get; set; }
         // Additional properties from Building
         public string BuildingName { get; set; }

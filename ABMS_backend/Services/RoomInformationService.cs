@@ -1,4 +1,5 @@
 ﻿using ABMS_backend.DTO;
+using ABMS_backend.DTO.RoomDTO;
 using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Exceptions;
@@ -26,27 +27,27 @@ namespace ABMS_backend.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public ResponseData<string> createRoomInformation(RoomForInsertDTO dto)
+        public ResponseData<string> createRoomInformation(RoomForCreateDTO dto)
         {
-            string error = dto.Validate();
+            //string error = dto.Validate();
 
-            if (error != null)
-            {
-                return new ResponseData<string>
-                {
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    ErrMsg = error
-                };
-            }
+            //if (error != null)
+            //{
+            //    return new ResponseData<string>
+            //    {
+            //        StatusCode = HttpStatusCode.InternalServerError,
+            //        ErrMsg = error
+            //    };
+            //}
             try
             {
                 Room room = new Room();
                 room.Id = Guid.NewGuid().ToString();
                 room.AccountId = dto.accountId;
                 room.BuildingId = dto.buildingId;
-                room.RoomNumber = dto.roomNumber;
-                room.RoomArea = dto.roomArea;
-                room.NumberOfResident = dto.numberOfResident;
+                room.RoomNumber = "";
+                room.RoomArea = 0;
+                room.NumberOfResident = 0;
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 room.CreateUser = getUser;
                 room.CreateTime = DateTime.Now;

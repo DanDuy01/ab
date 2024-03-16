@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using System.Text.RegularExpressions;
 
-namespace ABMS_backend.DTO
+namespace ABMS_backend.DTO.ReservationDTO
 {
     public class ReservationForInsertDTO
     {
@@ -21,12 +21,12 @@ namespace ABMS_backend.DTO
 
         public string Validate()
         {
-            if (String.IsNullOrEmpty(room_id))
+            if (string.IsNullOrEmpty(room_id))
             {
                 return "Room is required!";
             }
 
-            else if (String.IsNullOrEmpty(utility_detail_id))
+            else if (string.IsNullOrEmpty(utility_detail_id))
             {
                 return "Utility Detail is required!";
             }

@@ -3,7 +3,7 @@ using System.Numerics;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
-namespace ABMS_backend.DTO
+namespace ABMS_backend.DTO.VisitorDTO
 {
     public class VisitorForInsertDTO
     {
@@ -12,12 +12,12 @@ namespace ABMS_backend.DTO
         public DateTime arrivalTime { get; set; }
         public DateTime departureTime { get; set; }
         public bool gender { get; set; }
-        
+
         [Phone]
-        public string phoneNumber { get; set; } 
-        
-        public string identityNumber { get; set; } 
-        public string identityCardImgUrl { get; set; } 
+        public string phoneNumber { get; set; }
+
+        public string identityNumber { get; set; }
+        public string identityCardImgUrl { get; set; }
         public string? description { get; set; }
         //public string? approveUser { get; set; }
 
@@ -33,9 +33,9 @@ namespace ABMS_backend.DTO
             if (!regexPhone.IsMatch(phoneNumber))
             {
                 return "Wrong phone!";
-            }          
+            }
 
-           
+
 
             return null;
         }

@@ -1,11 +1,11 @@
-﻿namespace ABMS_backend.DTO
+﻿namespace ABMS_backend.DTO.ReservationDTO
 {
     public class ReservationResponseDTO
     {
         public string id { get; set; }
         public string room_id { get; set; }
 
-        public string utility { get; set;}
+        public string utility { get; set; }
 
         public string utility_detail_id { get; set; }
 
@@ -16,7 +16,7 @@
         public DateOnly booking_date { get; set; }
 
         public int? number_of_person { get; set; }
-        
+
         public float total_price { get; set; }
 
         public string? description { get; set; }

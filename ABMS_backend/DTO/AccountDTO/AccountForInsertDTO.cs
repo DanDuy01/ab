@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
-namespace ABMS_backend.DTO
+namespace ABMS_backend.DTO.AccountDTO
 {
     public class AccountForInsertDTO
     {
@@ -35,11 +35,13 @@ namespace ABMS_backend.DTO
 
             Regex regexEmail = new Regex(emailRegexPattern);
 
-            if (String.IsNullOrEmpty(building_id)){
+            if (string.IsNullOrEmpty(building_id))
+            {
                 return "Building is required!";
             }
 
-            else if (!regexPhone.IsMatch(phone)) {
+            else if (!regexPhone.IsMatch(phone))
+            {
                 return "Wrong phone!";
             }
 
@@ -48,12 +50,12 @@ namespace ABMS_backend.DTO
                 return "Wrong email!";
             }
 
-            else if (String.IsNullOrEmpty(full_name))
+            else if (string.IsNullOrEmpty(full_name))
             {
                 return "Full name is required!";
             }
-            
-            else if (String.IsNullOrEmpty(user_name))
+
+            else if (string.IsNullOrEmpty(user_name))
             {
                 return "Full name is required!";
             }

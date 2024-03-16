@@ -1,4 +1,5 @@
 ﻿using ABMS_backend.DTO;
+using ABMS_backend.DTO.RoomDTO;
 using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Validates;
@@ -34,7 +35,7 @@ namespace ABMS_backend.Controllers
 
 
         [HttpPost("resident-room/create")]
-        public ResponseData<string> Create([FromBody] RoomForInsertDTO dto)
+        public ResponseData<string> Create([FromBody] RoomForCreateDTO dto)
         {
             ResponseData<string> response = _repository.createRoomInformation(dto);
             return response;

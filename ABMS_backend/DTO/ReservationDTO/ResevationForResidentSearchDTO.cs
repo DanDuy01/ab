@@ -1,4 +1,4 @@
-﻿namespace ABMS_backend.DTO
+﻿namespace ABMS_backend.DTO.ReservationDTO
 {
     public class ResevationForResidentSearchDTO
     {

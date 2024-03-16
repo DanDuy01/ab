@@ -1,4 +1,5 @@
 ﻿using ABMS_backend.DTO;
+using ABMS_backend.DTO.ReservationDTO;
 using ABMS_backend.Models;
 
 namespace ABMS_backend.Repositories

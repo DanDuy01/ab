@@ -1,6 +1,6 @@
 ﻿using ABMS_backend.Models;
 
-namespace ABMS_backend.DTO
+namespace ABMS_backend.DTO.UtilityDTO
 {
     public class UtilityForInsertDTO
     {
@@ -20,12 +20,12 @@ namespace ABMS_backend.DTO
 
         public string Validate()
         {
-            if (String.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(name))
             {
                 return "Name is required!";
             }
 
-            else if (String.IsNullOrEmpty(buildingId))
+            else if (string.IsNullOrEmpty(buildingId))
             {
                 return "Building is required!";
             }
@@ -55,7 +55,7 @@ namespace ABMS_backend.DTO
                 return "Price per slot is required!";
             }
 
-            else if(pricePerSlot < 0)
+            else if (pricePerSlot < 0)
             {
                 return "Price per slot must greater or equal 0!";
             }

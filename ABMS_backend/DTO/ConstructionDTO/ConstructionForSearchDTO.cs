@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ABMS_backend.DTO
+namespace ABMS_backend.DTO.ConstructionDTO
 {
     public class ConstructionForSearchDTO
     {

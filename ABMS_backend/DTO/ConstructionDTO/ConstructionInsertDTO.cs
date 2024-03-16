@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
-namespace ABMS_backend.DTO
+namespace ABMS_backend.DTO.ConstructionDTO
 {
     public class ConstructionInsertDTO
     {
-        public string roomId {  get; set; }
+        public string roomId { get; set; }
         public string name { get; set; }
         public string constructionOrganization { get; set; }
         [Phone]
@@ -24,7 +24,7 @@ namespace ABMS_backend.DTO
                 return "Invalid phone number!";
             }
 
-            if(String.IsNullOrEmpty(roomId))
+            if (string.IsNullOrEmpty(roomId))
             {
                 return "Room is required!";
             }
