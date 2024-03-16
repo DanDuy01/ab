@@ -202,14 +202,6 @@ namespace ABMS_backend.Services
                 throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
             }
             utilitySchedule.Status = status;
-            if (_httpContextAccessor.HttpContext.Session.GetString("user") == null)
-            {
-                return new ResponseData<string>
-                {
-                    StatusCode = HttpStatusCode.Forbidden,
-                    ErrMsg = ErrorApp.FORBIDDEN.description
-                };
-            }
             string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
             utilitySchedule.ApproveUser = getUser;
             _abmsContext.UtilitySchedules.Update(utilitySchedule);
