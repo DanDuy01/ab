@@ -1,7 +1,9 @@
 ﻿using ABMS_backend.DTO;
+using ABMS_backend.DTO.FeedbackDTO;
+using ABMS_backend.DTO.VisitorDTO;
+using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Validates;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ABMS_backend.Controllers
@@ -31,6 +33,25 @@ namespace ABMS_backend.Controllers
             return response;
         }
 
+        [HttpPut("feedback/update/{id}")]
+        public ResponseData<string> Update(String id, [FromBody] FeedbackInsert dto)
+        {
+            ResponseData<string> response = _repository.updateFeedback(id, dto);
+            return response;
+        }
 
+        [HttpGet("feedback/get-all")]
+        public ResponseData<List<Feedback>> GetAll([FromQuery] FeedbackForSearch dto)
+        {
+            ResponseData<List<Feedback>> response = _repository.getAllFeedback(dto);
+            return response;
+        }
+
+        [HttpGet("feedback/getFeedbackById/{id}")]
+        public ResponseData<Feedback> GetFeedbackById(String id)
+        {
+            ResponseData<Feedback> response = _repository.getFeedbackById(id);
+            return response;
+        }
     }
 }

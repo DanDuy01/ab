@@ -48,6 +48,7 @@ namespace ABMS_backend.Models
         /// Trạng thái: 2 đã gửi, 3 đã duyệt, 4 bị từ chối, 5 đã thanh toán
         /// </summary>
         public int Status { get; set; }
+        public string? Response { get; set; }
 
         public virtual Room Room { get; set; } = null!;
         public virtual UtiliityDetail UtilityDetail { get; set; } = null!;
