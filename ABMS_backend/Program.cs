@@ -35,6 +35,7 @@ builder.Services.AddScoped<IConstructionManagementRepository, ConstructionServic
 builder.Services.AddScoped<IVisitorManagementRepository, VisitorManagementService>();
 builder.Services.AddScoped<IParkingCardRepository, ParkingCardService>();
 builder.Services.AddScoped<IBuildingRepository, BuildingService>();
+builder.Services.AddScoped<IFeedbackManagementRepository, FeedbackService>();
 builder.Services.AddControllersWithViews().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new TimeOnlyConverter());

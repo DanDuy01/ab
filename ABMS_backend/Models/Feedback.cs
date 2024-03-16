@@ -23,11 +23,11 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Tiêu đề
         /// </summary>
-        public float Title { get; set; }
+        public string Title { get; set; } = null!;
         /// <summary>
         /// Nội dung
         /// </summary>
-        public int Content { get; set; }
+        public string Content { get; set; } = null!;
         /// <summary>
         /// Đường dẫn ảnh
         /// </summary>
