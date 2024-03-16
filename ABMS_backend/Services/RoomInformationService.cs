@@ -102,36 +102,38 @@ namespace ABMS_backend.Services
             }
         }
 
-        public ResponseData<List<Room>> getRoomInformation(RoomForSearchDTO dto)
+        public ResponseData<List<RoomBuildingResponseDTO>> getRoomInformation(RoomForSearchDTO dto)
         {
-            var list = _abmsContext.Rooms.Include(x=>x.Residents).
-                 Where(x => (dto.accountId == null || x.AccountId == dto.accountId)
-                 &&(dto.buildingId == null || x.BuildingId == dto.buildingId)
-                 && (dto.roomNumber == null || x.RoomNumber.ToLower() 
-                 .Contains(dto.roomNumber.ToLower()))).Select(x=> new Room
+            var list = _abmsContext.Rooms.Include(x => x.Residents).Include(x => x.Building)
+                 .Where(x => (dto.accountId == null || x.AccountId == dto.accountId)
+                 && (dto.buildingId == null || x.BuildingId == dto.buildingId)
+                 && (dto.roomNumber == null || x.RoomNumber.ToLower().Contains(dto.roomNumber.ToLower())))
+                 .Select(x => new RoomBuildingResponseDTO
                  {
-                       Residents=x.Residents,
-                       AccountId=x.AccountId,
-                       BuildingId=x.BuildingId,
-                       CreateTime=x.CreateTime,
-                         Id = x.Id,
-                         ModifyUser = x.ModifyUser,
-                         CreateUser = x.CreateUser,
-                         RoomArea = x.RoomArea,
-                         Status = x.Status,
-                         ModifyTime = x.ModifyTime,
-                         NumberOfResident = x.NumberOfResident,
-                         RoomNumber = x.RoomNumber,
-
+                     // Map Room properties
+                     Id = x.Id,
+                     AccountId = x.AccountId,
+                     BuildingId = x.BuildingId,
+                     RoomNumber = x.RoomNumber,
+                     RoomArea = x.RoomArea,
+                     NumberOfResident = x.NumberOfResident,
+                     CreateUser = x.CreateUser,
+                     CreateTime = x.CreateTime,
+                     ModifyUser = x.ModifyUser,
+                     ModifyTime = x.ModifyTime,
+                     Status = x.Status,
+                     Residents = x.Residents,
+                     BuildingName = x.Building.Name,
+                     BuildingAddress = x.Building.Address
                  }).ToList();
-            return new ResponseData<List<Room>>
+
+            return new ResponseData<List<RoomBuildingResponseDTO>>
             {
                 Data = list,
                 StatusCode = HttpStatusCode.OK,
-                ErrMsg = ErrorApp.SUCCESS.description,
+                ErrMsg = "Success", // Assuming ErrorApp.SUCCESS.description is "Success"
                 Count = list.Count
             };
-
         }
 
         public ResponseData<Room> getRoomInformationById(string id)

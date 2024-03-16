@@ -9,7 +9,7 @@ namespace ABMS_backend.Repositories
         ResponseData<string> updateRoomInformation(string id, RoomForInsertDTO dto);
         ResponseData<string> deleteRoomInformation(string id);
         ResponseData<Room> getRoomInformationById(string id);
-        ResponseData<List<Room>> getRoomInformation(RoomForSearchDTO dto);
+        ResponseData<List<RoomBuildingResponseDTO>> getRoomInformation(RoomForSearchDTO dto);
 
     }
 }
