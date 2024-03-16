@@ -114,16 +114,15 @@ namespace ABMS_backend.Services
                        AccountId=x.AccountId,
                        BuildingId=x.BuildingId,
                        CreateTime=x.CreateTime,
-                       Id=x.Id,
-                       ModifyUser=x.ModifyUser,
-                       Feedbacks=x.Feedbacks,
-                       CreateUser=x.CreateUser,
-                       RoomArea=x.RoomArea,
-                       Status=x.Status,
-                       ModifyTime=x.ModifyTime,
-                       NumberOfResident=x.NumberOfResident,
-                       RoomNumber=x.RoomNumber,
-                       
+                         Id = x.Id,
+                         ModifyUser = x.ModifyUser,
+                         CreateUser = x.CreateUser,
+                         RoomArea = x.RoomArea,
+                         Status = x.Status,
+                         ModifyTime = x.ModifyTime,
+                         NumberOfResident = x.NumberOfResident,
+                         RoomNumber = x.RoomNumber,
+
                  }).ToList();
             return new ResponseData<List<Room>>
             {
