@@ -15,7 +15,9 @@ namespace ABMS_backend.Models
             Fees = new HashSet<Fee>();
             Funds = new HashSet<Fund>();
             Hotlines = new HashSet<Hotline>();
+            Posts = new HashSet<Post>();
             Rooms = new HashSet<Room>();
+            ServiceTypes = new HashSet<ServiceType>();
             Utilities = new HashSet<Utility>();
         }
 
@@ -65,7 +67,9 @@ namespace ABMS_backend.Models
         public virtual ICollection<Fee> Fees { get; set; }
         public virtual ICollection<Fund> Funds { get; set; }
         public virtual ICollection<Hotline> Hotlines { get; set; }
+        public virtual ICollection<Post> Posts { get; set; }
         public virtual ICollection<Room> Rooms { get; set; }
+        public virtual ICollection<ServiceType> ServiceTypes { get; set; }
         public virtual ICollection<Utility> Utilities { get; set; }
     }
 }

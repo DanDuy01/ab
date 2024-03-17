@@ -52,7 +52,9 @@ namespace ABMS_backend.Models
         /// Trạng thái: 5 đã thanh toán, 6 chưa thanh toán
         /// </summary>
         public int Status { get; set; }
+        public string? FeeId { get; set; }
 
+        public virtual Fee? FeeNavigation { get; set; }
         public virtual Room Room { get; set; } = null!;
     }
 }
