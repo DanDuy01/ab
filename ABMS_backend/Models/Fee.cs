@@ -8,6 +8,11 @@ namespace ABMS_backend.Models
     /// </summary>
     public partial class Fee
     {
+        public Fee()
+        {
+            ServiceCharges = new HashSet<ServiceCharge>();
+        }
+
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
@@ -62,5 +67,6 @@ namespace ABMS_backend.Models
         public int Status { get; set; }
 
         public virtual Building? Building { get; set; }
+        public virtual ICollection<ServiceCharge> ServiceCharges { get; set; }
     }
 }

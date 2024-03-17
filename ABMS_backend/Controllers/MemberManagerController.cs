@@ -33,6 +33,13 @@ namespace ABMS_backend.Controllers
             return response;
         }
 
+        [HttpGet("owner-member/{roomId}")]
+        public ResponseData<OwnerMemberDTO> GetHouseOwnerByRoomId(string roomId)
+        {
+            var houseOwner =  _repository.GetHouseOwnerByRoomId(roomId);
+            return houseOwner;
+        }
+
         [HttpPost("resident-room-member/create")]
         public ResponseData<string> Create([FromBody] MemberForInsertDTO dto)
         {
