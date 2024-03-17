@@ -152,14 +152,16 @@ namespace ABMS_backend.Services
 
         public ResponseData<List<Feedback>> getAllFeedback(FeedbackForSearch dto)
         {
-            var list = _abmsContext.Feedbacks.Include(x => x.Room).Include(x => x.ServiceType)
+            var list = _abmsContext.Feedbacks
+                .Include(x => x.Room).Include(x => x.ServiceType)
                 .Where(x => (dto.roomId == null || x.RoomId == dto.roomId)
-                && (dto.serviceTypeId == null || x.ServiceTypeId == dto.serviceTypeId)
-                && (dto.title == null || x.Title == dto.title)
-                && (dto.content == null || x.Content == dto.content)
-                && (dto.image == null || x.Image == dto.image)
-                && (dto.createdTime == null || x.CreateTime == dto.createdTime)
-                && (dto.status == null || x.Status == dto.status)).Select(x => new Feedback
+                    && (dto.serviceTypeId == null || x.ServiceTypeId == dto.serviceTypeId)
+                    && (dto.title == null || x.Title.ToLower().Contains(dto.title.ToLower()))
+                    && (dto.content == null || x.Content.ToLower().Contains(dto.content.ToLower()))
+                    && (dto.image == null || x.Image == dto.image)
+                    && (dto.createdTime == null || x.CreateTime == dto.createdTime)
+                    && (dto.status == null || x.Status == dto.status))
+                .Select(x => new Feedback
                 {
                     Id = x.Id,
                     RoomId = x.RoomId,
