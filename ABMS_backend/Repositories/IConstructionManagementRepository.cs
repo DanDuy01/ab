@@ -8,7 +8,8 @@ namespace ABMS_backend.Repositories
     {
         ResponseData<string> createConstruction(ConstructionInsertDTO dto);
         ResponseData<string> deleteConstruction(string id);
-        ResponseData<List<Construction>> getConstruction(ConstructionForSearchDTO dto);
+        ResponseData<string> updateConstruction(string id, ConstructionInsertDTO dto);
+        ResponseData<List<Construction>> getAllConstruction(ConstructionForSearchDTO dto);
         ResponseData<string> manageConstruction(string id, int status);
         ResponseData<Construction> getContructionById(string id);
     }
