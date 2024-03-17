@@ -10,6 +10,11 @@ namespace ABMS_backend.Models
     {
         public Building()
         {
+            Accounts = new HashSet<Account>();
+            Expenses = new HashSet<Expense>();
+            Fees = new HashSet<Fee>();
+            Funds = new HashSet<Fund>();
+            Hotlines = new HashSet<Hotline>();
             Rooms = new HashSet<Room>();
             Utilities = new HashSet<Utility>();
         }
@@ -55,6 +60,11 @@ namespace ABMS_backend.Models
         /// </summary>
         public int Status { get; set; }
 
+        public virtual ICollection<Account> Accounts { get; set; }
+        public virtual ICollection<Expense> Expenses { get; set; }
+        public virtual ICollection<Fee> Fees { get; set; }
+        public virtual ICollection<Fund> Funds { get; set; }
+        public virtual ICollection<Hotline> Hotlines { get; set; }
         public virtual ICollection<Room> Rooms { get; set; }
         public virtual ICollection<Utility> Utilities { get; set; }
     }

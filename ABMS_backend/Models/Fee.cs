@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace ABMS_backend.Models
 {
     /// <summary>
-    /// Giá dịch vụ
+    /// Bảng giá dịch vụ
     /// </summary>
     public partial class Fee
     {
@@ -13,9 +13,13 @@ namespace ABMS_backend.Models
         /// </summary>
         public string Id { get; set; } = null!;
         /// <summary>
+        /// Mã tòa nhà
+        /// </summary>
+        public string? BuildingId { get; set; }
+        /// <summary>
         /// Tên dịch vụ
         /// </summary>
-        public string FeeName { get; set; } = null!;
+        public string ServiceName { get; set; } = null!;
         /// <summary>
         /// Giá
         /// </summary>
@@ -56,5 +60,7 @@ namespace ABMS_backend.Models
         /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực
         /// </summary>
         public int Status { get; set; }
+
+        public virtual Building? Building { get; set; }
     }
 }

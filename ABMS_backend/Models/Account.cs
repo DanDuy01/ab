@@ -75,6 +75,7 @@ namespace ABMS_backend.Models
         /// </summary>
         public int Status { get; set; }
 
+        public virtual Building Building { get; set; } = null!;
         public virtual ICollection<AccountPost> AccountPosts { get; set; }
         public virtual ICollection<Room> Rooms { get; set; }
     }
