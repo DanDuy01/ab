@@ -38,7 +38,7 @@ namespace ABMS_backend.Services
             {
                 Fee fee = new Fee();
                 fee.Id = Guid.NewGuid().ToString();
-                fee.FeeName = dto.feeName;
+                fee.ServiceName = dto.feeName;
                 fee.Price = dto.price;
                 fee.Unit = dto.unit;
                 fee.EffectiveDate = dto.effectiveDate;
@@ -103,7 +103,7 @@ namespace ABMS_backend.Services
         public ResponseData<List<Fee>> getAllFee(FeeForSearchDTO dto)
         {
             var list = _abmsContext.Fees.Where(x =>
-            (dto.feeName == null || x.FeeName.ToLower()
+            (dto.feeName == null || x.ServiceName.ToLower()
                  .Contains(dto.feeName.ToLower()))
             && (dto.price == null || x.Price == dto.price)
             && (dto.unit == null || x.Unit == dto.unit)
@@ -151,7 +151,7 @@ namespace ABMS_backend.Services
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
-                fee.FeeName = dto.feeName;
+                fee.ServiceName = dto.feeName;
                 fee.Price = dto.price;
                 fee.Unit = dto.unit;
                 fee.EffectiveDate = dto.effectiveDate;
