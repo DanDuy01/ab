@@ -1,4 +1,4 @@
-﻿namespace ABMS_backend.DTO
+﻿namespace ABMS_backend.DTO.FeeDTO
 {
     public class FeeForInsertDTO
     {
@@ -10,7 +10,7 @@
 
         public string Validate()
         {
-            if (String.IsNullOrEmpty(feeName))
+            if (string.IsNullOrEmpty(feeName))
             {
                 return "Fee name is required!";
             }

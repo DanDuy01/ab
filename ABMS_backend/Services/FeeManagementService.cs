@@ -1,4 +1,5 @@
 ﻿using ABMS_backend.DTO;
+using ABMS_backend.DTO.FeeDTO;
 using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Exceptions;
