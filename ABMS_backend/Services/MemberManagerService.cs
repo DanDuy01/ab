@@ -1,10 +1,12 @@
 ﻿using ABMS_backend.DTO;
+using ABMS_backend.DTO.MemberDTO;
 using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Exceptions;
 using ABMS_backend.Utils.Token;
 using ABMS_backend.Utils.Validates;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Principal;
@@ -176,6 +178,37 @@ namespace ABMS_backend.Services
                     ErrMsg = "Updated failed why " + ex.Message
                 };
             }
+        }
+
+        public ResponseData<OwnerMemberDTO> GetHouseOwnerByRoomId(string roomId)
+        {
+            var houseOwner = _abmsContext.Residents
+                .Include(r => r.Room)
+                .Where(r => r.RoomId == roomId && r.IsHouseholder)
+                .Select(r => new OwnerMemberDTO
+                {
+                    Id = r.Id,
+                    RoomId = r.RoomId,
+                    FullName = r.FullName,
+                    DateOfBirth = r.DateOfBirth,
+                    IsHouseholder = r.IsHouseholder,
+                    Status=r.Status,
+                    Phone=r.Phone,
+                    Gender = r.Gender
+                })
+                .FirstOrDefault();
+
+            if (houseOwner == null)
+            {
+                throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
+            }
+
+            return new ResponseData<OwnerMemberDTO>
+            {
+                Data = houseOwner,
+                StatusCode = HttpStatusCode.OK,
+                ErrMsg = ErrorApp.SUCCESS.description
+            };
         }
     }
 }

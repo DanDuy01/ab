@@ -49,7 +49,9 @@ namespace ABMS_backend.Models
         /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực, 2 đã gửi, 4 bị từ chối
         /// </summary>
         public int Status { get; set; }
+        public string? BuildingId { get; set; }
 
+        public virtual Building? Building { get; set; }
         public virtual ICollection<AccountPost> AccountPosts { get; set; }
     }
 }

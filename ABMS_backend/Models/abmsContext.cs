@@ -30,6 +30,7 @@ namespace ABMS_backend.Models
         public virtual DbSet<Post> Posts { get; set; } = null!;
         public virtual DbSet<Resident> Residents { get; set; } = null!;
         public virtual DbSet<Room> Rooms { get; set; } = null!;
+        public virtual DbSet<RoomService> RoomServices { get; set; } = null!;
         public virtual DbSet<ServiceCharge> ServiceCharges { get; set; } = null!;
         public virtual DbSet<ServiceType> ServiceTypes { get; set; } = null!;
         public virtual DbSet<UtiliityDetail> UtiliityDetails { get; set; } = null!;
@@ -58,6 +59,8 @@ namespace ABMS_backend.Models
                 entity.HasComment("Tài khoản")
                     .HasCharSet("utf8mb4")
                     .UseCollation("utf8mb4_general_ci");
+
+                entity.HasIndex(e => e.BuildingId, "account_building_FK");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(100)
@@ -133,6 +136,12 @@ namespace ABMS_backend.Models
                     .HasMaxLength(100)
                     .HasColumnName("user_name")
                     .HasComment("Tên tài khoản");
+
+                entity.HasOne(d => d.Building)
+                    .WithMany(p => p.Accounts)
+                    .HasForeignKey(d => d.BuildingId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("account_building_FK");
             });
 
             modelBuilder.Entity<AccountPost>(entity =>
@@ -288,6 +297,11 @@ namespace ABMS_backend.Models
                     .HasColumnName("phone_contact")
                     .HasComment("Số điện thoại liên hệ");
 
+                entity.Property(e => e.Response)
+                    .HasMaxLength(100)
+                    .HasColumnName("response")
+                    .HasComment("Lí do từ chối");
+
                 entity.Property(e => e.RoomId)
                     .HasMaxLength(100)
                     .HasColumnName("room_id")
@@ -340,6 +354,10 @@ namespace ABMS_backend.Models
                     .HasColumnName("end_time")
                     .HasComment("Ngày, giờ kết thúc");
 
+                entity.Property(e => e.Response)
+                    .HasMaxLength(100)
+                    .HasColumnName("response");
+
                 entity.Property(e => e.RoomId)
                     .HasMaxLength(100)
                     .HasColumnName("room_id")
@@ -370,10 +388,16 @@ namespace ABMS_backend.Models
                     .HasCharSet("utf8mb4")
                     .UseCollation("utf8mb4_general_ci");
 
+                entity.HasIndex(e => e.BuildingId, "expense_building_FK");
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(100)
                     .HasColumnName("id")
                     .HasComment("Khóa chính của bảng");
+
+                entity.Property(e => e.BuildingId)
+                    .HasMaxLength(100)
+                    .HasColumnName("building_id");
 
                 entity.Property(e => e.CreateTime)
                     .HasColumnType("datetime")
@@ -413,20 +437,32 @@ namespace ABMS_backend.Models
                     .HasColumnType("int(11)")
                     .HasColumnName("status")
                     .HasComment("Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực");
+
+                entity.HasOne(d => d.Building)
+                    .WithMany(p => p.Expenses)
+                    .HasForeignKey(d => d.BuildingId)
+                    .HasConstraintName("expense_building_FK");
             });
 
             modelBuilder.Entity<Fee>(entity =>
             {
                 entity.ToTable("fee");
 
-                entity.HasComment("Giá dịch vụ")
+                entity.HasComment("Bảng giá dịch vụ")
                     .HasCharSet("utf8mb4")
                     .UseCollation("utf8mb4_general_ci");
+
+                entity.HasIndex(e => e.BuildingId, "fee_building_FK");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(100)
                     .HasColumnName("id")
                     .HasComment("Khóa chính của bảng");
+
+                entity.Property(e => e.BuildingId)
+                    .HasMaxLength(100)
+                    .HasColumnName("building_id")
+                    .HasComment("Mã tòa nhà");
 
                 entity.Property(e => e.CreateTime)
                     .HasColumnType("datetime")
@@ -451,11 +487,6 @@ namespace ABMS_backend.Models
                     .HasColumnName("expire_date")
                     .HasComment("Ngày hết hiệu lực");
 
-                entity.Property(e => e.FeeName)
-                    .HasMaxLength(100)
-                    .HasColumnName("fee_name")
-                    .HasComment("Tên dịch vụ");
-
                 entity.Property(e => e.ModifyTime)
                     .HasColumnType("datetime")
                     .HasColumnName("modify_time")
@@ -471,6 +502,11 @@ namespace ABMS_backend.Models
                     .HasColumnName("price")
                     .HasComment("Giá");
 
+                entity.Property(e => e.ServiceName)
+                    .HasMaxLength(100)
+                    .HasColumnName("service_name")
+                    .HasComment("Tên dịch vụ");
+
                 entity.Property(e => e.Status)
                     .HasColumnType("int(11)")
                     .HasColumnName("status")
@@ -480,6 +516,11 @@ namespace ABMS_backend.Models
                     .HasMaxLength(100)
                     .HasColumnName("unit")
                     .HasComment("Đơn vị");
+
+                entity.HasOne(d => d.Building)
+                    .WithMany(p => p.Fees)
+                    .HasForeignKey(d => d.BuildingId)
+                    .HasConstraintName("fee_building_FK");
             });
 
             modelBuilder.Entity<Feedback>(entity =>
@@ -500,7 +541,7 @@ namespace ABMS_backend.Models
                     .HasComment("Khóa chính của bảng");
 
                 entity.Property(e => e.Content)
-                    .HasColumnType("int(11)")
+                    .HasMaxLength(100)
                     .HasColumnName("content")
                     .HasComment("Nội dung");
 
@@ -530,6 +571,7 @@ namespace ABMS_backend.Models
                     .HasComment("Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực");
 
                 entity.Property(e => e.Title)
+                    .HasMaxLength(100)
                     .HasColumnName("title")
                     .HasComment("Tiêu đề");
 
@@ -554,10 +596,16 @@ namespace ABMS_backend.Models
                     .HasCharSet("utf8mb4")
                     .UseCollation("utf8mb4_general_ci");
 
+                entity.HasIndex(e => e.BuildingId, "fund_building_FK");
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(100)
                     .HasColumnName("id")
                     .HasComment("Khóa chính của bảng");
+
+                entity.Property(e => e.BuildingId)
+                    .HasMaxLength(100)
+                    .HasColumnName("building_id");
 
                 entity.Property(e => e.CreateTime)
                     .HasColumnType("datetime")
@@ -597,6 +645,11 @@ namespace ABMS_backend.Models
                     .HasColumnType("int(11)")
                     .HasColumnName("status")
                     .HasComment("Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực");
+
+                entity.HasOne(d => d.Building)
+                    .WithMany(p => p.Funds)
+                    .HasForeignKey(d => d.BuildingId)
+                    .HasConstraintName("fund_building_FK");
             });
 
             modelBuilder.Entity<Hotline>(entity =>
@@ -607,10 +660,16 @@ namespace ABMS_backend.Models
                     .HasCharSet("utf8mb4")
                     .UseCollation("utf8mb4_general_ci");
 
+                entity.HasIndex(e => e.BuildingId, "hotline_building_FK");
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(100)
                     .HasColumnName("id")
                     .HasComment("Khóa chính của bảng");
+
+                entity.Property(e => e.BuildingId)
+                    .HasMaxLength(100)
+                    .HasColumnName("building_id");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(100)
@@ -626,6 +685,11 @@ namespace ABMS_backend.Models
                     .HasColumnType("int(11)")
                     .HasColumnName("status")
                     .HasComment("Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực");
+
+                entity.HasOne(d => d.Building)
+                    .WithMany(p => p.Hotlines)
+                    .HasForeignKey(d => d.BuildingId)
+                    .HasConstraintName("hotline_building_FK");
             });
 
             modelBuilder.Entity<ParkingCard>(entity =>
@@ -697,10 +761,20 @@ namespace ABMS_backend.Models
                     .HasColumnName("resident_id")
                     .HasComment("Mã cư dân");
 
+                entity.Property(e => e.Response)
+                    .HasMaxLength(100)
+                    .HasColumnName("response")
+                    .HasComment("Lí do từ chối");
+
                 entity.Property(e => e.Status)
                     .HasColumnType("int(11)")
                     .HasColumnName("status")
-                    .HasComment("Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực, 2 đã gửi, 5 chưa thanh toán");
+                    .HasComment("Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực, 2 đã gửi, 6 chưa thanh toán");
+
+                entity.Property(e => e.Type)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("type")
+                    .HasComment("Loại xe: 1 xe máy, 2 ô tô, 3 xe đạp(xe điện)");
 
                 entity.HasOne(d => d.Resident)
                     .WithMany(p => p.ParkingCards)
@@ -717,10 +791,16 @@ namespace ABMS_backend.Models
                     .HasCharSet("utf8mb4")
                     .UseCollation("utf8mb4_general_ci");
 
+                entity.HasIndex(e => e.BuildingId, "post_building_FK");
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(100)
                     .HasColumnName("id")
                     .HasComment("Khóa chính của bảng");
+
+                entity.Property(e => e.BuildingId)
+                    .HasMaxLength(100)
+                    .HasColumnName("building_id");
 
                 entity.Property(e => e.Content)
                     .HasMaxLength(200)
@@ -761,6 +841,11 @@ namespace ABMS_backend.Models
                     .HasMaxLength(100)
                     .HasColumnName("title")
                     .HasComment("Tiêu đề");
+
+                entity.HasOne(d => d.Building)
+                    .WithMany(p => p.Posts)
+                    .HasForeignKey(d => d.BuildingId)
+                    .HasConstraintName("post_building_FK");
             });
 
             modelBuilder.Entity<Resident>(entity =>
@@ -915,6 +1000,37 @@ namespace ABMS_backend.Models
                     .HasConstraintName("room_building_FK");
             });
 
+            modelBuilder.Entity<RoomService>(entity =>
+            {
+                entity.ToTable("room_service");
+
+                entity.HasComment("Lịch sử dùng dịch vụ");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(100)
+                    .HasColumnName("id")
+                    .HasComment("Khóa chính của bảng");
+
+                entity.Property(e => e.CreateUser)
+                    .HasMaxLength(100)
+                    .HasColumnName("create_user")
+                    .HasComment("Người tạo");
+
+                entity.Property(e => e.Date)
+                    .HasColumnName("date")
+                    .HasComment("Ngày sử dụng");
+
+                entity.Property(e => e.FeeId)
+                    .HasMaxLength(100)
+                    .HasColumnName("fee_id")
+                    .HasComment("Mã dịch vụ");
+
+                entity.Property(e => e.RoomId)
+                    .HasMaxLength(100)
+                    .HasColumnName("room_id")
+                    .HasComment("Mã căn hộ");
+            });
+
             modelBuilder.Entity<ServiceCharge>(entity =>
             {
                 entity.ToTable("service_charge");
@@ -922,6 +1038,8 @@ namespace ABMS_backend.Models
                 entity.HasComment("Thanh toán dịch vụ")
                     .HasCharSet("utf8mb4")
                     .UseCollation("utf8mb4_general_ci");
+
+                entity.HasIndex(e => e.FeeId, "service_charge_fee_FK");
 
                 entity.HasIndex(e => e.RoomId, "service_charge_room_FK");
 
@@ -948,6 +1066,10 @@ namespace ABMS_backend.Models
                 entity.Property(e => e.Fee)
                     .HasColumnName("fee")
                     .HasComment("Số tiền");
+
+                entity.Property(e => e.FeeId)
+                    .HasMaxLength(100)
+                    .HasColumnName("fee_id");
 
                 entity.Property(e => e.ModifyTime)
                     .HasColumnType("datetime")
@@ -979,6 +1101,11 @@ namespace ABMS_backend.Models
                     .HasColumnName("year")
                     .HasComment("Năm");
 
+                entity.HasOne(d => d.FeeNavigation)
+                    .WithMany(p => p.ServiceCharges)
+                    .HasForeignKey(d => d.FeeId)
+                    .HasConstraintName("service_charge_fee_FK");
+
                 entity.HasOne(d => d.Room)
                     .WithMany(p => p.ServiceCharges)
                     .HasForeignKey(d => d.RoomId)
@@ -994,10 +1121,16 @@ namespace ABMS_backend.Models
                     .HasCharSet("utf8mb4")
                     .UseCollation("utf8mb4_general_ci");
 
+                entity.HasIndex(e => e.BuildingId, "service_type_building_FK");
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(100)
                     .HasColumnName("id")
                     .HasComment("Khóa chính của bảng");
+
+                entity.Property(e => e.BuildingId)
+                    .HasMaxLength(100)
+                    .HasColumnName("building_id");
 
                 entity.Property(e => e.CreateTime)
                     .HasColumnType("datetime")
@@ -1028,6 +1161,11 @@ namespace ABMS_backend.Models
                     .HasColumnType("int(11)")
                     .HasColumnName("status")
                     .HasComment("Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực");
+
+                entity.HasOne(d => d.Building)
+                    .WithMany(p => p.ServiceTypes)
+                    .HasForeignKey(d => d.BuildingId)
+                    .HasConstraintName("service_type_building_FK");
             });
 
             modelBuilder.Entity<UtiliityDetail>(entity =>
@@ -1207,6 +1345,10 @@ namespace ABMS_backend.Models
                     .HasColumnName("number_of_person")
                     .HasComment("Số người tham gia");
 
+                entity.Property(e => e.Response)
+                    .HasMaxLength(100)
+                    .HasColumnName("response");
+
                 entity.Property(e => e.RoomId)
                     .HasMaxLength(100)
                     .HasColumnName("room_id")
@@ -1289,7 +1431,7 @@ namespace ABMS_backend.Models
                     .HasComment("Giới tính");
 
                 entity.Property(e => e.IdentityCardImgUrl)
-                    .HasMaxLength(100)
+                    .HasMaxLength(300)
                     .HasColumnName("identity_card_img_url")
                     .HasComment("Ảnh cccd");
 
@@ -1302,6 +1444,11 @@ namespace ABMS_backend.Models
                     .HasMaxLength(100)
                     .HasColumnName("phone_number")
                     .HasComment("Số điện thoại");
+
+                entity.Property(e => e.Response)
+                    .HasMaxLength(100)
+                    .HasColumnName("response")
+                    .HasComment("Lí do từ chối");
 
                 entity.Property(e => e.RoomId)
                     .HasMaxLength(100)

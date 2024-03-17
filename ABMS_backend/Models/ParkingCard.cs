@@ -29,6 +29,10 @@ namespace ABMS_backend.Models
         /// </summary>
         public string Color { get; set; } = null!;
         /// <summary>
+        /// Loại xe: 1 xe máy, 2 ô tô, 3 xe đạp(xe điện)
+        /// </summary>
+        public int Type { get; set; }
+        /// <summary>
         /// Đường dẫn ảnh
         /// </summary>
         public string? Image { get; set; }
@@ -57,9 +61,13 @@ namespace ABMS_backend.Models
         /// </summary>
         public DateTime? ModifyTime { get; set; }
         /// <summary>
-        /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực, 2 đã gửi, 5 chưa thanh toán
+        /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực, 2 đã gửi, 6 chưa thanh toán
         /// </summary>
         public int Status { get; set; }
+        /// <summary>
+        /// Lí do từ chối
+        /// </summary>
+        public string? Response { get; set; }
 
         public virtual Resident Resident { get; set; } = null!;
     }

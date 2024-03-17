@@ -16,5 +16,12 @@
             PAID = 5,
             NOT_PAID = 6
         }
+
+        public enum PARKING_CARD_TYPE
+        {
+            MOTOR_BIKE = 1,
+            CAR = 2,
+            ELECTRIC_BICYCLE = 3
+        }
     }
 }

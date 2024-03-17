@@ -1,4 +1,5 @@
 ﻿using ABMS_backend.DTO;
+using ABMS_backend.DTO.MemberDTO;
 using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Validates;
@@ -30,6 +31,13 @@ namespace ABMS_backend.Controllers
         {
             ResponseData<Resident> response = _repository.getMemberById(id);
             return response;
+        }
+
+        [HttpGet("owner-member/{roomId}")]
+        public ResponseData<OwnerMemberDTO> GetHouseOwnerByRoomId(string roomId)
+        {
+            var houseOwner =  _repository.GetHouseOwnerByRoomId(roomId);
+            return houseOwner;
         }
 
         [HttpPost("resident-room-member/create")]

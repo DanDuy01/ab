@@ -23,6 +23,7 @@
         public static readonly ErrorApp BOOKING_EXISTED = new ErrorApp(4003, "This slot has been booked!");
         public static readonly ErrorApp UTILITY_NOT_EXISTED = new ErrorApp(4004, "Utility not existed!");
         public static readonly ErrorApp UTILITY_DETAIL_EXISTED = new ErrorApp(4005, "Utility detail existed!");
+        public static readonly ErrorApp VEHICE_EXISTED = new ErrorApp(4006, "Vehice existed!");
 
     }
 }

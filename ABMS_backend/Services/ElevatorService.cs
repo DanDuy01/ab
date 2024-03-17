@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using ABMS_backend.Utils.Token;
 using Microsoft.EntityFrameworkCore;
+using ABMS_backend.DTO.ElevatorDTO;
 
 namespace ABMS_backend.Services
 {
@@ -176,7 +177,8 @@ namespace ABMS_backend.Services
             var list = _abmsContext.Elevators.Include(x=>x.Room).
                 Where(x => (dto.room_id == null || x.RoomId == dto.room_id)
                 && (dto.time == null || (x.StartTime <= dto.time && dto.time <= x.EndTime))
-                && (dto.status == null || x.Status == dto.status)).Select(x=> new Elevator
+                && (dto.status == null || x.Status == dto.status) && 
+                (dto.building_id== null || x.Room.BuildingId == dto.building_id)).Select(x=> new Elevator
                 {
                     Id = x.Id,
                     StartTime = x.StartTime,

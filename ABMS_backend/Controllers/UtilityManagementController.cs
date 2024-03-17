@@ -1,4 +1,5 @@
 ﻿using ABMS_backend.DTO;
+using ABMS_backend.DTO.UtilityDTO;
 using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Validates;
@@ -46,7 +47,7 @@ namespace ABMS_backend.Controllers
         }
 
         [HttpGet("utility/get-all")]
-        public ResponseData<List<Utility>> GetAll([FromQuery] UtilityForSearch dto)
+        public ResponseData<List<Utility>> GetAllUtility([FromQuery] UtilityForSearch dto)
         {
             ResponseData<List<Utility>> response = _repository.getAllUtility(dto);
             return response;
@@ -61,7 +62,7 @@ namespace ABMS_backend.Controllers
 
 
         [HttpGet("utility/get/{id}")]
-        public ResponseData<Utility> GetById(String id)
+        public ResponseData<Utility> GetUtilityById(String id)
         {
             ResponseData<Utility> response = _repository.getUtilityById(id);
             return response;

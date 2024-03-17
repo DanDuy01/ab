@@ -7,6 +7,7 @@ using ABMS_backend.Utils.Token;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using Utility = ABMS_backend.Models.Utility;
+using ABMS_backend.DTO.UtilityDTO;
 
 namespace ABMS_backend.Services
 {
@@ -212,7 +213,8 @@ namespace ABMS_backend.Services
         {
             var list = _abmsContext.Utilities.
                 Where(x => dtoSearch.name == null || x.Name.ToLower().Contains(dtoSearch.name.ToLower())
-                && (dtoSearch.buildingId == null || x.BuildingId == dtoSearch.buildingId)).ToList();
+                && (dtoSearch.buildingId == null || x.BuildingId == dtoSearch.buildingId)
+                && (dtoSearch.status == null || x.Status == dtoSearch.status)).ToList();
 
             return new ResponseData<List<Utility>>
             {
