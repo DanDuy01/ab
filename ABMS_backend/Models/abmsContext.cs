@@ -842,6 +842,10 @@ namespace ABMS_backend.Models
                     .HasColumnName("title")
                     .HasComment("Tiêu đề");
 
+                entity.Property(e => e.Type)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("type");
+
                 entity.HasOne(d => d.Building)
                     .WithMany(p => p.Posts)
                     .HasForeignKey(d => d.BuildingId)
