@@ -101,30 +101,82 @@ namespace ABMS_backend.Services
             }
         }
 
-        public ResponseData<List<Construction>> getConstruction(ConstructionForSearchDTO dto)
+        public ResponseData<string> updateConstruction(string id, ConstructionInsertDTO dto)
         {
-            var list = _abmsContext.Constructions.Include(x=>x.Room).
-                Where(x =>
-                    (dto.roomId == null || x.RoomId == dto.roomId)
-                    && (dto.name == null || x.Name == dto.name)
+            //validate
+            string error = dto.Validate();
+            if (error != null)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = error
+                };
+            }
+
+            try
+            {
+                Construction c = _abmsContext.Constructions.Find(id);
+                if (c == null)
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.InternalServerError,
+                        ErrMsg = "Construction not found!"
+                    };
+                }
+
+                c.RoomId = dto.roomId;
+                c.Name = dto.name;
+                c.ConstructionOrganization = dto.constructionOrganization;
+                c.PhoneContact = dto.phone;
+                c.StartTime = dto.startTime;
+                c.EndTime = dto.endTime;
+                c.Description = dto.description;
+                c.CreateTime = DateTime.Now;
+                c.Status = (int)Constants.STATUS.SENT;
+                _abmsContext.Constructions.Update(c);
+                _abmsContext.SaveChanges();
+                return new ResponseData<string>
+                {
+                    Data = c.Id,
+                    StatusCode = HttpStatusCode.OK,
+                    ErrMsg = ErrorApp.SUCCESS.description
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = "Update failed: " + ex.Message
+                };
+            }
+        }
+
+        public ResponseData<List<Construction>> getAllConstruction(ConstructionForSearchDTO dto)
+        {
+            var list = _abmsContext.Constructions.Include(x => x.Room)
+                .Where(x => (dto.roomId == null || x.RoomId == dto.roomId)
+                    && (dto.name == null || x.Name.ToLower().Contains(dto.name.ToLower()))
                     && (dto.building_id == null || x.Room.BuildingId == dto.building_id)
-                    && (dto.constructionOrganization == null || x.ConstructionOrganization == dto.constructionOrganization)
-                    && (dto.phone == null || x.PhoneContact == dto.phone)
+                    && (dto.constructionOrganization == null || x.ConstructionOrganization.ToLower().Contains(dto.constructionOrganization.ToLower()))
+                    && (dto.phone == null || x.PhoneContact.Contains(dto.phone))
                     && (dto.time == null || (x.StartTime <= dto.time && dto.time <= x.EndTime))
-                    && (dto.status == null || x.Status == dto.status)).Select(x=> new Construction
+                    && (dto.status == null || x.Status == dto.status)).Select(x => new Construction
                     {
                         StartTime = x.StartTime,
                         EndTime = x.EndTime,
                         Name = x.Name,
-                          ConstructionOrganization = x.ConstructionOrganization,
-                          PhoneContact = x.PhoneContact,
-                          Description = x.Description,
-                          CreateTime = x.CreateTime,
-                          Status = x.Status,
-                          Id = x.Id,
-                    RoomId= x.RoomId,
-                    Room=x.Room,
-                    ApproveUser=x.ApproveUser
+                        ConstructionOrganization = x.ConstructionOrganization,
+                        PhoneContact = x.PhoneContact,
+                        Description = x.Description,
+                        CreateTime = x.CreateTime,
+                        Status = x.Status,
+                        Id = x.Id,
+                        RoomId = x.RoomId,
+                        Room = x.Room,
+                        ApproveUser = x.ApproveUser
                     })
                 .ToList();
             return new ResponseData<List<Construction>>

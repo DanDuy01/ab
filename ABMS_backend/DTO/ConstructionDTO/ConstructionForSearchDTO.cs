@@ -10,8 +10,6 @@ namespace ABMS_backend.DTO.ConstructionDTO
         public string? constructionOrganization { get; set; }
         [Phone]
         public string? phone { get; set; }
-
-
         public DateTime? time { get; set; }
         public int? status { get; set; }
     }
