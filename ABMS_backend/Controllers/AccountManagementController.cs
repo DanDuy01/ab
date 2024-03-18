@@ -18,7 +18,7 @@ namespace ABMS_backend.Controllers
             _repository = repository;
         }
         [HttpPut("account/update/{id}")]
-        public ResponseData<string> Update(String id, [FromBody] AccountForInsertDTO dto)
+        public ResponseData<string> Update(String id, [FromBody] AccountForUpdateDTO dto)
         {
             ResponseData<string> response = _repository.updateCmbAccount(id, dto);
             return response;

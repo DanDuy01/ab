@@ -20,7 +20,7 @@ namespace ABMS_backend.Services
             _httpContextAccessor = httpContext;
         }
 
-        ResponseData<string> IAccountManagementRepository.updateCmbAccount(string id, AccountForInsertDTO dto)
+        ResponseData<string> IAccountManagementRepository.updateCmbAccount(string id, AccountForUpdateDTO dto)
         {
             //validate
             string error = dto.Validate();
@@ -49,10 +49,10 @@ namespace ABMS_backend.Services
                 account.BuildingId = dto.building_id;
                 account.PhoneNumber = dto.phone;
                 account.Email = dto.email;
-                account.FullName = dto.full_name;
+                account.FullName = string.IsNullOrWhiteSpace(dto.full_name) ? account.FullName : dto.full_name;
                 account.Role = dto.role;
-                account.UserName = dto.user_name;
-                account.Avatar = dto.avatar;
+                account.UserName = string.IsNullOrWhiteSpace(dto.user_name) ? account.UserName : dto.user_name;
+                account.Avatar = string.IsNullOrWhiteSpace(dto.avatar) ? account.Avatar : dto.avatar;
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 account.ModifyUser = getUser;
                 account.ModifyTime = DateTime.Now;
