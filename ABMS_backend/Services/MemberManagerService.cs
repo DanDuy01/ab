@@ -105,9 +105,7 @@ namespace ABMS_backend.Services
 
         public ResponseData<List<Resident>> getAllMember(MemberForSearchDTO dto)
         {
-            var list = _abmsContext.Residents.
-                 Where(x => (dto.fullName == null || x.FullName.ToLower().Contains(dto.fullName.ToLower())
-                 && (dto.roomId == null || x.RoomId == dto.roomId))).ToList();
+            var list = _abmsContext.Residents.Where(x =>(dto.roomId == null || x.RoomId == dto.roomId)).ToList();
             return new ResponseData<List<Resident>>
             {
                 Data = list,
