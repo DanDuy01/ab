@@ -40,6 +40,16 @@ namespace ABMS_backend.Services
             }
             try
             {
+                bool householderExists = _abmsContext.Residents.Any(r => r.RoomId == dto.roomId && r.IsHouseholder && dto.isHouseHolder );
+
+                if (householderExists)
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.InternalServerError,
+                        ErrMsg = "Cannot create resident: A householder already exists in the specified room."
+                    };
+                }
                 Resident resident = new Resident();
                 resident.Id = Guid.NewGuid().ToString();
                 resident.RoomId = dto.roomId;
