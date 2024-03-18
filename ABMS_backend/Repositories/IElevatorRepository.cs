@@ -10,7 +10,7 @@ namespace ABMS_backend.Repositories
 
         ResponseData<string> updateElevator(string id, ElevatorForEditDTO dto);
 
-        ResponseData<string> manageElevator(string id, int status);
+        ResponseData<string> manageElevator(string id, ElevatorForManageDTO dto);
 
         ResponseData<string> deleteElevator(string id);
 

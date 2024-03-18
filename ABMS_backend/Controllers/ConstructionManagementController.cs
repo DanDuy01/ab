@@ -40,9 +40,9 @@ namespace ABMS_backend.Controllers
         }
 
         [HttpPut("construction/manage/{id}")]
-        public ResponseData<string> Manage(String id, int status)
+        public ResponseData<string> Manage(String id, ConstructionForManageDTO dto)
         {
-            ResponseData<string> response = _repository.manageConstruction(id, status);
+            ResponseData<string> response = _repository.manageConstruction(id, dto);
             return response;
         }
 

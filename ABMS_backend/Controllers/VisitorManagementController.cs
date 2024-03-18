@@ -28,9 +28,9 @@ namespace ABMS_backend.Controllers
         }
 
         [HttpPut("visitor/manage/{id}")]
-        public ResponseData<string> Manage(String id, int status)
+        public ResponseData<string> Manage(String id, VisitorForManageDTO dto)
         {
-            ResponseData<string> response = _repository.manageVisitor(id, status);
+            ResponseData<string> response = _repository.manageVisitor(id, dto);
             return response;
         }
 

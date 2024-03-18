@@ -154,14 +154,15 @@ namespace ABMS_backend.Services
         #endregion
 
         #region Role reception
-        public ResponseData<string> manageConstruction(string id, int status)
+        public ResponseData<string> manageConstruction(string id, ConstructionForManageDTO dto)
         {
             Construction c = _abmsContext.Constructions.Find(id);
             if (c == null)
             {
                 throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
             }
-            c.Status = status;
+            c.Status = dto.status;
+            c.Response = dto.response;
             string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
             c.ApproveUser = getUser;
             _abmsContext.Constructions.Update(c);

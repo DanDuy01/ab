@@ -19,6 +19,7 @@
         public int status { get; set; }
 
         public string? note { get; set; }
+        public string? response { get; set; }
 
         public string Validate()
         {

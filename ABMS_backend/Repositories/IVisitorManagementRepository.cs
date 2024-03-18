@@ -14,7 +14,7 @@ namespace ABMS_backend.Repositories
         ResponseData<List<Visitor>> getAllRequestVisitor(VisitorForSearchDTO dto);
 
         ResponseData<Visitor> getRequestVisitorById(string id);
-        ResponseData<string> manageVisitor(string id, int status);
+        ResponseData<string> manageVisitor(string id, VisitorForManageDTO dto);
 
     }
 }
