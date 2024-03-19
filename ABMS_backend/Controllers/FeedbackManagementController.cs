@@ -1,4 +1,5 @@
 ﻿using ABMS_backend.DTO;
+using ABMS_backend.DTO.ElevatorDTO;
 using ABMS_backend.DTO.FeedbackDTO;
 using ABMS_backend.DTO.VisitorDTO;
 using ABMS_backend.Models;
@@ -39,6 +40,13 @@ namespace ABMS_backend.Controllers
             ResponseData<string> response = _repository.updateFeedback(id, dto);
             return response;
         }
+        [HttpPut("feedback/manage/{id}")]
+        public ResponseData<string> Manage(String id, [FromBody] FeedbackForManageDTO dto)
+        {
+            ResponseData<string> response = _repository.replyFeedback(id, dto);
+            return response;
+        }
+
 
         [HttpGet("feedback/get-all")]
         public ResponseData<List<Feedback>> GetAll([FromQuery] FeedbackForSearch dto)

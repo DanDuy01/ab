@@ -8,6 +8,7 @@ using ABMS_backend.Utils.Token;
 using ABMS_backend.DTO.FeedbackDTO;
 using Microsoft.EntityFrameworkCore;
 using ABMS_backend.DTO.VisitorDTO;
+using ABMS_backend.DTO.ConstructionDTO;
 
 namespace ABMS_backend.Services
 {
@@ -98,6 +99,23 @@ namespace ABMS_backend.Services
                 };
             }
         }
+        public ResponseData<string> replyFeedback(string id, FeedbackForManageDTO dto)
+        {
+            Feedback f = _abmsContext.Feedbacks.Find(id);
+            if (f == null)
+            {
+                throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
+            }
+            f.Response = dto.response;
+            _abmsContext.Feedbacks.Update(f);
+            _abmsContext.SaveChanges();
+            return new ResponseData<string>
+            {
+                Data = f.Id,
+                StatusCode = HttpStatusCode.OK,
+                ErrMsg = ErrorApp.SUCCESS.description
+            };
+        }
 
         public ResponseData<string> updateFeedback(string id, FeedbackInsert dto)
         {
@@ -156,6 +174,7 @@ namespace ABMS_backend.Services
                 .Include(x => x.Room).Include(x => x.ServiceType)
                 .Where(x => (dto.roomId == null || x.RoomId == dto.roomId)
                     && (dto.serviceTypeId == null || x.ServiceTypeId == dto.serviceTypeId)
+                     && (dto.buildingId == null || x.Room.BuildingId== dto.buildingId)
                     && (dto.title == null || x.Title.ToLower().Contains(dto.title.ToLower()))
                     && (dto.content == null || x.Content.ToLower().Contains(dto.content.ToLower()))
                     && (dto.image == null || x.Image == dto.image)
@@ -171,6 +190,7 @@ namespace ABMS_backend.Services
                     Image = x.Image,
                     CreateTime = x.CreateTime,
                     Status = x.Status,
+                    Response= x.Response,
                     Room = x.Room,
                     ServiceType = x.ServiceType,
                 }).ToList();
@@ -197,7 +217,8 @@ namespace ABMS_backend.Services
                 CreateTime = x.CreateTime,
                 Status = x.Status,
                 Room = x.Room,
-                ServiceType = x.ServiceType
+                ServiceType = x.ServiceType,
+                Response = x.Response,
             }).FirstOrDefault(x=>x.Id == id);
             if (f == null)
             {
