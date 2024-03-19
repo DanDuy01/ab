@@ -110,7 +110,7 @@ namespace ABMS_backend.Services
             }
         }
 
-        public ResponseData<string> manageElevator(string id, int status)
+        public ResponseData<string> manageElevator(string id, ElevatorForManageDTO dto)
         {
             Elevator elevator = _abmsContext.Elevators.Find(id);
             if (elevator == null)
@@ -119,7 +119,7 @@ namespace ABMS_backend.Services
             }
             bool hasConflict = _abmsContext.Elevators.Any(otherElevator =>
          otherElevator.Id != id &&
-         otherElevator.Status == 3 && status !=4 &&
+         otherElevator.Status == 3 && dto.status !=4 &&
          (elevator.StartTime < otherElevator.EndTime && elevator.EndTime > otherElevator.StartTime));
 
             if (hasConflict)
@@ -130,7 +130,8 @@ namespace ABMS_backend.Services
                     ErrMsg = "Time slot conflict"
                 };
             }
-            elevator.Status = status;
+            elevator.Status = dto.status;
+            elevator.Response = dto.response;
             string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
             elevator.ApproveUser = getUser;
             _abmsContext.Elevators.Update(elevator);

@@ -141,14 +141,15 @@ namespace ABMS_backend.Services
             };
 
         }
-        public ResponseData<string> manageVisitor(string id, int status)
+        public ResponseData<string> manageVisitor(string id, VisitorForManageDTO dto)
         {
             Visitor visitor = _abmsContext.Visitors.Find(id);
             if (visitor == null)
             {
                 throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
             }
-            visitor.Status = status;
+            visitor.Status = dto.status;
+            visitor.Response = dto.response;
             string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
             visitor.ApproveUser = getUser;
             _abmsContext.Visitors.Update(visitor);

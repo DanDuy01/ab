@@ -117,7 +117,7 @@ namespace ABMS_backend.Services
                 cardToUpdate.Note = dto.note;
                 cardToUpdate.Status = dto.status;
                 cardToUpdate.LicensePlate = dto.license_plate;
-
+                cardToUpdate.Response = dto.response;
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 cardToUpdate.ModifyUser = getUser;
                 cardToUpdate.ModifyTime = DateTime.Now;

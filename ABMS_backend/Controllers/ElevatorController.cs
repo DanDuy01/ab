@@ -33,9 +33,9 @@ namespace ABMS_backend.Controllers
         }
 
         [HttpPut("elevator/manage/{id}")]
-        public ResponseData<string> Manage(String id, int status)
+        public ResponseData<string> Manage(String id, [FromBody]ElevatorForManageDTO dto)
         {
-            ResponseData<string> response = _repository.manageElevator(id, status);
+            ResponseData<string> response = _repository.manageElevator(id, dto);
             return response;
         }
 

@@ -40,6 +40,16 @@ namespace ABMS_backend.Services
             }
             try
             {
+                bool householderExists = _abmsContext.Residents.Any(r => r.RoomId == dto.roomId && r.IsHouseholder && dto.isHouseHolder );
+
+                if (householderExists)
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.InternalServerError,
+                        ErrMsg = "Cannot create resident: A householder already exists in the specified room."
+                    };
+                }
                 Resident resident = new Resident();
                 resident.Id = Guid.NewGuid().ToString();
                 resident.RoomId = dto.roomId;
@@ -105,9 +115,7 @@ namespace ABMS_backend.Services
 
         public ResponseData<List<Resident>> getAllMember(MemberForSearchDTO dto)
         {
-            var list = _abmsContext.Residents.
-                 Where(x => (dto.fullName == null || x.FullName.ToLower().Contains(dto.fullName.ToLower())
-                 && (dto.roomId == null || x.RoomId == dto.roomId))).ToList();
+            var list = _abmsContext.Residents.Where(x =>(dto.roomId == null || x.RoomId == dto.roomId)).ToList();
             return new ResponseData<List<Resident>>
             {
                 Data = list,

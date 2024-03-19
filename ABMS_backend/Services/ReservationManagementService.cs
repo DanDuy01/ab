@@ -167,6 +167,7 @@ namespace ABMS_backend.Services
                 Where(x => (dto.roomId == null || x.RoomId == dto.roomId) &&
                 (dto.utilityId == null || x.UtilityDetail.UtilityId == dto.utilityId) &&
                 (dto.utilityDetailId == null || x.UtilityDetailId == dto.utilityDetailId) &&
+                (dto.status == null || x.Status== dto.status) &&
                 (dto.bookingDate == null || x.BookingDate == dto.bookingDate)).ToList();
             List < ReservationResponseDTO > dtoList = new List<ReservationResponseDTO> ();
             foreach (var schedule in utilitySchedules)
