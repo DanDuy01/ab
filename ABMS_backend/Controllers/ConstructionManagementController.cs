@@ -39,17 +39,19 @@ namespace ABMS_backend.Controllers
             return response;
         }
 
-<<<<<<< HEAD
+
         [HttpGet("construction/get-all")]
         public ResponseData<List<Construction>> Get([FromQuery] ConstructionForSearchDTO dto)
         {
             ResponseData<List<Construction>> response = _repository.getAllConstruction(dto);
-=======
+            return response;
+        }
+
         [HttpPut("construction/manage/{id}")]
         public ResponseData<string> Manage(String id, ConstructionForManageDTO dto)
         {
             ResponseData<string> response = _repository.manageConstruction(id, dto);
->>>>>>> deploy
+
             return response;
         }
 
@@ -60,11 +62,6 @@ namespace ABMS_backend.Controllers
             return response;
         }
 
-        [HttpPut("construction/manage/{id}")]
-        public ResponseData<string> Manage(String id, int status)
-        {
-            ResponseData<string> response = _repository.manageConstruction(id, status);
-            return response;
-        }
+       
     }
 }
