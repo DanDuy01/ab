@@ -170,7 +170,9 @@ namespace ABMS_backend.Services
                     Content = x.Content,
                     Image = x.Image,
                     CreateTime = x.CreateTime,
-                    Status = x.Status
+                    Status = x.Status,
+                    Room = x.Room,
+                    ServiceType = x.ServiceType,
                 }).ToList();
 
             return new ResponseData<List<Feedback>>
@@ -184,7 +186,19 @@ namespace ABMS_backend.Services
 
         public ResponseData<Feedback> getFeedbackById(string id)
         {
-            Feedback f = _abmsContext.Feedbacks.Find(id);
+            Feedback f = _abmsContext.Feedbacks.Include(x=>x.Room).Include(x=>x.ServiceType).Select(x=> new Feedback
+            {
+                Id = x.Id,
+                RoomId = x.RoomId,
+                ServiceTypeId = x.ServiceTypeId,
+                Title = x.Title,
+                Content = x.Content,
+                Image = x.Image,
+                CreateTime = x.CreateTime,
+                Status = x.Status,
+                Room = x.Room,
+                ServiceType = x.ServiceType
+            }).FirstOrDefault(x=>x.Id == id);
             if (f == null)
             {
                 throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
