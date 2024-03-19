@@ -25,13 +25,6 @@ namespace ABMS_backend.Controllers
             return response;
         }
 
-        [HttpPost("utility/create-utility-detail")]
-        public ResponseData<string> CreateUtilityDetail([FromBody] UtilityDetailDTO dto)
-        {
-            ResponseData<string> response = _repository.createUtilityDetail(dto);
-            return response;
-        }
-
         [HttpPut("utility/update/{id}")]
         public ResponseData<string> Update(String id, [FromBody] UtilityForInsertDTO dto)
         {
@@ -53,6 +46,34 @@ namespace ABMS_backend.Controllers
             return response;
         }
 
+        [HttpGet("utility/get/{id}")]
+        public ResponseData<Utility> GetUtilityById(String id)
+        {
+            ResponseData<Utility> response = _repository.getUtilityById(id);
+            return response;
+        }
+
+        [HttpPost("utility/create-utility-detail")]
+        public ResponseData<string> CreateUtilityDetail([FromBody] UtilityDetailDTO dto)
+        {
+            ResponseData<string> response = _repository.createUtilityDetail(dto);
+            return response;
+        }
+
+        [HttpPut("utility/update-utility-detail/{id}")]
+        public ResponseData<string> UpdateDetail(String id, String name)
+        {
+            ResponseData<string> response = _repository.updateUtilityDetail(id, name);
+            return response;
+        }
+
+        [HttpDelete("utility/delete-utility-detail/{id}")]
+        public ResponseData<string> DeleteDetail(String id)
+        {
+            ResponseData<string> response = _repository.deleteUtilityDetail(id);
+            return response;
+        }
+
         [HttpGet("utility/get-utility-detail")]
         public ResponseData<List<UtiliityDetail>> GetUtilityDetail(String? utilityId)
         {
@@ -60,11 +81,10 @@ namespace ABMS_backend.Controllers
             return response;
         }
 
-
-        [HttpGet("utility/get/{id}")]
-        public ResponseData<Utility> GetUtilityById(String id)
+        [HttpGet("utility/get-utility-detail/{id}")]
+        public ResponseData<UtiliityDetail> GetUtilityDetailById(String id)
         {
-            ResponseData<Utility> response = _repository.getUtilityById(id);
+            ResponseData<UtiliityDetail> response = _repository.getUtilityDetailById(id);
             return response;
         }
     }

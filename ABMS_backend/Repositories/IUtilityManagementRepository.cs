@@ -8,16 +8,22 @@ namespace ABMS_backend.Repositories
     {
         ResponseData<string> createUtility(UtilityForInsertDTO dto);
 
-        ResponseData<string> createUtilityDetail(UtilityDetailDTO dto);
-
         ResponseData<string> updateUtility(string id, UtilityForInsertDTO dto);
 
         ResponseData<string> deleteUtility(string id);
 
         ResponseData<List<Utility>> getAllUtility(UtilityForSearch dto);
 
+        ResponseData<Utility> getUtilityById(string id);
+
+        ResponseData<string> createUtilityDetail(UtilityDetailDTO dto);
+
+        ResponseData<string> updateUtilityDetail(string id, string name);
+
+        ResponseData<string> deleteUtilityDetail(string id);
+
         ResponseData<List<UtiliityDetail>> getUtilityDetail(String? utilityId);
 
-        ResponseData<Utility> getUtilityById(string id);
+        ResponseData<UtiliityDetail> getUtilityDetailById(string id);
     }
 }
