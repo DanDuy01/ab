@@ -20,13 +20,13 @@ namespace ABMS_backend.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public ResponseData<string> createServiceType(ServiceTypeInsert dto)
+        public ResponseData<ServiceType> createServiceType(ServiceTypeInsert dto)
         {
             //validate
             string error = dto.Validate();
             if (error != null)
             {
-                return new ResponseData<string>
+                return new ResponseData<ServiceType>
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
                     ErrMsg = error
@@ -45,16 +45,16 @@ namespace ABMS_backend.Services
                 st.Status = (int)Constants.STATUS.ACTIVE;
                 _abmsContext.ServiceTypes.Add(st);
                 _abmsContext.SaveChanges();
-                return new ResponseData<string>
+                return new ResponseData<ServiceType>
                 {
-                    Data = st.Id,
+                    Data = st,
                     StatusCode = HttpStatusCode.OK,
                     ErrMsg = ErrorApp.SUCCESS.description
                 };
             }
             catch (Exception ex)
             {
-                return new ResponseData<string>
+                return new ResponseData<ServiceType>
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
                     ErrMsg = "Create failed: " + ex.Message
