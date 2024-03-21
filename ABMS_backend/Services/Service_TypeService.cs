@@ -117,11 +117,7 @@ namespace ABMS_backend.Services
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
 
-                string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
-                st.ModifyUser = getUser;
-                st.ModifyTime = DateTime.Now;
-                st.Status = (int)Constants.STATUS.IN_ACTIVE;
-                _abmsContext.ServiceTypes.Update(st);
+                _abmsContext.ServiceTypes.Remove(st);
                 _abmsContext.SaveChanges();
                 return new ResponseData<string>
                 {
