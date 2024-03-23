@@ -106,6 +106,7 @@ namespace ABMS_backend.Services
             {
                 throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
             }
+            f.Status = dto.status;
             f.Response = dto.response;
             _abmsContext.Feedbacks.Update(f);
             _abmsContext.SaveChanges();
