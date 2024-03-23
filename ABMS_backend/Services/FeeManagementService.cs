@@ -39,10 +39,12 @@ namespace ABMS_backend.Services
             {
                 Fee fee = new Fee();
                 fee.Id = Guid.NewGuid().ToString();
+                fee.BuildingId = dto.buildingId;
                 fee.ServiceName = dto.feeName;
                 fee.Price = dto.price;
                 fee.Unit = dto.unit;
                 fee.EffectiveDate = dto.effectiveDate;
+                fee.ExpireDate = dto.expireDate;
                 fee.Description = dto.description;
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 fee.CreateUser = getUser;
@@ -106,9 +108,10 @@ namespace ABMS_backend.Services
             var list = _abmsContext.Fees.Where(x =>
             (dto.feeName == null || x.ServiceName.ToLower()
                  .Contains(dto.feeName.ToLower()))
-            && (dto.price == null || x.Price == dto.price)
-            && (dto.unit == null || x.Unit == dto.unit)
-            && (dto.effective_Date == null || x.EffectiveDate == dto.effective_Date)).ToList();
+                 && (dto.buildingId == null || x.BuildingId == dto.buildingId)
+                 && (dto.price == null || x.Price == dto.price)
+                 && (dto.unit == null || x.Unit == dto.unit)
+                 && (dto.effective_Date == null || x.EffectiveDate == dto.effective_Date)).ToList();
 
             return new ResponseData<List<Fee>>
             {
@@ -156,6 +159,7 @@ namespace ABMS_backend.Services
                 fee.Price = dto.price;
                 fee.Unit = dto.unit;
                 fee.EffectiveDate = dto.effectiveDate;
+                fee.ExpireDate = dto.expireDate;
                 fee.Description = dto.description;
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 fee.ModifyUser = getUser;
