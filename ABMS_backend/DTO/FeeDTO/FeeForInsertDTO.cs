@@ -3,6 +3,7 @@
     public class FeeForInsertDTO
     {
         public string feeName { get; set; }
+        public string buildingId { get; set; }
         public int price { get; set; }
         public string unit { get; set; }
         public DateOnly effectiveDate { get; set; }
@@ -13,6 +14,10 @@
             if (string.IsNullOrEmpty(feeName))
             {
                 return "Fee name is required!";
+            }
+            if (string.IsNullOrEmpty(buildingId))
+            {
+                return "Building is required!";
             }
             if (price <= 0)
             {

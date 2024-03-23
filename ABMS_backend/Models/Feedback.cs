@@ -40,6 +40,7 @@ namespace ABMS_backend.Models
         /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực
         /// </summary>
         public int Status { get; set; }
+        public string? Response { get; set; }
 
         public virtual Room Room { get; set; } = null!;
         public virtual ServiceType ServiceType { get; set; } = null!;

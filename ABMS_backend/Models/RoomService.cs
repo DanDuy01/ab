@@ -3,9 +3,6 @@ using System.Collections.Generic;
 
 namespace ABMS_backend.Models
 {
-    /// <summary>
-    /// Lịch sử dùng dịch vụ
-    /// </summary>
     public partial class RoomService
     {
         /// <summary>
@@ -17,16 +14,31 @@ namespace ABMS_backend.Models
         /// </summary>
         public string RoomId { get; set; } = null!;
         /// <summary>
-        /// Mã dịch vụ
+        /// Mã giá dịch vụ
         /// </summary>
         public string FeeId { get; set; } = null!;
         /// <summary>
-        /// Ngày sử dụng
+        /// Số lượng
         /// </summary>
-        public DateOnly Date { get; set; }
+        public int Amount { get; set; }
+        /// <summary>
+        /// Mô tả
+        /// </summary>
+        public string? Description { get; set; }
         /// <summary>
         /// Người tạo
         /// </summary>
         public string CreateUser { get; set; } = null!;
+        /// <summary>
+        /// Ngày tạo
+        /// </summary>
+        public DateTime CreateTime { get; set; }
+        /// <summary>
+        /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực
+        /// </summary>
+        public int Status { get; set; }
+
+        public virtual Fee Fee { get; set; } = null!;
+        public virtual Room Room { get; set; } = null!;
     }
 }

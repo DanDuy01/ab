@@ -17,9 +17,9 @@ namespace ABMS_backend.Models
         /// </summary>
         public string RoomId { get; set; } = null!;
         /// <summary>
-        /// Số tiền
+        /// Tổng số tiền
         /// </summary>
-        public float Fee { get; set; }
+        public float TotalPrice { get; set; }
         /// <summary>
         /// Tháng
         /// </summary>
@@ -52,9 +52,7 @@ namespace ABMS_backend.Models
         /// Trạng thái: 5 đã thanh toán, 6 chưa thanh toán
         /// </summary>
         public int Status { get; set; }
-        public string? FeeId { get; set; }
 
-        public virtual Fee? FeeNavigation { get; set; }
         public virtual Room Room { get; set; } = null!;
     }
 }
