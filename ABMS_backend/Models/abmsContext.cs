@@ -804,7 +804,8 @@ namespace ABMS_backend.Models
 
                 entity.Property(e => e.BuildingId)
                     .HasMaxLength(100)
-                    .HasColumnName("building_id");
+                    .HasColumnName("building_id")
+                    .HasComment("Mã căn hộ");
 
                 entity.Property(e => e.Content)
                     .HasColumnType("text")
@@ -848,7 +849,8 @@ namespace ABMS_backend.Models
 
                 entity.Property(e => e.Type)
                     .HasColumnType("int(11)")
-                    .HasColumnName("type");
+                    .HasColumnName("type")
+                    .HasComment("Loại: 1 bài viết, 2 thông báo");
 
                 entity.HasOne(d => d.Building)
                     .WithMany(p => p.Posts)

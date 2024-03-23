@@ -53,13 +53,13 @@ namespace ABMS_backend.Models
         /// </summary>
         public string? ApproveUser { get; set; }
         /// <summary>
-        /// Trạng thái: 2 đã gửi, 3 đã duyệt, 4 bị từ chối
-        /// </summary>
-        public int Status { get; set; }
-        /// <summary>
         /// Lí do từ chối
         /// </summary>
         public string? Response { get; set; }
+        /// <summary>
+        /// Trạng thái: 2 đã gửi, 3 đã duyệt, 4 bị từ chối
+        /// </summary>
+        public int Status { get; set; }
 
         public virtual Room Room { get; set; } = null!;
     }

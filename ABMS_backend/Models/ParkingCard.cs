@@ -45,6 +45,10 @@ namespace ABMS_backend.Models
         /// </summary>
         public string? Note { get; set; }
         /// <summary>
+        /// Lí do từ chối
+        /// </summary>
+        public string? Response { get; set; }
+        /// <summary>
         /// Người tạo
         /// </summary>
         public string CreateUser { get; set; } = null!;
@@ -64,10 +68,6 @@ namespace ABMS_backend.Models
         /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực, 2 đã gửi, 6 chưa thanh toán
         /// </summary>
         public int Status { get; set; }
-        /// <summary>
-        /// Lí do từ chối
-        /// </summary>
-        public string? Response { get; set; }
 
         public virtual Resident Resident { get; set; } = null!;
     }

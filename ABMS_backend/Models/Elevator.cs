@@ -32,11 +32,11 @@ namespace ABMS_backend.Models
         /// Người phê duyệt
         /// </summary>
         public string? ApproveUser { get; set; }
+        public string? Response { get; set; }
         /// <summary>
         /// Trạng thái: 2 đã gửi, 3 đã duyệt, 4 bị từ chối
         /// </summary>
         public int Status { get; set; }
-        public string? Response { get; set; }
 
         public virtual Room Room { get; set; } = null!;
     }
