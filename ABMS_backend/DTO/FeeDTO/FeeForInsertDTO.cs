@@ -7,7 +7,8 @@
         public int price { get; set; }
         public string unit { get; set; }
         public DateOnly effectiveDate { get; set; }
-        public string description { get; set; }
+        public DateOnly? expireDate { get; set; }
+        public string? description { get; set; }
 
         public string Validate()
         {

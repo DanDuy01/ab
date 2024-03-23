@@ -44,6 +44,7 @@ namespace ABMS_backend.Services
                 fee.Price = dto.price;
                 fee.Unit = dto.unit;
                 fee.EffectiveDate = dto.effectiveDate;
+                fee.ExpireDate = dto.expireDate;
                 fee.Description = dto.description;
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 fee.CreateUser = getUser;
@@ -158,6 +159,7 @@ namespace ABMS_backend.Services
                 fee.Price = dto.price;
                 fee.Unit = dto.unit;
                 fee.EffectiveDate = dto.effectiveDate;
+                fee.ExpireDate = dto.expireDate;
                 fee.Description = dto.description;
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 fee.ModifyUser = getUser;
