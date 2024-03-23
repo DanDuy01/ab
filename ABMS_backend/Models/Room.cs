@@ -14,6 +14,7 @@ namespace ABMS_backend.Models
             Elevators = new HashSet<Elevator>();
             Feedbacks = new HashSet<Feedback>();
             Residents = new HashSet<Resident>();
+            RoomServices = new HashSet<RoomService>();
             ServiceCharges = new HashSet<ServiceCharge>();
             UtilitySchedules = new HashSet<UtilitySchedule>();
             Visitors = new HashSet<Visitor>();
@@ -67,6 +68,7 @@ namespace ABMS_backend.Models
         public virtual ICollection<Elevator> Elevators { get; set; }
         public virtual ICollection<Feedback> Feedbacks { get; set; }
         public virtual ICollection<Resident> Residents { get; set; }
+        public virtual ICollection<RoomService> RoomServices { get; set; }
         public virtual ICollection<ServiceCharge> ServiceCharges { get; set; }
         public virtual ICollection<UtilitySchedule> UtilitySchedules { get; set; }
         public virtual ICollection<Visitor> Visitors { get; set; }

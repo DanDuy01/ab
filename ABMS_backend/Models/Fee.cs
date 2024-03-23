@@ -10,7 +10,7 @@ namespace ABMS_backend.Models
     {
         public Fee()
         {
-            ServiceCharges = new HashSet<ServiceCharge>();
+            RoomServices = new HashSet<RoomService>();
         }
 
         /// <summary>
@@ -67,6 +67,6 @@ namespace ABMS_backend.Models
         public int Status { get; set; }
 
         public virtual Building? Building { get; set; }
-        public virtual ICollection<ServiceCharge> ServiceCharges { get; set; }
+        public virtual ICollection<RoomService> RoomServices { get; set; }
     }
 }
