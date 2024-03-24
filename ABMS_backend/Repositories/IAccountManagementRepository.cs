@@ -9,6 +9,7 @@ namespace ABMS_backend.Repositories
         ResponseData<string> updateCmbAccount(string id, AccountForUpdateDTO dto);
 
         ResponseData<string> deleteCmbAccount(string id);
+        ResponseData<string> activeAccount(string id, int status);
 
         ResponseData<List<Account>> getCmbAccount(AccountForSearchDTO dto);
 

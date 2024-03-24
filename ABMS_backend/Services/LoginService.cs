@@ -136,6 +136,7 @@ namespace ABMS_backend.Services
                  new Claim("PhoneNumber", user.PhoneNumber.ToString()),
                  new Claim("FullName", user.FullName),
                  new Claim("BuildingId", user.BuildingId),
+                 new Claim("Status", user.Status.ToString()),
                  //new Claim("Id", dto.Id),
                  new Claim("Id", user.Id.ToString())
             };
