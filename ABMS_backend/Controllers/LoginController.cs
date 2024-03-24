@@ -40,7 +40,7 @@ namespace ABMS_backend.Controllers
         }
 
         [HttpPost("account/import-data")]
-        public ResponseData<string> ImportData([FromForm] IFormFile file, int role)
+        public ResponseData<string> ImportData([FromForm] IFormFile file,[FromForm] int role)
         {
             ResponseData<string> response = _repository.ImportData(file, role);
             return response;
