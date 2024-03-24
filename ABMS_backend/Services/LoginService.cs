@@ -199,7 +199,7 @@ namespace ABMS_backend.Services
             };
         }
 
-        public ResponseData<string> ImportData(IFormFile file, int role)
+        public ResponseData<string> ImportData(IFormFile file, int role,  string buildingId)
         {
             try
             {
@@ -228,21 +228,31 @@ namespace ABMS_backend.Services
                         }
 
                         int rowCount = worksheet.Dimension.Rows;
+                        if (rowCount < 2)
+                        {
+                            return new ResponseData<string>
+                            {
+                                StatusCode = HttpStatusCode.BadRequest,
+                                ErrMsg = "Excel file must contain at least one row of data."
+                            };
+                        }
+
+
                         for (int row = 2; row <= rowCount; row++) // Assuming the first row is header
                         {
                             Account account = new Account();
                             account.Id = Guid.NewGuid().ToString();
-                            string buildingName = worksheet.Cells[row, 1].Value?.ToString();
-                            Building building = _abmsContext.Buildings.FirstOrDefault(x => x.Name == buildingName);
-                            account.BuildingId = building.Id;
-                            account.PhoneNumber = worksheet.Cells[row, 2].Value?.ToString();
-                            string password = worksheet.Cells[row, 3].Value?.ToString();
+                            //string buildingName = worksheet.Cells[row, 1].Value?.ToString();
+                            //Building building = _abmsContext.Buildings.FirstOrDefault(x => x.Name == buildingName);
+                            account.BuildingId = buildingId;
+                            account.PhoneNumber = worksheet.Cells[row, 1].Value?.ToString();
+                            string password = worksheet.Cells[row, 2].Value?.ToString();
                             HashPasword(password, out byte[] passwordHash, out byte[] passwordSalt);
                             account.PasswordSalt = passwordSalt;
                             account.PasswordHash = passwordHash;
-                            account.UserName = worksheet.Cells[row, 4].Value?.ToString();
-                            account.Email = worksheet.Cells[row, 5].Value?.ToString();
-                            account.FullName = worksheet.Cells[row, 6].Value?.ToString();
+                            account.UserName = worksheet.Cells[row, 3].Value?.ToString();
+                            account.Email = worksheet.Cells[row, 4].Value?.ToString();
+                            account.FullName = worksheet.Cells[row, 5].Value?.ToString();
                             account.Role = role;
                             string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                             account.CreateUser = getUser;
