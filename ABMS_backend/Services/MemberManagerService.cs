@@ -64,6 +64,10 @@ namespace ABMS_backend.Services
                 resident.Status = (int)Constants.STATUS.ACTIVE;
                 _abmsContext.Residents.Add(resident);
                 _abmsContext.SaveChanges();
+                Room room = _abmsContext.Rooms.Find(dto.roomId);
+                room.NumberOfResident++;
+                _abmsContext.Rooms.Update(room);
+                _abmsContext.SaveChanges();
                 return new ResponseData<string>
                 {
                     Data = resident.Id,
