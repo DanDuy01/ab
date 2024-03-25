@@ -39,13 +39,11 @@ builder.Services.AddScoped<IBuildingRepository, BuildingService>();
 builder.Services.AddScoped<IFeedbackManagementRepository, FeedbackService>();
 builder.Services.AddScoped<IServiceTypeRepository, Service_TypeService>();
 builder.Services.AddScoped<IPostManagermentRepository, PostManagementService>();
-<<<<<<< HEAD
 builder.Services.AddScoped<IRoomServiceRepository, RoomServiceService>();
 builder.Services.AddScoped<IServiceChargeRepository, ServiceChargeService>();
 builder.Services.AddScoped<IFeeManagementRepository, FeeManagementService>();
-=======
 builder.Services.AddScoped<IHotlineManagementRepository, HotlineManagementService>();
->>>>>>> origin/sangtt/hotline-management
+
 builder.Services.AddControllersWithViews().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new TimeOnlyConverter());
