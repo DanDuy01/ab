@@ -70,8 +70,7 @@ namespace ABMS_backend.Services
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
-                hotline.Status = (int)Constants.STATUS.IN_ACTIVE;
-                _abmsContext.Hotlines.Update(hotline);
+                _abmsContext.Hotlines.Remove(hotline);
                 _abmsContext.SaveChanges();
                 return new ResponseData<string>
                 {
