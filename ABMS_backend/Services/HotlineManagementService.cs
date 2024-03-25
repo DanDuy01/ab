@@ -22,12 +22,12 @@ namespace ABMS_backend.Services
             _abmsContext = abmsContext;
             _httpContextAccessor = httpContextAccessor;
         }
-        public ResponseData<string> createHotline(HotlineForInsertDTO dto)
+        public ResponseData<Hotline> createHotline(HotlineForInsertDTO dto)
         {
             string error = dto.Validate();
             if (error != null)
             {
-                return new ResponseData<string>
+                return new ResponseData<Hotline>
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
                     ErrMsg = error
@@ -43,9 +43,9 @@ namespace ABMS_backend.Services
                 hotline.Status = (int)Constants.STATUS.ACTIVE;
                 _abmsContext.Hotlines.Add(hotline);
                 _abmsContext.SaveChanges();
-                return new ResponseData<string>
+                return new ResponseData<Hotline>
                 {
-                    Data = hotline.Id,
+                    Data = hotline,
                     StatusCode = HttpStatusCode.OK,
                     ErrMsg = ErrorApp.SUCCESS.description
                 };
@@ -53,7 +53,7 @@ namespace ABMS_backend.Services
             }
             catch(Exception ex)
             {
-                return new ResponseData<string>
+                return new ResponseData<Hotline>
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
                     ErrMsg = "Created failed why " + ex.Message
