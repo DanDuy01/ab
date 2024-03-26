@@ -252,15 +252,19 @@ namespace ABMS_backend.Services
                 };
             }
         }
-        public IEnumerable<Post> GetNotifications(string accountId, bool onlyUnread, int skip, int take)
+        public IEnumerable<PostNotificationDTO> GetNotifications(string accountId, int skip, int take)
         {
             var notifications = _abmsContext.AccountPosts
-                .Where(ap => ap.AccountId == accountId && (onlyUnread == false || ap.IsRead == 0))
-                .OrderByDescending(ap => ap.Post.CreateTime)
-                .Select(ap => ap.Post)
-                .Skip(skip)
-                .Take(take)
-                .ToList();
+        .Where(ap => ap.AccountId == accountId && ap.Post.Type == 7) // Filter by account ID and post type
+        .OrderByDescending(ap => ap.Post.CreateTime)
+        .Select(ap => new PostNotificationDTO
+        {
+            Post = ap.Post,
+            IsRead = ap.IsRead == 1 // Assuming IsRead is stored as an int (1 for true, 0 for false)
+        })
+        .Skip(skip)
+        .Take(take)
+        .ToList();
 
             return notifications;
         }

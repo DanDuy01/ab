@@ -14,7 +14,7 @@ namespace ABMS_backend.Repositories
         ResponseData<string> updatePost(string id, PostForInsertDTO dto);
         ResponseData<List<Post>> getAllPost(PostForSearchDTO dto);
         ResponseData<Post> getPostById(string id);
-        IEnumerable<Post> GetNotifications(string accountId, bool onlyUnread, int skip, int take);
+        IEnumerable<PostNotificationDTO> GetNotifications(string accountId, int skip, int take);
         public void MarkNotificationsAsRead(string accountId);
     }
 }

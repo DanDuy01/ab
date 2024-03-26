@@ -60,10 +60,10 @@ namespace ABMS_backend.Controllers
         }
 
         [HttpGet("post/get-notification")]
-        public IEnumerable<Post> GetNotifcation([FromQuery]string accountId, [FromQuery] bool onlyUnread,
+        public IEnumerable<PostNotificationDTO> GetNotifcation([FromQuery]string accountId,
             [FromQuery] int skip, [FromQuery] int take)
         {
-            IEnumerable<Post> response = _repository.GetNotifications(accountId, onlyUnread, skip,take);
+            IEnumerable<PostNotificationDTO> response = _repository.GetNotifications(accountId, skip,take);
             return response;
         }
 
