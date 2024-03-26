@@ -50,7 +50,7 @@ namespace ABMS_backend.Services
                 _abmsContext.Posts.Add(post);
                 _abmsContext.SaveChanges();
 
-                var targetAccounts = _abmsContext.Accounts.Where(a => a.Role == 3).ToList();
+                var targetAccounts = _abmsContext.Accounts.Where(a => a.Role == 3 &&a.BuildingId == dto.buildingId).ToList();
 
                 foreach (var account in targetAccounts)
                 {
@@ -113,7 +113,7 @@ namespace ABMS_backend.Services
                 _abmsContext.Posts.Add(post);
                 _abmsContext.SaveChanges();
 
-                var targetAccounts = _abmsContext.Accounts.Where(a => a.Role == 2).ToList();
+                var targetAccounts = _abmsContext.Accounts.Where(a => a.Role == 2 && a.BuildingId==dto.buildingId).ToList();
 
                 foreach (var account in targetAccounts)
                 {
