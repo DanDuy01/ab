@@ -441,6 +441,7 @@ namespace ABMS_backend.Models
                 entity.HasOne(d => d.Building)
                     .WithMany(p => p.Expenses)
                     .HasForeignKey(d => d.BuildingId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("expense_building_FK");
             });
 
@@ -520,6 +521,7 @@ namespace ABMS_backend.Models
                 entity.HasOne(d => d.Building)
                     .WithMany(p => p.Fees)
                     .HasForeignKey(d => d.BuildingId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fee_building_FK");
             });
 
@@ -653,6 +655,7 @@ namespace ABMS_backend.Models
                 entity.HasOne(d => d.Building)
                     .WithMany(p => p.Funds)
                     .HasForeignKey(d => d.BuildingId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fund_building_FK");
             });
 
@@ -693,6 +696,7 @@ namespace ABMS_backend.Models
                 entity.HasOne(d => d.Building)
                     .WithMany(p => p.Hotlines)
                     .HasForeignKey(d => d.BuildingId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("hotline_building_FK");
             });
 
@@ -855,6 +859,7 @@ namespace ABMS_backend.Models
                 entity.HasOne(d => d.Building)
                     .WithMany(p => p.Posts)
                     .HasForeignKey(d => d.BuildingId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("post_building_FK");
             });
 
@@ -951,7 +956,8 @@ namespace ABMS_backend.Models
 
                 entity.Property(e => e.AccountId)
                     .HasMaxLength(100)
-                    .HasColumnName("account_id");
+                    .HasColumnName("account_id")
+                    .HasComment("Mã tài khoản");
 
                 entity.Property(e => e.BuildingId)
                     .HasMaxLength(100)
@@ -1199,6 +1205,7 @@ namespace ABMS_backend.Models
                 entity.HasOne(d => d.Building)
                     .WithMany(p => p.ServiceTypes)
                     .HasForeignKey(d => d.BuildingId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("service_type_building_FK");
             });
 
