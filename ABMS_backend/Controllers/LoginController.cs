@@ -12,8 +12,9 @@ namespace ABMS_backend.Controllers
     public class LoginController : ControllerBase
     {
         private ILoginAccount _repository;
+             
 
-        public LoginController(ILoginAccount repository)
+        public LoginController(ILoginAccount repository) 
         {
             _repository = repository;
         }
