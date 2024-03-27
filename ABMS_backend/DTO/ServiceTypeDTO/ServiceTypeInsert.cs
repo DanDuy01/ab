@@ -7,10 +7,6 @@
 
         public string Validate()
         {
-            if (string.IsNullOrEmpty(buildingId))
-            {
-                return "Building is required!";
-            }
             if (string.IsNullOrEmpty(name))
             {
                 return "Name is required!";

@@ -9,5 +9,6 @@
         public string? image {  get; set; }
         public DateTime? createdTime { get; set; }
         public int? status { get; set; }
+        public string? buildingId { get; set; }
     }
 }

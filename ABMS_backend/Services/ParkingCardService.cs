@@ -243,6 +243,7 @@ namespace ABMS_backend.Services
                     CreateTime = x.CreateTime,
                     ModifyUser = x.ModifyUser,
                     ModifyTime = x.ModifyTime,
+                    Response = x.Response,
                     Resident = new Resident
                     {
                         Id = x.Resident.Id,

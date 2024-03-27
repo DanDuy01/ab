@@ -11,5 +11,6 @@ namespace ABMS_backend.Repositories
         ResponseData<string> updateFeedback(string id, FeedbackInsert dto);
         ResponseData<List<Feedback>> getAllFeedback(FeedbackForSearch dto);
         ResponseData<Feedback> getFeedbackById(string id);
+        ResponseData<string> replyFeedback(string id, FeedbackForManageDTO dto);
     }
 }

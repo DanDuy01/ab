@@ -581,6 +581,10 @@ namespace ABMS_backend.Models
                     .HasColumnName("title")
                     .HasComment("Tiêu đề");
 
+                entity.Property(e => e.Response)
+                  .HasMaxLength(100)
+                  .HasColumnName("response");
+
                 entity.HasOne(d => d.Room)
                     .WithMany(p => p.Feedbacks)
                     .HasForeignKey(d => d.RoomId)

@@ -141,6 +141,36 @@ namespace ABMS_backend.Services
             };
         }
 
-
+        public ResponseData<string> activeAccount(string id, int status)
+        {
+            try
+            {
+                Account account = _abmsContext.Accounts.Find(id);
+                if (account == null)
+                {
+                    throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
+                }
+                account.Status = status;
+                string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                account.ModifyUser = getUser;
+                account.ModifyTime = DateTime.Now;
+                _abmsContext.Accounts.Update(account);
+                _abmsContext.SaveChanges();
+                return new ResponseData<string>
+                {
+                    Data = account.Id,
+                    StatusCode = HttpStatusCode.OK,
+                    ErrMsg = ErrorApp.SUCCESS.description
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = "Updated failed why " + ex.Message
+                };
+            }
+        }
     }
 }

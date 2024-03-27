@@ -20,13 +20,13 @@ namespace ABMS_backend.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public ResponseData<string> createServiceType(ServiceTypeInsert dto)
+        public ResponseData<ServiceType> createServiceType(ServiceTypeInsert dto)
         {
             //validate
             string error = dto.Validate();
             if (error != null)
             {
-                return new ResponseData<string>
+                return new ResponseData<ServiceType>
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
                     ErrMsg = error
@@ -45,16 +45,16 @@ namespace ABMS_backend.Services
                 st.Status = (int)Constants.STATUS.ACTIVE;
                 _abmsContext.ServiceTypes.Add(st);
                 _abmsContext.SaveChanges();
-                return new ResponseData<string>
+                return new ResponseData<ServiceType>
                 {
-                    Data = st.Id,
+                    Data = st,
                     StatusCode = HttpStatusCode.OK,
                     ErrMsg = ErrorApp.SUCCESS.description
                 };
             }
             catch (Exception ex)
             {
-                return new ResponseData<string>
+                return new ResponseData<ServiceType>
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
                     ErrMsg = "Create failed: " + ex.Message
@@ -117,11 +117,7 @@ namespace ABMS_backend.Services
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
 
-                string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
-                st.ModifyUser = getUser;
-                st.ModifyTime = DateTime.Now;
-                st.Status = (int)Constants.STATUS.IN_ACTIVE;
-                _abmsContext.ServiceTypes.Update(st);
+                _abmsContext.ServiceTypes.Remove(st);
                 _abmsContext.SaveChanges();
                 return new ResponseData<string>
                 {

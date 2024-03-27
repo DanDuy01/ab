@@ -12,8 +12,9 @@ namespace ABMS_backend.Controllers
     public class LoginController : ControllerBase
     {
         private ILoginAccount _repository;
+             
 
-        public LoginController(ILoginAccount repository)
+        public LoginController(ILoginAccount repository) 
         {
             _repository = repository;
         }
@@ -40,9 +41,9 @@ namespace ABMS_backend.Controllers
         }
 
         [HttpPost("account/import-data")]
-        public ResponseData<string> ImportData([FromForm] IFormFile file,[FromForm] int role)
+        public ResponseData<string> ImportData([FromForm] IFormFile file, [FromForm] int role, [FromForm] string buildingId)
         {
-            ResponseData<string> response = _repository.ImportData(file, role);
+            ResponseData<string> response = _repository.ImportData(file, role, buildingId);
             return response;
         }
 

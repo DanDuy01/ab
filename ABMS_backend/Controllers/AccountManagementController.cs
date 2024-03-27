@@ -24,6 +24,13 @@ namespace ABMS_backend.Controllers
             return response;
         }
 
+        [HttpPut("account/active/{id}")]
+        public ResponseData<string> Active(String id, int status)
+        {
+            ResponseData<string> response = _repository.activeAccount(id, status);
+            return response;
+        }
+
         [HttpDelete("account/delete/{id}")]
         public ResponseData<string> Delete(String id)
         {

@@ -20,9 +20,9 @@ namespace ABMS_backend.Controllers
         }
 
         [HttpPost("service-type/create")]
-        public ResponseData<string> Create([FromBody] ServiceTypeInsert dto)
+        public ResponseData<ServiceType> Create([FromBody] ServiceTypeInsert dto)
         {
-            ResponseData<string> response = _repository.createServiceType(dto);
+            ResponseData<ServiceType> response = _repository.createServiceType(dto);
             return response;
         }
 

@@ -6,7 +6,7 @@ namespace ABMS_backend.Repositories
 {
     public interface IServiceTypeRepository
     {
-        ResponseData<string> createServiceType(ServiceTypeInsert dto);
+        ResponseData<ServiceType> createServiceType(ServiceTypeInsert dto);
         ResponseData<string> updateServiceType(string id, ServiceTypeInsert dto);
         ResponseData<string> deleteServiceType(string id);
         ResponseData<ServiceType> getServiceTypeById(string id);
