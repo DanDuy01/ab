@@ -9,6 +9,8 @@ using System.Net;
 using Utility = ABMS_backend.Models.Utility;
 using ABMS_backend.DTO.UtilityDTO;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace ABMS_backend.Services
 {
@@ -355,6 +357,61 @@ namespace ABMS_backend.Services
                 Data = utilityDetail,
                 StatusCode = HttpStatusCode.OK,
                 ErrMsg = ErrorApp.SUCCESS.description
+            };
+        }
+
+        public ResponseData<string> restore(List<string> idList)
+        {
+            foreach (string id in idList)
+            {
+                Utility utility = _abmsContext.Utilities.Find(id);
+                if(utility == null)
+                {
+                    return new ResponseData<string>
+                    {
+                        Data = id,
+                        StatusCode = HttpStatusCode.NotFound,
+                        ErrMsg = ErrorApp.OBJECT_NOT_FOUND.description
+                    };
+                }
+                utility.Status = (int)Constants.STATUS.ACTIVE;
+                _abmsContext.Utilities.Update(utility);
+            }
+            _abmsContext.SaveChanges();
+            string jsonData = JsonConvert.SerializeObject(idList);
+            return new ResponseData<string>
+            {
+                Data = jsonData,
+                StatusCode = HttpStatusCode.OK,
+                ErrMsg = ErrorApp.SUCCESS.description,
+                Count = idList.Count
+            };
+        }
+
+        public ResponseData<string> remove(List<string> idList)
+        {
+            foreach (string id in idList)
+            {
+                Utility utility = _abmsContext.Utilities.Find(id);
+                if (utility == null)
+                {
+                    return new ResponseData<string>
+                    {
+                        Data = id,
+                        StatusCode = HttpStatusCode.NotFound,
+                        ErrMsg = ErrorApp.OBJECT_NOT_FOUND.description
+                    };
+                }
+                _abmsContext.Utilities.Remove(utility);
+            }
+            _abmsContext.SaveChanges();
+            string jsonData = JsonConvert.SerializeObject(idList);
+            return new ResponseData<string>
+            {
+                Data = jsonData,
+                StatusCode = HttpStatusCode.OK,
+                ErrMsg = ErrorApp.SUCCESS.description,
+                Count = idList.Count
             };
         }
     }
