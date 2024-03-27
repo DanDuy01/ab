@@ -53,6 +53,20 @@ namespace ABMS_backend.Controllers
             return response;
         }
 
+        [HttpPut("utility/restore")]
+        public ResponseData<string> Restore(List<String> idList)
+        {
+            ResponseData<string> response = _repository.restore(idList);
+            return response;
+        }
+
+        [HttpDelete("utility/remove")]
+        public ResponseData<string> Remove(List<String> idList)
+        {
+            ResponseData<string> response = _repository.remove(idList);
+            return response;
+        }
+
         [HttpPost("utility/create-utility-detail")]
         public ResponseData<string> CreateUtilityDetail([FromBody] UtilityDetailDTO dto)
         {

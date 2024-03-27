@@ -24,6 +24,9 @@ namespace ABMS_backend.Models
         /// Khóa chính của bảng
         /// </summary>
         public string Id { get; set; } = null!;
+        /// <summary>
+        /// Mã tài khoản
+        /// </summary>
         public string AccountId { get; set; } = null!;
         /// <summary>
         /// Mã tòa nhà

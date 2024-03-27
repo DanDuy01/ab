@@ -20,7 +20,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Mã căn hộ
         /// </summary>
-        public string? BuildingId { get; set; }
+        public string BuildingId { get; set; } = null!;
         /// <summary>
         /// Tiêu đề
         /// </summary>
@@ -58,7 +58,7 @@ namespace ABMS_backend.Models
         /// </summary>
         public int Status { get; set; }
 
-        public virtual Building? Building { get; set; }
+        public virtual Building Building { get; set; } = null!;
         public virtual ICollection<AccountPost> AccountPosts { get; set; }
     }
 }
