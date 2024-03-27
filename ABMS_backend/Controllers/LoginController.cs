@@ -2,7 +2,8 @@
 using ABMS_backend.Utils.Validates;
 using ABMS_backend.DTO;
 using ABMS_backend.Repositories;
-using ABMS_backend.Models;
+using OfficeOpenXml;
+using System.Net;
 
 namespace ABMS_backend.Controllers
 {
@@ -11,8 +12,9 @@ namespace ABMS_backend.Controllers
     public class LoginController : ControllerBase
     {
         private ILoginAccount _repository;
+             
 
-        public LoginController(ILoginAccount repository)
+        public LoginController(ILoginAccount repository) 
         {
             _repository = repository;
         }
@@ -36,6 +38,31 @@ namespace ABMS_backend.Controllers
         {
             ResponseData<string> response = _repository.getAccountByEmail(dto);
             return response;
+        }
+
+        [HttpPost("account/import-data")]
+        public ResponseData<string> ImportData([FromForm] IFormFile file, [FromForm] int role, [FromForm] string buildingId)
+        {
+            ResponseData<string> response = _repository.ImportData(file, role, buildingId);
+            return response;
+        }
+
+        [HttpGet("account/export-data/{buildingId}")]
+        public IActionResult ExportData(string buildingId)
+        {
+            try
+            {
+                byte[] fileContents = _repository.ExportData(buildingId);
+
+                // Return the Excel file as a downloadable attachment
+                return File(fileContents, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "accounts.xlsx");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Failed to export accounts. Reason: {ex.Message}");
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Failed to export accounts.");
+            }
         }
     }
 }

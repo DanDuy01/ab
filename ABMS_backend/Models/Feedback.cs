@@ -41,7 +41,6 @@ namespace ABMS_backend.Models
         /// </summary>
         public int Status { get; set; }
         public string? Response { get; set; }
-
         public virtual Room Room { get; set; } = null!;
         public virtual ServiceType ServiceType { get; set; } = null!;
     }

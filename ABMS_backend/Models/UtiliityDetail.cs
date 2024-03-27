@@ -15,13 +15,13 @@ namespace ABMS_backend.Models
         /// </summary>
         public string Id { get; set; } = null!;
         /// <summary>
-        /// Tên detail
-        /// </summary>
-        public string Name { get; set; } = null!;
-        /// <summary>
         /// Mã tiện ích
         /// </summary>
         public string UtilityId { get; set; } = null!;
+        /// <summary>
+        /// Tên detail
+        /// </summary>
+        public string Name { get; set; } = null!;
         /// <summary>
         /// Người tạo
         /// </summary>

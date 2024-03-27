@@ -16,6 +16,11 @@ namespace ABMS_backend.Repositories
 
         ResponseData<Utility> getUtilityById(string id);
 
+        ResponseData<string> restore(List<string> id);
+
+        ResponseData<string> remove(List<string> id);
+
+
         ResponseData<string> createUtilityDetail(UtilityDetailDTO dto);
 
         ResponseData<string> updateUtilityDetail(string id, string name);

@@ -7,7 +7,7 @@ namespace ABMS_backend.Repositories
 {
     public interface IHotlineManagementRepository
     {
-        ResponseData<string> createHotline(HotlineForInsertDTO dto);
+        ResponseData<Hotline> createHotline(HotlineForInsertDTO dto);
         ResponseData<string> deleteHotline(string id);
         ResponseData<string> updateHotline(string id, HotlineForInsertDTO dto);
         ResponseData<List<Hotline>> getAllHotline(HotlineForSearchDTO dto);

@@ -5,11 +5,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using OfficeOpenXml;
 using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
-
+ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 // Add services to the container.
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
@@ -38,10 +39,18 @@ builder.Services.AddScoped<IBuildingRepository, BuildingService>();
 builder.Services.AddScoped<IFeedbackManagementRepository, FeedbackService>();
 builder.Services.AddScoped<IServiceTypeRepository, Service_TypeService>();
 builder.Services.AddScoped<IPostManagermentRepository, PostManagementService>();
+<<<<<<< HEAD
 builder.Services.AddScoped<IHotlineManagementRepository, HotlineManagementService>();
 builder.Services.AddScoped<IRoomServiceRepository, RoomServiceService>();
 builder.Services.AddScoped<IServiceChargeRepository, ServiceChargeService>();
 builder.Services.AddScoped<IFeeManagementRepository, FeeManagementService>();
+=======
+builder.Services.AddScoped<IRoomServiceRepository, RoomServiceService>();
+builder.Services.AddScoped<IServiceChargeRepository, ServiceChargeService>();
+builder.Services.AddScoped<IFeeManagementRepository, FeeManagementService>();
+builder.Services.AddScoped<IHotlineManagementRepository, HotlineManagementService>();
+
+>>>>>>> b0d077dd8f9880acd8f09acbdedcaa36c954cc8c
 builder.Services.AddControllersWithViews().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new TimeOnlyConverter());

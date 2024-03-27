@@ -18,6 +18,10 @@ namespace ABMS_backend.Models
         /// </summary>
         public string Id { get; set; } = null!;
         /// <summary>
+        /// Mã căn hộ
+        /// </summary>
+        public string BuildingId { get; set; } = null!;
+        /// <summary>
         /// Tiêu đề
         /// </summary>
         public string Title { get; set; } = null!;
@@ -29,6 +33,10 @@ namespace ABMS_backend.Models
         /// Ảnh đính kèm
         /// </summary>
         public string? Image { get; set; }
+        /// <summary>
+        /// Loại: 1 bài viết, 2 thông báo
+        /// </summary>
+        public int Type { get; set; }
         /// <summary>
         /// Người tạo
         /// </summary>
@@ -49,10 +57,8 @@ namespace ABMS_backend.Models
         /// Trạng thái: 0 hết hiệu lực, 1 còn hiệu lực, 2 đã gửi, 4 bị từ chối
         /// </summary>
         public int Status { get; set; }
-        public string? BuildingId { get; set; }
-        public int Type { get; set; }
 
-        public virtual Building? Building { get; set; }
+        public virtual Building Building { get; set; } = null!;
         public virtual ICollection<AccountPost> AccountPosts { get; set; }
     }
 }

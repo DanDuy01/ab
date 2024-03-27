@@ -21,9 +21,9 @@ namespace ABMS_backend.Controllers
         }
 
         [HttpPost("hotline/create")]
-        public ResponseData<string> Create([FromBody] HotlineForInsertDTO dto)
+        public ResponseData<Hotline> Create([FromBody] HotlineForInsertDTO dto)
         {
-            ResponseData<string> response = _repository.createHotline(dto);
+            ResponseData<Hotline> response = _repository.createHotline(dto);
             return response;
         }
 

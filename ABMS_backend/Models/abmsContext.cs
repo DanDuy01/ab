@@ -441,6 +441,7 @@ namespace ABMS_backend.Models
                 entity.HasOne(d => d.Building)
                     .WithMany(p => p.Expenses)
                     .HasForeignKey(d => d.BuildingId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("expense_building_FK");
             });
 
@@ -520,6 +521,7 @@ namespace ABMS_backend.Models
                 entity.HasOne(d => d.Building)
                     .WithMany(p => p.Fees)
                     .HasForeignKey(d => d.BuildingId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fee_building_FK");
             });
 
@@ -578,6 +580,10 @@ namespace ABMS_backend.Models
                     .HasMaxLength(100)
                     .HasColumnName("title")
                     .HasComment("Tiêu đề");
+
+                entity.Property(e => e.Response)
+                  .HasMaxLength(100)
+                  .HasColumnName("response");
 
                 entity.HasOne(d => d.Room)
                     .WithMany(p => p.Feedbacks)
@@ -653,6 +659,7 @@ namespace ABMS_backend.Models
                 entity.HasOne(d => d.Building)
                     .WithMany(p => p.Funds)
                     .HasForeignKey(d => d.BuildingId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fund_building_FK");
             });
 
@@ -693,6 +700,7 @@ namespace ABMS_backend.Models
                 entity.HasOne(d => d.Building)
                     .WithMany(p => p.Hotlines)
                     .HasForeignKey(d => d.BuildingId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("hotline_building_FK");
             });
 
@@ -804,7 +812,8 @@ namespace ABMS_backend.Models
 
                 entity.Property(e => e.BuildingId)
                     .HasMaxLength(100)
-                    .HasColumnName("building_id");
+                    .HasColumnName("building_id")
+                    .HasComment("Mã căn hộ");
 
                 entity.Property(e => e.Content)
                     .HasColumnType("text")
@@ -848,11 +857,13 @@ namespace ABMS_backend.Models
 
                 entity.Property(e => e.Type)
                     .HasColumnType("int(11)")
-                    .HasColumnName("type");
+                    .HasColumnName("type")
+                    .HasComment("Loại: 1 bài viết, 2 thông báo");
 
                 entity.HasOne(d => d.Building)
                     .WithMany(p => p.Posts)
                     .HasForeignKey(d => d.BuildingId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("post_building_FK");
             });
 
@@ -949,7 +960,8 @@ namespace ABMS_backend.Models
 
                 entity.Property(e => e.AccountId)
                     .HasMaxLength(100)
-                    .HasColumnName("account_id");
+                    .HasColumnName("account_id")
+                    .HasComment("Mã tài khoản");
 
                 entity.Property(e => e.BuildingId)
                     .HasMaxLength(100)
@@ -1197,6 +1209,7 @@ namespace ABMS_backend.Models
                 entity.HasOne(d => d.Building)
                     .WithMany(p => p.ServiceTypes)
                     .HasForeignKey(d => d.BuildingId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("service_type_building_FK");
             });
 
