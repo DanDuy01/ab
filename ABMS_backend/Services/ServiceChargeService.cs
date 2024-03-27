@@ -9,6 +9,8 @@ using ABMS_backend.Utils.Token;
 using ABMS_backend.Utils.Validates;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System.Linq;
 using System.Net;
 
 namespace ABMS_backend.Services
@@ -39,35 +41,43 @@ namespace ABMS_backend.Services
             }
             try
             {
-                ServiceCharge service = _abmsContext.ServiceCharges.FirstOrDefault
-                    (x => x.RoomId == dto.room_id && x.Month == dto.month && x.Year == dto.year);
-                if (service != null)
+                List<string> list = new List<string>();
+                var rooms = _abmsContext.Rooms.Include(x => x.RoomServices).Where(x => x.BuildingId == dto.building_id).ToList();
+                foreach (var room in rooms)
                 {
-                    throw new CustomException(ErrorApp.SERVICE_CHARGE_EXISTED);
-                }
-                ServiceCharge serviceCharge = new ServiceCharge();
-                serviceCharge.Id = Guid.NewGuid().ToString();
-                serviceCharge.RoomId = dto.room_id;
-                serviceCharge.Month = dto.month;
-                serviceCharge.Year = dto.year;
-                serviceCharge.Description = dto.description;
-                string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
-                serviceCharge.CreateUser = getUser;
-                serviceCharge.CreateTime = DateTime.Now;
-                serviceCharge.Status = (int)Constants.STATUS.NOT_PAID;
+                    ServiceCharge service = _abmsContext.ServiceCharges.FirstOrDefault
+                    (x => x.RoomId == room.Id && x.Month == dto.month && x.Year == dto.year);
+                    if (service != null)
+                    {
+                        throw new CustomException(ErrorApp.SERVICE_CHARGE_EXISTED);
+                    }
+                    ServiceCharge serviceCharge = new ServiceCharge();
+                    serviceCharge.Id = Guid.NewGuid().ToString();
+                    serviceCharge.RoomId = room.Id;
+                    serviceCharge.Month = dto.month;
+                    serviceCharge.Year = dto.year;
+                    string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                    serviceCharge.CreateUser = getUser;
+                    serviceCharge.CreateTime = DateTime.Now;
+                    serviceCharge.Status = (int)Constants.STATUS.NOT_PAID;
 
-                var roomService = _abmsContext.RoomServices.Include(x => x.Fee).
-                    Where(x => x.RoomId == dto.room_id).ToList();
-                foreach ( var item in roomService ) {
-                    serviceCharge.TotalPrice += item.Amount * item.Fee.Price;                
-                }
-                _abmsContext.ServiceCharges.Add(serviceCharge);
+                    var roomService = _abmsContext.RoomServices.Include(x => x.Fee).
+                        Where(x => x.RoomId == room.Id).ToList();
+                    foreach (var item in roomService)
+                    {
+                        serviceCharge.TotalPrice += item.Amount * item.Fee.Price;
+                    }
+                    list.Add(serviceCharge.Id);
+                    _abmsContext.ServiceCharges.Add(serviceCharge);
+                }               
                 _abmsContext.SaveChanges();
+                string jsonData = JsonConvert.SerializeObject(list);
                 return new ResponseData<string>
                 {
-                    Data = serviceCharge.Id,
+                    Data = jsonData,
                     StatusCode = HttpStatusCode.OK,
-                    ErrMsg = ErrorApp.SUCCESS.description
+                    ErrMsg = ErrorApp.SUCCESS.description,
+                    Count = list.Count
                 };
             }
             catch (Exception ex)

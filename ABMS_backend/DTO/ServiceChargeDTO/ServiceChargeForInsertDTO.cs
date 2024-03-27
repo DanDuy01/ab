@@ -4,19 +4,17 @@ namespace ABMS_backend.DTO.ServiceChargeDTO
 {
     public class ServiceChargeForInsertDTO
     {
-        public string room_id { get; set; }
+        public string building_id { get; set; }
 
         public int month { get; set; }
 
         public int year { get; set; }
 
-        public string? description { get; set; }
-
         public string Validate()
         {
-            if (string.IsNullOrEmpty(room_id))
+            if (string.IsNullOrEmpty(building_id))
             {
-                return "Room is required!";
+                return "Building is required!";
             }
 
             else if (month < 1 || month > 12)
