@@ -43,7 +43,10 @@ builder.Services.AddScoped<IHotlineManagementRepository, HotlineManagementServic
 builder.Services.AddScoped<IRoomServiceRepository, RoomServiceService>();
 builder.Services.AddScoped<IServiceChargeRepository, ServiceChargeService>();
 builder.Services.AddScoped<IFeeManagementRepository, FeeManagementService>();
+builder.Services.AddScoped<IHotlineManagementRepository, HotlineManagementService>();
+builder.Services.AddScoped<IExpenseRepository, ExpenseService>();
 builder.Services.AddScoped<IFundManagementRepository, FundManagementService>();
+
 builder.Services.AddControllersWithViews().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new TimeOnlyConverter());
