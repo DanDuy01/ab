@@ -8,6 +8,7 @@ namespace ABMS_backend.Repositories
     {
         ResponseData<string> getAccount(Login dto);
         ResponseData<string> getAccountByEmail(LoginWithEmail dto);
+        ResponseData<string> changePassword(string id, ChangePassword password);
         ResponseData<string> Register(RegisterDTO request);
         ResponseData<string> ImportData(IFormFile file, int role,string buildingId);
         byte[] ExportData(string buildingId);

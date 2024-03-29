@@ -13,7 +13,6 @@ using ABMS_backend.Utils.Exceptions;
 using OfficeOpenXml;
 using ABMS_backend.Utils.Token;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
 
 namespace ABMS_backend.Services
 {
@@ -47,7 +46,67 @@ namespace ABMS_backend.Services
             return userClaim;
         }
 
-        ResponseData<string> ILoginAccount.getAccount(Login dto)
+        public ResponseData<string> changePassword(string id, ChangePassword password)
+        {
+            Account a = _abmsContext.Accounts.Find(id);
+            //validate
+            string error = password.Validate();
+            if (error != null)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = error
+                };
+            }
+
+            try
+            {
+                if (VerifyPassword(password.old_password, a.PasswordHash, a.PasswordSalt))
+                {
+                    if (password.new_password == password.old_password)
+                    {
+                        return new ResponseData<string>
+                        {
+                            StatusCode = HttpStatusCode.InternalServerError,
+                            ErrMsg = "Must be new password!"
+                        };
+                    }
+
+                    HashPasword(password.new_password, out byte[] passwordHash, out byte[] passwordSalt);
+                    string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+
+                    a.PasswordHash = passwordHash;
+                    a.PasswordSalt = passwordSalt;
+                    a.ModifyUser = getUser;
+                    a.ModifyTime = DateTime.Now;
+
+                    _abmsContext.Accounts.Update(a);
+                    _abmsContext.SaveChanges();
+                    return new ResponseData<string>
+                    {
+                        Data = a.Id,
+                        StatusCode = HttpStatusCode.OK,
+                        ErrMsg = ErrorApp.SUCCESS.description
+                    };
+                }
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = "Wrong old password!"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = "Change password failed: " + ex.Message
+                };
+            }
+        }
+
+        public ResponseData<string> getAccount(Login dto)
         {
             var account = _abmsContext.Accounts.FirstOrDefault(x => x.PhoneNumber == dto.phoneNumber);
             if (account != null)
@@ -77,7 +136,7 @@ namespace ABMS_backend.Services
             };
         }
 
-        ResponseData<string> ILoginAccount.getAccountByEmail(LoginWithEmail dto)
+        public ResponseData<string> getAccountByEmail(LoginWithEmail dto)
         {
             var account = _abmsContext.Accounts.FirstOrDefault(x => x.Email == dto.email);
             if (account != null)
@@ -182,7 +241,7 @@ namespace ABMS_backend.Services
                 FullName = request.full_name,
                 BuildingId = request.building_id,
                 Role = request.role,
-                UserName = request.user_name,               
+                UserName = request.user_name,
                 CreateUser = getUser,
                 CreateTime = DateTime.Now,
                 Status = (int)Constants.STATUS.ACTIVE,
@@ -199,7 +258,7 @@ namespace ABMS_backend.Services
             };
         }
 
-        public ResponseData<string> ImportData(IFormFile file, int role,  string buildingId)
+        public ResponseData<string> ImportData(IFormFile file, int role, string buildingId)
         {
             try
             {
@@ -303,7 +362,7 @@ namespace ABMS_backend.Services
                     int row = 2;
                     foreach (var account in accounts)
                     {
-                        worksheet.Cells[row, 1].Value = account.Building?.Name; 
+                        worksheet.Cells[row, 1].Value = account.Building?.Name;
                         worksheet.Cells[row, 2].Value = account.PhoneNumber;
                         worksheet.Cells[row, 3].Value = account.UserName;
                         worksheet.Cells[row, 4].Value = account.Email;
