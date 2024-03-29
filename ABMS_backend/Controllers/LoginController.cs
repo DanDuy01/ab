@@ -12,12 +12,19 @@ namespace ABMS_backend.Controllers
     public class LoginController : ControllerBase
     {
         private ILoginAccount _repository;
-             
 
         public LoginController(ILoginAccount repository) 
         {
             _repository = repository;
         }
+
+        [HttpPost("account/changepassword/{id}")]
+        public ResponseData<string> ChangePassword(string id, [FromBody] ChangePassword password)
+        {
+            ResponseData<string> response = _repository.changePassword(id, password);
+            return response;
+        }
+
 
         [HttpPost("account/register")]
         public ResponseData<string> Create([FromBody] RegisterDTO dto)
