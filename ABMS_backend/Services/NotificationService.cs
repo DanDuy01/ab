@@ -48,6 +48,7 @@ namespace ABMS_backend.Services
                 notification.Title = dto.title;
                 notification.Content = dto.content;
                 notification.CreateTime = DateTime.Now;
+                notification.BuildingId = dto.buildingId;
                 notification.Type = 2;
                 _abmsContext.Notifications.Add(notification);
                 _abmsContext.SaveChanges();
@@ -104,6 +105,7 @@ namespace ABMS_backend.Services
                 notification.Id = Guid.NewGuid().ToString();
                 notification.Title = dto.title;
                 notification.Content = dto.content;
+                notification.BuildingId = dto.buildingId;
                 notification.CreateTime = DateTime.Now;
                 notification.Type = 1;
                 _abmsContext.Notifications.Add(notification);
