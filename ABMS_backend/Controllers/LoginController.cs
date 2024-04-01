@@ -13,18 +13,24 @@ namespace ABMS_backend.Controllers
     {
         private ILoginAccount _repository;
 
-        public LoginController(ILoginAccount repository) 
+        public LoginController(ILoginAccount repository)
         {
             _repository = repository;
         }
 
-        [HttpPost("account/changepassword/{id}")]
+        [HttpPost("account/change-password/{id}")]
         public ResponseData<string> ChangePassword(string id, [FromBody] ChangePassword password)
         {
-            ResponseData<string> response = _repository.changePassword(id, password);
+            ResponseData<string> response = _repository.ChangePassword(id, password);
             return response;
         }
 
+        [HttpPost("account/reset-password/{id}")]
+        public ResponseData<string> ResetPassword(string id)
+        {
+            ResponseData<string> response = _repository.ResetPassword(id);
+            return response;
+        }
 
         [HttpPost("account/register")]
         public ResponseData<string> Create([FromBody] RegisterDTO dto)
@@ -33,17 +39,17 @@ namespace ABMS_backend.Controllers
             return response;
         }
 
-        [HttpPost("account/loginByPhone")]
-        public ResponseData<string> LoginByPhone([FromBody] Login dto) 
+        [HttpPost("account/login-by-phone")]
+        public ResponseData<string> LoginByPhone([FromBody] Login dto)
         {
-            ResponseData<string> response = _repository.getAccount(dto);
+            ResponseData<string> response = _repository.GetAccount(dto);
             return response;
         }
-        
-        [HttpPost("account/loginByEmail")]
+
+        [HttpPost("account/login-by-email")]
         public ResponseData<string> LoginByEmail([FromBody] LoginWithEmail dto)
         {
-            ResponseData<string> response = _repository.getAccountByEmail(dto);
+            ResponseData<string> response = _repository.GetAccountByEmail(dto);
             return response;
         }
 

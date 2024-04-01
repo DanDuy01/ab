@@ -6,9 +6,10 @@ namespace ABMS_backend.Repositories
 {
     public interface ILoginAccount
     {
-        ResponseData<string> getAccount(Login dto);
-        ResponseData<string> getAccountByEmail(LoginWithEmail dto);
-        ResponseData<string> changePassword(string id, ChangePassword password);
+        ResponseData<string> GetAccount(Login dto);
+        ResponseData<string> GetAccountByEmail(LoginWithEmail dto);
+        ResponseData<string> ChangePassword(string id, ChangePassword password);
+        ResponseData<string> ResetPassword(string id);
         ResponseData<string> Register(RegisterDTO request);
         ResponseData<string> ImportData(IFormFile file, int role,string buildingId);
         byte[] ExportData(string buildingId);
