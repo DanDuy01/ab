@@ -60,10 +60,10 @@ namespace ABMS_backend.Services
             {
                 var new_password = RandomString(8);
                 HashPasword(new_password, out byte[] passwordHash, out byte[] passwordSalt);
-                string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                //string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 a.PasswordHash = passwordHash;
                 a.PasswordSalt = passwordSalt;
-                a.ModifyUser = getUser;
+                //a.ModifyUser = getUser;
                 a.ModifyTime = DateTime.Now;
                 _abmsContext.Update(a);
                 _abmsContext.SaveChanges();
