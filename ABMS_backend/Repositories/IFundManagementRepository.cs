@@ -12,5 +12,6 @@ namespace ABMS_backend.Repositories
         ResponseData<string> updateFund(string id, FundForInsertDTO dto);
         ResponseData<List<Fund>> getAllFund(FundForSearchDTO dto);
         ResponseData<Fund> getFundById(string id);
+        byte[] ExportData(string buildingId);
     }
 }

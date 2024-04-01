@@ -345,28 +345,33 @@ namespace ABMS_backend.Services
         {
             try
             {
-                var accounts = _abmsContext.Accounts.Include(x => x.Building).Where(x => x.Role == 3 && x.BuildingId == buildingId).ToList();
-
+                var accounts = _abmsContext.Accounts.Include(x => x.Building).Where(x => x.Role == (int)Constants.ROLE.ROOM && x.BuildingId == buildingId).ToList();
+                Building building = _abmsContext.Buildings.Find(buildingId);
                 using (var package = new ExcelPackage())
                 {
                     var worksheet = package.Workbook.Worksheets.Add("Accounts");
 
+                    // Add title
+                    var titleCell = worksheet.Cells["A1:D1"];
+                    titleCell.Merge = true; // Merge cells from A1 to F1
+                    titleCell.Value = building.Name + "'s Resident Account Statistics";
+                    titleCell.Style.Font.Bold = true;
+                    titleCell.Style.Font.Size = 14;
+
                     // Add headers
-                    worksheet.Cells["A1"].Value = "Building Name";
-                    worksheet.Cells["B1"].Value = "Phone Number";
-                    worksheet.Cells["C1"].Value = "User Name";
-                    worksheet.Cells["D1"].Value = "Email";
-                    worksheet.Cells["E1"].Value = "Full Name";
+                    worksheet.Cells["A3"].Value = "Phone Number";
+                    worksheet.Cells["B3"].Value = "User Name";
+                    worksheet.Cells["C3"].Value = "Email";
+                    worksheet.Cells["D3"].Value = "Full Name";
 
                     // Add data
-                    int row = 2;
+                    int row = 4;
                     foreach (var account in accounts)
                     {
-                        worksheet.Cells[row, 1].Value = account.Building?.Name;
-                        worksheet.Cells[row, 2].Value = account.PhoneNumber;
-                        worksheet.Cells[row, 3].Value = account.UserName;
-                        worksheet.Cells[row, 4].Value = account.Email;
-                        worksheet.Cells[row, 5].Value = account.FullName;
+                        worksheet.Cells[row, 1].Value = account.PhoneNumber;
+                        worksheet.Cells[row, 2].Value = account.UserName;
+                        worksheet.Cells[row, 3].Value = account.Email;
+                        worksheet.Cells[row, 4].Value = account.FullName;
                         row++;
                     }
 

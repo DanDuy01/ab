@@ -5,6 +5,7 @@ using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Validates;
 using Microsoft.AspNetCore.Mvc;
 using ABMS_backend.DTO.ServiceChargeDTO;
+using System.Net;
 
 namespace ABMS_backend.Controllers
 {
@@ -59,6 +60,24 @@ namespace ABMS_backend.Controllers
         {
             ResponseData<List<ServiceChargeResponseDTO>> response = _repository.getTotal(room_id, status);
             return response;
+        }
+
+        [HttpGet("service-charge/export-data/{buildingId}")]
+        public IActionResult ExportData(string buildingId)
+        {
+            try
+            {
+                byte[] fileContents = _repository.ExportData(buildingId);
+
+                // Return the Excel file as a downloadable attachment
+                return File(fileContents, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "service-charges.xlsx");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Failed to export service-charge. Reason: {ex.Message}");
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Failed to export service-charges.");
+            }
         }
     }
 }
