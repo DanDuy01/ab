@@ -46,7 +46,45 @@ namespace ABMS_backend.Services
             return userClaim;
         }
 
-        public ResponseData<string> changePassword(string id, ChangePassword password)
+        public string RandomString(int length)
+        {
+            Random random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghiklmnopqrstuvwxyz0123456789";
+            return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        public ResponseData<string> ResetPassword(string id)
+        {
+            Account a = _abmsContext.Accounts.Find(id);
+            try
+            {
+                var new_password = RandomString(8);
+                HashPasword(new_password, out byte[] passwordHash, out byte[] passwordSalt);
+                string getUser = GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                a.PasswordHash = passwordHash;
+                a.PasswordSalt = passwordSalt;
+                a.ModifyUser = getUser;
+                a.ModifyTime = DateTime.Now;
+                _abmsContext.Update(a);
+                _abmsContext.SaveChanges();
+                return new ResponseData<string>
+                {
+                    Data = new_password,
+                    StatusCode = HttpStatusCode.OK,
+                    ErrMsg = ErrorApp.SUCCESS.description
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = "Reset password failed: " + ex.Message
+                };
+            }
+        }
+
+        public ResponseData<string> ChangePassword(string id, ChangePassword password)
         {
             Account a = _abmsContext.Accounts.Find(id);
             //validate
@@ -106,7 +144,7 @@ namespace ABMS_backend.Services
             }
         }
 
-        public ResponseData<string> getAccount(Login dto)
+        public ResponseData<string> GetAccount(Login dto)
         {
             var account = _abmsContext.Accounts.FirstOrDefault(x => x.PhoneNumber == dto.phoneNumber);
             if (account != null)
@@ -136,7 +174,7 @@ namespace ABMS_backend.Services
             };
         }
 
-        public ResponseData<string> getAccountByEmail(LoginWithEmail dto)
+        public ResponseData<string> GetAccountByEmail(LoginWithEmail dto)
         {
             var account = _abmsContext.Accounts.FirstOrDefault(x => x.Email == dto.email);
             if (account != null)
@@ -206,12 +244,14 @@ namespace ABMS_backend.Services
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:SecretKey"]));
             var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(
-                _configuration["JWT:Issuer"],
-                _configuration["JWT:Audience"],
-                claims,
-                expires: DateTime.UtcNow.AddMinutes(30),
-                signingCredentials: signIn);
+            var token = new JwtSecurityToken
+                (
+                    _configuration["JWT:Issuer"],
+                    _configuration["JWT:Audience"],
+                    claims,
+                    expires: DateTime.UtcNow.AddMinutes(30),
+                    signingCredentials: signIn
+                );
 
             string Token = new JwtSecurityTokenHandler().WriteToken(token);
             return Token;
