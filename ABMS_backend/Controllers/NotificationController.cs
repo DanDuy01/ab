@@ -21,9 +21,10 @@ namespace ABMS_backend.Controllers
         }
 
         [HttpPost("notification/create-for-receptionist")]
-        public ResponseData<string> CreateForReceptionist([FromBody] NotificationForResidentDTO dto)
+        public async Task<ResponseData<string>> CreateForReceptionist([FromBody] NotificationForResidentDTO dto)
         {
-            ResponseData<string> response = _repository.createNotificationForReceptionist(dto);
+            // Call the async method and await its result directly without wrapping it in a Task variable
+            ResponseData<string> response = await _repository.createNotificationForReceptionistAsync(dto);
             return response;
         }
 

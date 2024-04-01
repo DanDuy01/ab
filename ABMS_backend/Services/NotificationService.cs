@@ -6,6 +6,7 @@ using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Exceptions;
 using ABMS_backend.Utils.Validates;
 using AutoMapper;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -17,19 +18,22 @@ namespace ABMS_backend.Services
     public class NotificationService : INotificationRepository
     {
         private readonly abmsContext _abmsContext;
+        private readonly IHubContext<NotificationHub> _hubContext;
 
         private IMapper _mapper;
 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public NotificationService(abmsContext abmsContext, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        public NotificationService(abmsContext abmsContext, IMapper mapper, IHttpContextAccessor httpContextAccessor,
+            IHubContext<NotificationHub> hubContext)
         {
             _abmsContext = abmsContext;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
+             _hubContext = hubContext;
         }
 
-        public ResponseData<string> createNotificationForReceptionist(NotificationForResidentDTO dto)
+        public async Task<ResponseData<string>> createNotificationForReceptionistAsync(NotificationForResidentDTO dto)
         {
             string error = dto.Validate();
 
@@ -68,7 +72,7 @@ namespace ABMS_backend.Services
                 }
 
                 _abmsContext.SaveChanges();
-
+                await _hubContext.Clients.Group(dto.buildingId.ToString()).SendAsync("ReceiveNotification", notification);
                 return new ResponseData<string>
                 {
                     Data = notification.Id,

@@ -20,6 +20,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddSignalR();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -124,10 +125,14 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 app.UseCors("CORSPolicy");
+app.UseRouting();
 app.UseAuthorization();
 app.UseAuthentication();
 app.UseSession();
-
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<NotificationHub>("/notificationHub");
+});
 app.MapControllers();
 
 app.Run();
