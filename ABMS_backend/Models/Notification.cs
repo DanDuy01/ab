@@ -35,7 +35,7 @@ namespace ABMS_backend.Models
         /// <summary>
         /// Đã đọc: true, false
         /// </summary>
-        public ulong IsRead { get; set; }
+        public bool IsRead { get; set; }
 
         public virtual Account Account { get; set; } = null!;
     }

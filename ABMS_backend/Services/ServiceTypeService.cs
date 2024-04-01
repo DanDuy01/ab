@@ -10,11 +10,11 @@ using System.Net;
 
 namespace ABMS_backend.Services
 {
-    public class Service_TypeService : IServiceTypeRepository
+    public class ServiceTypeService : IServiceTypeRepository
     {
         private readonly abmsContext _abmsContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public Service_TypeService(abmsContext abmsContext, IHttpContextAccessor httpContextAccessor)
+        public ServiceTypeService(abmsContext abmsContext, IHttpContextAccessor httpContextAccessor)
         {
             _abmsContext = abmsContext;
             _httpContextAccessor = httpContextAccessor;

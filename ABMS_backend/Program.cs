@@ -37,7 +37,7 @@ builder.Services.AddScoped<IVisitorManagementRepository, VisitorManagementServic
 builder.Services.AddScoped<IParkingCardRepository, ParkingCardService>();
 builder.Services.AddScoped<IBuildingRepository, BuildingService>();
 builder.Services.AddScoped<IFeedbackManagementRepository, FeedbackService>();
-builder.Services.AddScoped<IServiceTypeRepository, Service_TypeService>();
+builder.Services.AddScoped<IServiceTypeRepository, ServiceTypeService>();
 builder.Services.AddScoped<IPostManagermentRepository, PostManagementService>();
 builder.Services.AddScoped<IHotlineManagementRepository, HotlineManagementService>();
 builder.Services.AddScoped<IRoomServiceRepository, RoomServiceService>();
@@ -46,6 +46,7 @@ builder.Services.AddScoped<IFeeManagementRepository, FeeManagementService>();
 builder.Services.AddScoped<IHotlineManagementRepository, HotlineManagementService>();
 builder.Services.AddScoped<IExpenseRepository, ExpenseService>();
 builder.Services.AddScoped<IFundManagementRepository, FundManagementService>();
+builder.Services.AddScoped<INotificationRepository, NotificationService>();
 
 builder.Services.AddControllersWithViews().AddJsonOptions(options =>
 {

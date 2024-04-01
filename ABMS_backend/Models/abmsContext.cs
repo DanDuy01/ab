@@ -727,7 +727,6 @@ namespace ABMS_backend.Models
                     .HasComment("Nội dung");
 
                 entity.Property(e => e.IsRead)
-                    .HasColumnType("bit(1)")
                     .HasColumnName("is_read")
                     .HasComment("Đã đọc: true, false");
 
