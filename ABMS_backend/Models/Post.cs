@@ -8,11 +8,6 @@ namespace ABMS_backend.Models
     /// </summary>
     public partial class Post
     {
-        public Post()
-        {
-            AccountPosts = new HashSet<AccountPost>();
-        }
-
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
@@ -59,6 +54,5 @@ namespace ABMS_backend.Models
         public int Status { get; set; }
 
         public virtual Building Building { get; set; } = null!;
-        public virtual ICollection<AccountPost> AccountPosts { get; set; }
     }
 }
