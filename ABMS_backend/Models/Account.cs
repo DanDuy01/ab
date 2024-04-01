@@ -11,6 +11,7 @@ namespace ABMS_backend.Models
         public Account()
         {
             AccountPosts = new HashSet<AccountPost>();
+            Notifications = new HashSet<Notification>();
             Rooms = new HashSet<Room>();
         }
 
@@ -77,6 +78,7 @@ namespace ABMS_backend.Models
 
         public virtual Building Building { get; set; } = null!;
         public virtual ICollection<AccountPost> AccountPosts { get; set; }
+        public virtual ICollection<Notification> Notifications { get; set; }
         public virtual ICollection<Room> Rooms { get; set; }
     }
 }
