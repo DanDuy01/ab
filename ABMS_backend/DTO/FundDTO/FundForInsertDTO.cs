@@ -5,7 +5,7 @@
         public string buildingId { get; set; }
         public float fund { get; set; }
         public string fundSource { get; set; }
-        public string description { get; set; }
+        public string? description { get; set; }
 
         public string Validate()
         {

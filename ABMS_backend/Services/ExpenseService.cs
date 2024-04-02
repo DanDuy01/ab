@@ -6,6 +6,7 @@ using ABMS_backend.Utils.Exceptions;
 using ABMS_backend.Utils.Token;
 using ABMS_backend.Utils.Validates;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 using System.Net;
 
 namespace ABMS_backend.Services
@@ -201,6 +202,54 @@ namespace ABMS_backend.Services
                 ErrMsg = ErrorApp.SUCCESS.description,
                 Count = list.Count
             };
+        }
+
+        public byte[] ExportData(string buildingId)
+        {
+            try
+            {
+                var expenses = _abmsContext.Expenses.Include(x => x.Building).Where(x => x.Status == (int)Constants.STATUS.ACTIVE && x.BuildingId == buildingId).ToList();
+                Building building = _abmsContext.Buildings.Find(buildingId);
+                using (var package = new ExcelPackage())
+                {
+                    var worksheet = package.Workbook.Worksheets.Add("Expenses");
+
+                    // Add title
+                    var titleCell = worksheet.Cells["A1:D1"];
+                    titleCell.Merge = true; // Merge cells from A1 to F1
+                    titleCell.Value = building.Name + "'s Expense Statistics";
+                    titleCell.Style.Font.Bold = true;
+                    titleCell.Style.Font.Size = 14;
+
+                    // Add headers
+                    worksheet.Cells["A3"].Value = "Expense";
+                    worksheet.Cells["B3"].Value = "Expense Source";
+                    worksheet.Cells["C3"].Value = "Description";
+
+                    // Add data
+                    int row = 4;
+                    foreach (var expense in expenses)
+                    {
+                        worksheet.Cells[row, 1].Value = expense.Building?.Name;
+                        worksheet.Cells[row, 2].Value = expense.Expense1;
+                        worksheet.Cells[row, 3].Value = expense.Expense1;
+                        worksheet.Cells[row, 4].Value = expense.Description;
+                        row++;
+                    }
+
+                    // Auto fit columns
+                    worksheet.Cells.AutoFitColumns();
+
+                    // Return the Excel file as a byte array
+                    return package.GetAsByteArray();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Failed to export accounts. Reason: {ex.Message}");
+                throw; // Propagate the exception to the caller
+            }
         }
     }
 }

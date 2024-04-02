@@ -17,5 +17,7 @@ namespace ABMS_backend.Repositories
         ResponseData<ServiceCharge> getServiceChargeById(string id);
 
         ResponseData<List<ServiceChargeResponseDTO>> getTotal(String room_id, int? status);
+
+        byte[] ExportData(string buildingId);
     }
 }

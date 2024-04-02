@@ -4,6 +4,7 @@ using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Validates;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace ABMS_backend.Controllers
 {
@@ -50,6 +51,24 @@ namespace ABMS_backend.Controllers
         {
             ResponseData<List<Expense>> response = _repository.getAllExpense(dto);
             return response;
+        }
+
+        [HttpGet("expense/export-data/{buildingId}")]
+        public IActionResult ExportData(string buildingId)
+        {
+            try
+            {
+                byte[] fileContents = _repository.ExportData(buildingId);
+
+                // Return the Excel file as a downloadable attachment
+                return File(fileContents, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "expenses.xlsx");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Failed to export expenses. Reason: {ex.Message}");
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Failed to export expenses.");
+            }
         }
     }
 }
