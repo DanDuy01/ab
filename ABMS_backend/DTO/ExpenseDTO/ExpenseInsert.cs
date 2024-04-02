@@ -6,9 +6,6 @@
         public float money { get; set; }
         public string? expenseSource { get; set; }
         public string? description { get; set; }
-        public string createUser { get; set; }
-        public DateTime createTime { get; set; }
-        public int status { get; set; }
 
         public string Validate()
         {

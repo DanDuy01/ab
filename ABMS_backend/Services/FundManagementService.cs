@@ -74,11 +74,12 @@ namespace ABMS_backend.Services
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
-                fund.Status = (int)Constants.STATUS.IN_ACTIVE;
-                string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
-                fund.ModifyUser = getUser;
-                fund.ModifyTime = DateTime.Now;
-                _abmsContext.Funds.Update(fund);
+                //fund.Status = (int)Constants.STATUS.IN_ACTIVE;
+                //string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                //fund.ModifyUser = getUser;
+                //fund.ModifyTime = DateTime.Now;
+                //_abmsContext.Funds.Update(fund);
+                _abmsContext.Remove(fund);
                 _abmsContext.SaveChanges();
                 return new ResponseData<string>
                 {

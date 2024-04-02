@@ -17,7 +17,6 @@ namespace ABMS_backend.Models
         }
 
         public virtual DbSet<Account> Accounts { get; set; } = null!;
-        public virtual DbSet<AccountPost> AccountPosts { get; set; } = null!;
         public virtual DbSet<Building> Buildings { get; set; } = null!;
         public virtual DbSet<Construction> Constructions { get; set; } = null!;
         public virtual DbSet<Elevator> Elevators { get; set; } = null!;
@@ -27,6 +26,7 @@ namespace ABMS_backend.Models
         public virtual DbSet<Fund> Funds { get; set; } = null!;
         public virtual DbSet<Hotline> Hotlines { get; set; } = null!;
         public virtual DbSet<Notification> Notifications { get; set; } = null!;
+        public virtual DbSet<NotificationAccount> NotificationAccounts { get; set; } = null!;
         public virtual DbSet<ParkingCard> ParkingCards { get; set; } = null!;
         public virtual DbSet<Post> Posts { get; set; } = null!;
         public virtual DbSet<Resident> Residents { get; set; } = null!;
@@ -143,50 +143,6 @@ namespace ABMS_backend.Models
                     .HasForeignKey(d => d.BuildingId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("account_building_FK");
-            });
-
-            modelBuilder.Entity<AccountPost>(entity =>
-            {
-                entity.ToTable("account_post");
-
-                entity.HasCharSet("utf8mb4")
-                    .UseCollation("utf8mb4_general_ci");
-
-                entity.HasIndex(e => e.AccountId, "account_post_account_FK");
-
-                entity.HasIndex(e => e.PostId, "account_post_post_FK");
-
-                entity.Property(e => e.Id)
-                    .HasMaxLength(100)
-                    .HasColumnName("id")
-                    .HasComment("Khóa chính của bảng");
-
-                entity.Property(e => e.AccountId)
-                    .HasMaxLength(100)
-                    .HasColumnName("account_id")
-                    .HasComment("Mã tài khoản");
-
-                entity.Property(e => e.IsRead)
-                    .HasColumnType("tinyint(4)")
-                    .HasColumnName("is_read")
-                    .HasComment("Đã đọc: true, false");
-
-                entity.Property(e => e.PostId)
-                    .HasMaxLength(100)
-                    .HasColumnName("post_id")
-                    .HasComment("Mã bài đăng");
-
-                entity.HasOne(d => d.Account)
-                    .WithMany(p => p.AccountPosts)
-                    .HasForeignKey(d => d.AccountId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("account_post_account_FK");
-
-                entity.HasOne(d => d.Post)
-                    .WithMany(p => p.AccountPosts)
-                    .HasForeignKey(d => d.PostId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("account_post_post_FK");
             });
 
             modelBuilder.Entity<Building>(entity =>
@@ -709,47 +665,80 @@ namespace ABMS_backend.Models
                     .HasCharSet("utf8mb4")
                     .UseCollation("utf8mb4_general_ci");
 
-                entity.HasIndex(e => e.AccountId, "notification_account_FK");
+                entity.HasIndex(e => e.BuildingId, "notification_building_FK");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(100)
                     .HasColumnName("id")
                     .HasComment("Khóa chính của bảng");
 
-                entity.Property(e => e.AccountId)
+                entity.Property(e => e.BuildingId)
                     .HasMaxLength(100)
-                    .HasColumnName("account_id")
-                    .HasComment("Mã tài khoản");
+                    .HasColumnName("building_id");
 
                 entity.Property(e => e.Content)
                     .HasColumnType("text")
                     .HasColumnName("content")
                     .HasComment("Nội dung");
 
-                entity.Property(e => e.IsRead)
-                    .HasColumnName("is_read")
-                    .HasComment("Đã đọc: true, false");
-
-                entity.Property(e => e.ServiceId)
-                    .HasMaxLength(100)
-                    .HasColumnName("service_id")
-                    .HasComment("Mã dịch vụ hoặc tiện ích");
-
-                entity.Property(e => e.ServiceName)
-                    .HasMaxLength(100)
-                    .HasColumnName("service_name")
-                    .HasComment("Tên dịch vụ hoặc tiện ích");
+                entity.Property(e => e.CreateTime)
+                    .HasColumnType("datetime")
+                    .HasColumnName("create_time");
 
                 entity.Property(e => e.Title)
                     .HasMaxLength(100)
                     .HasColumnName("title")
                     .HasComment("Tiêu đề");
 
-                entity.HasOne(d => d.Account)
+                entity.Property(e => e.Type)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("type");
+
+                entity.HasOne(d => d.Building)
                     .WithMany(p => p.Notifications)
+                    .HasForeignKey(d => d.BuildingId)
+                    .HasConstraintName("notification_building_FK");
+            });
+
+            modelBuilder.Entity<NotificationAccount>(entity =>
+            {
+                entity.ToTable("notification_account");
+
+                entity.HasIndex(e => e.AccountId, "notification_account_account_FK");
+
+                entity.HasIndex(e => e.NotificationId, "notification_account_notification_FK");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(100)
+                    .HasColumnName("id")
+                    .UseCollation("utf8mb4_general_ci")
+                    .HasCharSet("utf8mb4");
+
+                entity.Property(e => e.AccountId)
+                    .HasMaxLength(100)
+                    .HasColumnName("account_id")
+                    .UseCollation("utf8mb4_general_ci")
+                    .HasCharSet("utf8mb4");
+
+                entity.Property(e => e.IsRead)
+                    .HasColumnType("tinyint(4)")
+                    .HasColumnName("is_read");
+
+                entity.Property(e => e.NotificationId)
+                    .HasMaxLength(100)
+                    .HasColumnName("notification_id")
+                    .UseCollation("utf8mb4_general_ci")
+                    .HasCharSet("utf8mb4");
+
+                entity.HasOne(d => d.Account)
+                    .WithMany(p => p.NotificationAccounts)
                     .HasForeignKey(d => d.AccountId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("notification_account_FK");
+                    .HasConstraintName("notification_account_account_FK");
+
+                entity.HasOne(d => d.Notification)
+                    .WithMany(p => p.NotificationAccounts)
+                    .HasForeignKey(d => d.NotificationId)
+                    .HasConstraintName("notification_account_notification_FK");
             });
 
             modelBuilder.Entity<ParkingCard>(entity =>

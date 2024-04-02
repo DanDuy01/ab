@@ -21,7 +21,7 @@ namespace ABMS_backend.Services
             _abmsContext = abmsContext;
             _httpContextAccessor = httpContextAccessor;
         }
-        public ResponseData<string> createPostForResident(PostForInsertDTO dto)
+        public ResponseData<string> createPost(PostForInsertDTO dto)
         {
             string error = dto.Validate();
             if (error != null)
@@ -48,23 +48,6 @@ namespace ABMS_backend.Services
                     Status = (int)Constants.STATUS.ACTIVE
                 };
                 _abmsContext.Posts.Add(post);
-                _abmsContext.SaveChanges();
-
-                var targetAccounts = _abmsContext.Accounts.Where(a => a.Role == 3 &&a.BuildingId == dto.buildingId).ToList();
-
-                foreach (var account in targetAccounts)
-                {
-                    var accountPost = new AccountPost
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        AccountId = account.Id,
-                        PostId = post.Id,
-                        IsRead = 0 // False, indicating unread
-                    };
-                    _abmsContext.AccountPosts.Add(accountPost);
-                }
-
-                // Save AccountPost entries
                 _abmsContext.SaveChanges();
 
                 // Return success response
@@ -84,67 +67,7 @@ namespace ABMS_backend.Services
                 };
             }
         }
-        public ResponseData<string> createPostForReceptionist(PostForInsertDTO dto)
-        {
-            string error = dto.Validate();
-            if (error != null)
-            {
-                return new ResponseData<string>
-                {
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    ErrMsg = error
-                };
-            }
-            try
-            {
-                // Create and save the new post
-                Post post = new Post
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Title = dto.title,
-                    BuildingId = dto.buildingId,
-                    Content = dto.content,
-                    Image = dto.image,
-                    Type = dto.type,
-                    CreateUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]),
-                    CreateTime = DateTime.Now,
-                    Status = (int)Constants.STATUS.ACTIVE
-                };
-                _abmsContext.Posts.Add(post);
-                _abmsContext.SaveChanges();
-
-                var targetAccounts = _abmsContext.Accounts.Where(a => a.Role == 2 && a.BuildingId==dto.buildingId).ToList();
-
-                foreach (var account in targetAccounts)
-                {
-                    var accountPost = new AccountPost
-                    {
-                        Id = Guid.NewGuid().ToString(), 
-                        AccountId = account.Id,
-                        PostId = post.Id,
-                        IsRead = 0 
-                    };
-                    _abmsContext.AccountPosts.Add(accountPost);
-                }
-
-                _abmsContext.SaveChanges();
-                return new ResponseData<string>
-                {
-                    Data = post.Id,
-                    StatusCode = HttpStatusCode.OK,
-                    ErrMsg = ErrorApp.SUCCESS.description
-                };
-            }
-            catch (Exception ex)
-            {
-                return new ResponseData<string>
-                {
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    ErrMsg = "Create failed why " + ex.Message
-                };
-            }
-        }
-
+     
         public ResponseData<string> deletePost(string id)
         {
             try
@@ -252,35 +175,8 @@ namespace ABMS_backend.Services
                 };
             }
         }
-        public IEnumerable<PostNotificationDTO> GetNotifications(string accountId, int skip, int take)
-        {
-            var notifications = _abmsContext.AccountPosts
-        .Where(ap => ap.AccountId == accountId && ap.Post.Type == 7) // Filter by account ID and post type
-        .OrderByDescending(ap => ap.Post.CreateTime)
-        .Select(ap => new PostNotificationDTO
-        {
-            Post = ap.Post,
-            IsRead = ap.IsRead == 1 // Assuming IsRead is stored as an int (1 for true, 0 for false)
-        })
-        .Skip(skip)
-        .Take(take)
-        .ToList();
-
-            return notifications;
-        }
-        public void MarkNotificationsAsRead(string accountId)
-        {
-            var unreadNotifications = _abmsContext.AccountPosts
-                .Where(ap => ap.AccountId == accountId && ap.IsRead == 0)
-                .ToList();
-
-            foreach (var notification in unreadNotifications)
-            {
-                notification.IsRead = 1;
-            }
-
-            _abmsContext.SaveChanges();
-        }
+       
+       
 
     }
 

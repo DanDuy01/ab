@@ -18,19 +18,14 @@ namespace ABMS_backend.Controllers
             _repository = repository;
         }
 
-        [HttpPost("post/createResident")]
-        public ResponseData<string> CreateForResident([FromBody] PostForInsertDTO dto)
+        [HttpPost("post/create")]
+        public ResponseData<string> Create([FromBody] PostForInsertDTO dto)
         {
-            ResponseData<string> response = _repository.createPostForResident(dto);
+            ResponseData<string> response = _repository.createPost(dto);
             return response;
         }
 
-        [HttpPost("post/createReceptionist")]
-        public ResponseData<string> CreateForReceptionist([FromBody] PostForInsertDTO dto)
-        {
-            ResponseData<string> response = _repository.createPostForReceptionist(dto);
-            return response;
-        }
+    
 
         [HttpDelete("post/delete/{id}")]
         public ResponseData<string> Delete(String id)
@@ -52,20 +47,7 @@ namespace ABMS_backend.Controllers
             ResponseData<List<Post>> response = _repository.getAllPost(dto);
             return response;
         }
-        [HttpPost("markAsRead")]
-        public IActionResult MarkAsRead(string accountId)
-        {
-            _repository.MarkNotificationsAsRead(accountId);
-            return Ok();
-        }
-
-        [HttpGet("post/get-notification")]
-        public IEnumerable<PostNotificationDTO> GetNotifcation([FromQuery]string accountId,
-            [FromQuery] int skip, [FromQuery] int take)
-        {
-            IEnumerable<PostNotificationDTO> response = _repository.GetNotifications(accountId, skip,take);
-            return response;
-        }
+      
 
         [HttpGet("post/getPostId/{id}")]
         public ResponseData<Post> GetPostById(String id)

@@ -8,22 +8,15 @@ namespace ABMS_backend.Models
     /// </summary>
     public partial class Notification
     {
+        public Notification()
+        {
+            NotificationAccounts = new HashSet<NotificationAccount>();
+        }
+
         /// <summary>
         /// Khóa chính của bảng
         /// </summary>
         public string Id { get; set; } = null!;
-        /// <summary>
-        /// Mã tài khoản
-        /// </summary>
-        public string AccountId { get; set; } = null!;
-        /// <summary>
-        /// Mã dịch vụ hoặc tiện ích
-        /// </summary>
-        public string ServiceId { get; set; } = null!;
-        /// <summary>
-        /// Tên dịch vụ hoặc tiện ích
-        /// </summary>
-        public string ServiceName { get; set; } = null!;
         /// <summary>
         /// Tiêu đề
         /// </summary>
@@ -32,11 +25,11 @@ namespace ABMS_backend.Models
         /// Nội dung
         /// </summary>
         public string Content { get; set; } = null!;
-        /// <summary>
-        /// Đã đọc: true, false
-        /// </summary>
-        public bool IsRead { get; set; }
+        public string? BuildingId { get; set; }
+        public DateTime? CreateTime { get; set; }
+        public int? Type { get; set; }
 
-        public virtual Account Account { get; set; } = null!;
+        public virtual Building? Building { get; set; }
+        public virtual ICollection<NotificationAccount> NotificationAccounts { get; set; }
     }
 }
