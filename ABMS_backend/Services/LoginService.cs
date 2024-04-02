@@ -284,7 +284,7 @@ namespace ABMS_backend.Services
                 UserName = request.user_name,
                 CreateUser = getUser,
                 CreateTime = DateTime.Now,
-                Status = (int)Constants.STATUS.ACTIVE,
+                Status = (int)Utils.Validates.Constants.STATUS.ACTIVE,
                 Id = Guid.NewGuid().ToString()
                 //Role = "customer"
             };
@@ -356,7 +356,7 @@ namespace ABMS_backend.Services
                             string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                             account.CreateUser = getUser;
                             account.CreateTime = DateTime.Now;
-                            account.Status = (int)Constants.STATUS.ACTIVE;
+                            account.Status = (int)Utils.Validates.Constants.STATUS.ACTIVE;
                             _abmsContext.Accounts.Add(account);
                             list.Add(account.Id);
                         }
@@ -385,7 +385,7 @@ namespace ABMS_backend.Services
         {
             try
             {
-                var accounts = _abmsContext.Accounts.Include(x => x.Building).Where(x => x.Role == (int)Constants.ROLE.ROOM && x.BuildingId == buildingId).ToList();
+                var accounts = _abmsContext.Accounts.Include(x => x.Building).Where(x => x.Role == (int)Utils.Validates.Constants.ROLE.ROOM && x.BuildingId == buildingId).ToList();
                 Building building = _abmsContext.Buildings.Find(buildingId);
                 using (var package = new ExcelPackage())
                 {
@@ -396,24 +396,49 @@ namespace ABMS_backend.Services
                     titleCell.Merge = true; // Merge cells from A1 to F1
                     titleCell.Value = building.Name + "'s Resident Account Statistics";
                     titleCell.Style.Font.Bold = true;
-                    titleCell.Style.Font.Size = 14;
+                    titleCell.Style.Font.Size = 20;
 
                     // Add headers
                     worksheet.Cells["A3"].Value = "Phone Number";
                     worksheet.Cells["B3"].Value = "User Name";
                     worksheet.Cells["C3"].Value = "Email";
                     worksheet.Cells["D3"].Value = "Full Name";
+                    worksheet.Cells["E3"].Value = "Room";
+                    worksheet.Cells["F3"].Value = "Residents";
+
+                    worksheet.Cells["A3"].Style.Font.Bold = true;
+                    worksheet.Cells["B3"].Style.Font.Bold = true;
+                    worksheet.Cells["C3"].Style.Font.Bold = true;
+                    worksheet.Cells["D3"].Style.Font.Bold = true;
+                    worksheet.Cells["E3"].Style.Font.Bold = true;
+                    worksheet.Cells["F3"].Style.Font.Bold = true;
 
                     // Add data
                     int row = 4;
+                    Room room = new Room();
                     foreach (var account in accounts)
                     {
                         worksheet.Cells[row, 1].Value = account.PhoneNumber;
                         worksheet.Cells[row, 2].Value = account.UserName;
                         worksheet.Cells[row, 3].Value = account.Email;
                         worksheet.Cells[row, 4].Value = account.FullName;
+                        room = _abmsContext.Rooms.FirstOrDefault(x => x.AccountId == account.Id);
+
+                        if (room != null)
+                        {
+                            worksheet.Cells[row, 5].Value = room.RoomNumber; // Cột 5: Số phòng
+
+                            var residents = _abmsContext.Residents.Where(r => r.RoomId == room.Id).Select(r => r.FullName).ToList();
+                            string residentsText = string.Join("\n", residents); // Chuỗi các cư dân, mỗi cư dân trên một dòng
+
+                            // Gán văn bản với định dạng xuống dòng cho mỗi cư dân
+                            worksheet.Cells[row, 6].Value = residentsText;
+                            worksheet.Cells[row, 6].Style.WrapText = true;
+                        }
+                        // Tăng row khi ghi mỗi tài khoản
                         row++;
                     }
+                    worksheet.Column(6).Width = 20;
 
                     // Auto fit columns
                     worksheet.Cells.AutoFitColumns();
