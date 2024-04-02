@@ -48,6 +48,7 @@ builder.Services.AddScoped<IHotlineManagementRepository, HotlineManagementServic
 builder.Services.AddScoped<IExpenseRepository, ExpenseService>();
 builder.Services.AddScoped<IFundManagementRepository, FundManagementService>();
 builder.Services.AddScoped<INotificationRepository, NotificationService>();
+builder.Services.AddScoped<IReportRepository, ReportService>();
 
 builder.Services.AddControllersWithViews().AddJsonOptions(options =>
 {
