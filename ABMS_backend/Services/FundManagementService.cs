@@ -181,7 +181,7 @@ namespace ABMS_backend.Services
         public byte[] ExportData(string buildingId)
         {
             try
-            {
+            { 
                 var funds = _abmsContext.Funds.Include(x => x.Building).Where(x => x.Status == 1 && x.BuildingId == buildingId).ToList();
                 Building building = _abmsContext.Buildings.Find(buildingId);
                 using (var package = new ExcelPackage())
