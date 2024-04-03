@@ -23,5 +23,13 @@
             CAR = 2,
             ELECTRIC_BICYCLE = 3
         }
+
+        public enum ROLE
+        {
+            ADMIN = 0,
+            CMB = 1,
+            RECEPTIONIST = 2,
+            ROOM = 3
+        }
     }
 }

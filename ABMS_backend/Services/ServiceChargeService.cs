@@ -10,6 +10,7 @@ using ABMS_backend.Utils.Validates;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using OfficeOpenXml;
 using System.Linq;
 using System.Net;
 
@@ -226,6 +227,57 @@ namespace ABMS_backend.Services
             };
         }
 
-        
+        public byte[] ExportData(string buildingId)
+        {
+            try
+            {
+                var serviceCharges = _abmsContext.ServiceCharges.Include(x => x.Room).Where(x => x.Room.BuildingId == buildingId).ToList();
+                Building building = _abmsContext.Buildings.Find(buildingId);
+                using (var package = new ExcelPackage())
+                {
+                    var worksheet = package.Workbook.Worksheets.Add("ServiceCharges");
+
+                    // Add title
+                    var titleCell = worksheet.Cells["A1:F1"];
+                    titleCell.Merge = true; // Merge cells from A1 to F1
+                    titleCell.Value = building.Name + "'s Service Charges Statistics";
+                    titleCell.Style.Font.Bold = true;
+                    titleCell.Style.Font.Size = 14;
+
+                    // Add headers
+                    worksheet.Cells["A3"].Value = "Room";
+                    worksheet.Cells["B3"].Value = "Total Price";
+                    worksheet.Cells["C3"].Value = "Month";
+                    worksheet.Cells["D3"].Value = "Year";
+                    worksheet.Cells["E3"].Value = "Description";
+                    worksheet.Cells["F3"].Value = "Status";
+
+                    // Add data
+                    int row = 4;
+                    foreach (var serviceCharge in serviceCharges)
+                    {
+                        worksheet.Cells[row, 1].Value = serviceCharge.Room?.RoomNumber;
+                        worksheet.Cells[row, 2].Value = serviceCharge.TotalPrice;
+                        worksheet.Cells[row, 3].Value = serviceCharge.Month;
+                        worksheet.Cells[row, 4].Value = serviceCharge.Year;
+                        worksheet.Cells[row, 5].Value = serviceCharge.Description;
+                        worksheet.Cells[row, 6].Value = serviceCharge.Status == 5 ? "Paid" : "Not Paid";
+                        row++;
+                    }
+
+                    // Auto fit columns
+                    worksheet.Cells.AutoFitColumns();
+
+                    // Return the Excel file as a byte array
+                    return package.GetAsByteArray();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Failed to export accounts. Reason: {ex.Message}");
+                throw; // Propagate the exception to the caller
+            }
+        }
     }
 }
