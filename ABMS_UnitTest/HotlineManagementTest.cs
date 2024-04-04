@@ -23,7 +23,7 @@ namespace ABMS_UnitTest
 
         [TestMethod]
         public void CreateHotline_Test()
-        {
+        { 
             // Arrange
             HotlineForInsertDTO dto = new HotlineForInsertDTO
             {
