@@ -36,5 +36,28 @@ namespace ABMS_backend.Services
                 ErrMsg = ErrorApp.SUCCESS.description
             };
         }
+        public ResponseData<List<UtilityReservationCountDTO>> GetUtilityReservationCounts(string buildingId)
+        {
+            var utilityReservationCounts = _abmsContext.Utilities
+                .Where(u => u.BuildingId == buildingId)
+                .Select(u => new UtilityReservationCountDTO
+                {
+                    UtilityName = u.Name,
+                    ReservationCount = u.UtiliityDetails
+                        .SelectMany(ud => ud.UtilitySchedules)
+                        .Count(),
+                }).ToList();
+
+            return new ResponseData<List<UtilityReservationCountDTO>>
+            {
+                Data = utilityReservationCounts,
+                StatusCode = HttpStatusCode.OK,
+                ErrMsg = ErrorApp.SUCCESS.description,
+                Count = utilityReservationCounts.Count
+            };
+        }
+
+     
+     
     }
 }
