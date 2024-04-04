@@ -2,9 +2,11 @@
 using ABMS_backend.DTO.FeeDTO;
 using ABMS_backend.Models;
 using ABMS_backend.Repositories;
+using ABMS_backend.Services;
 using ABMS_backend.Utils.Validates;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace ABMS_backend.Controllers
 {
@@ -52,6 +54,50 @@ namespace ABMS_backend.Controllers
         {
             ResponseData<Fee> response = _repository.getFeeById(id);
             return response;
+        }
+
+        [HttpGet("CheckRoomsMissingFees/{buildingId}")]
+        public ActionResult CheckRoomsMissingFees(string buildingId)
+        {
+            try
+            {
+                var result = _repository.CheckRoomsMissingFees(buildingId);
+                if (result.StatusCode != HttpStatusCode.OK)
+                {
+                    return BadRequest(result);
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ResponseData<bool>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = $"An error occurred while checking for rooms missing fees: {ex.Message}"
+                });
+            }
+        }
+
+        [HttpPost("AssignFeesToBuildingRooms")]
+        public ActionResult AssignFeesToBuildingRooms(string buildingId)
+        {
+            try
+            {
+                var result = _repository.AssignFeesToAllRoomsInBuilding(buildingId);
+                if (result.StatusCode != HttpStatusCode.OK)
+                {
+                    return BadRequest(result);
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ResponseData<bool>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = $"An error occurred while assigning fees: {ex.Message}"
+                });
+            }
         }
     }
 }
