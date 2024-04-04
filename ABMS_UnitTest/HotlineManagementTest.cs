@@ -3,6 +3,8 @@ using ABMS_backend.Models;
 using ABMS_backend.Services;
 using ABMS_backend.Utils.Validates;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Moq;
 using System.Net;
 
@@ -12,13 +14,10 @@ namespace ABMS_UnitTest
     public class HotlineManagementTest
     {
         private readonly abmsContext _abmsContext;
-
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
         public HotlineManagementTest()
         {
             _abmsContext = new abmsContext();
-            _httpContextAccessor = new HttpContextAccessor();
+            
         }
 
         [TestMethod]
@@ -27,12 +26,12 @@ namespace ABMS_UnitTest
             // Arrange
             HotlineForInsertDTO dto = new HotlineForInsertDTO
             {
-                phoneNumber = "0963535178",
+                phoneNumber = "0963535117",
                 name = "name",
                 buildingId = "1"
             };
 
-            var service = new HotlineManagementService(_abmsContext, _httpContextAccessor);
+            var service = new HotlineManagementService(_abmsContext, null);
             // Act
             var result = service.createHotline(dto);
             // Assert
@@ -52,15 +51,17 @@ namespace ABMS_UnitTest
                 buildingId = "1"
             };
 
-            var service = new HotlineManagementService(_abmsContext, _httpContextAccessor);
-
+            var service = new HotlineManagementService(_abmsContext, null);
             // Act
             var result = service.createHotline(dto);
-
             // Assert
             Assert.AreEqual(HttpStatusCode.InternalServerError, result.StatusCode);
             Assert.IsNotNull(result.ErrMsg);
             Assert.IsNull(result.Data);
         }
+
+
+        
+
     }
 }
