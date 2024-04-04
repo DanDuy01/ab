@@ -52,10 +52,7 @@ namespace ABMS_UnitTest
                 buildingId = "1"
             };
 
-            var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-            var abmsContextMock = new Mock<abmsContext>(); // Thay AbmsContext bằng tên của context của bạn
-
-            var service = new HotlineManagementService(abmsContextMock.Object, httpContextAccessorMock.Object);// Thay HotlineService bằng tên của lớp chứa phương thức createHotline của bạn
+            var service = new HotlineManagementService(_abmsContext, _httpContextAccessor);
 
             // Act
             var result = service.createHotline(dto);
