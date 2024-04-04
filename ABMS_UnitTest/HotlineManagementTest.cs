@@ -11,10 +11,16 @@ namespace ABMS_UnitTest
     [TestClass]
     public class HotlineManagementTest
     {
-        private Mock<HttpContextAccessor> _httpContextAccessorMock;
-        private Mock<abmsContext> _abmsContextMock;
-        private HotlineManagementService _holineService;
-  
+        private readonly abmsContext _abmsContext;
+
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public HotlineManagementTest()
+        {
+            _abmsContext = new abmsContext();
+            _httpContextAccessor = new HttpContextAccessor();
+        }
+
         [TestMethod]
         public void CreateHotline_Test()
         {
@@ -25,9 +31,8 @@ namespace ABMS_UnitTest
                 name = "name",
                 buildingId = "1"
             };
-            var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-            var abmsContextMock = new Mock<abmsContext>();
-            var service = new HotlineManagementService(abmsContextMock.Object, httpContextAccessorMock.Object);
+
+            var service = new HotlineManagementService(_abmsContext, _httpContextAccessor);
             // Act
             var result = service.createHotline(dto);
             // Assert
@@ -47,10 +52,7 @@ namespace ABMS_UnitTest
                 buildingId = "1"
             };
 
-            var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-            var abmsContextMock = new Mock<abmsContext>(); // Thay AbmsContext bằng tên của context của bạn
-
-            var service = new HotlineManagementService(abmsContextMock.Object, httpContextAccessorMock.Object);// Thay HotlineService bằng tên của lớp chứa phương thức createHotline của bạn
+            var service = new HotlineManagementService(_abmsContext, _httpContextAccessor);
 
             // Act
             var result = service.createHotline(dto);
