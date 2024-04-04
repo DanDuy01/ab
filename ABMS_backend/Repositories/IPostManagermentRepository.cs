@@ -13,5 +13,6 @@ namespace ABMS_backend.Repositories
         ResponseData<string> updatePost(string id, PostForInsertDTO dto);
         ResponseData<List<Post>> getAllPost(PostForSearchDTO dto);
         ResponseData<Post> getPostById(string id);
+        ResponseData<string> approve(string id, int status);
     }
 }
