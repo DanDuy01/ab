@@ -46,7 +46,9 @@ namespace ABMS_backend.Services
                     ReservationCount = u.UtiliityDetails
                         .SelectMany(ud => ud.UtilitySchedules)
                         .Count(),
-                }).ToList();
+                })
+                .Where(u => u.ReservationCount > 0)
+                .ToList();
 
             return new ResponseData<List<UtilityReservationCountDTO>>
             {
