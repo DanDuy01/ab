@@ -162,15 +162,28 @@ namespace ABMS_backend.Services
             }
         }
 
-        public ResponseData<List<ServiceCharge>> getServiceCharge(ServiceChargeForSearchDTO dto)
+        public ResponseData<List<ServiceChargeListResponseDTO>> getServiceCharge(ServiceChargeForSearchDTO dto)
         {
-            var list = _abmsContext.ServiceCharges.Where(x =>
+            var list = _abmsContext.ServiceCharges.Include(x => x.Room).Where(x =>
             (dto.room_id == null || x.RoomId == dto.room_id)
                 && (dto.month == null || x.Month == dto.month)
-                && (dto.year == null || x.Year == dto.year)).ToList();
-            return new ResponseData<List<ServiceCharge>>
+                && (dto.year == null || x.Year == dto.year)
+                && (dto.building_id == null || x.Room.BuildingId == dto.building_id)).ToList();
+            List<ServiceChargeListResponseDTO> listDto = new List<ServiceChargeListResponseDTO>();
+            foreach (var item in list)
             {
-                Data = list,
+                ServiceChargeListResponseDTO responseDTO = new ServiceChargeListResponseDTO();
+                responseDTO.room_number = item.Room.RoomNumber;
+                responseDTO.status = item.Status;
+                responseDTO.month = item.Month;
+                responseDTO.year = item.Year;
+                responseDTO.total_price = item.TotalPrice;
+                responseDTO.description = item.Description;
+                listDto.Add(responseDTO);
+            }
+            return new ResponseData<List<ServiceChargeListResponseDTO>>
+            {
+                Data = listDto,
                 StatusCode = HttpStatusCode.OK,
                 ErrMsg = ErrorApp.SUCCESS.description,
                 Count = list.Count

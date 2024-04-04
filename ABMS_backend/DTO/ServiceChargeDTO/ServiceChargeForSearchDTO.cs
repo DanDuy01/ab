@@ -2,6 +2,8 @@
 {
     public class ServiceChargeForSearchDTO
     {
+        public string? building_id { get; set; }
+
         public string? room_id { get; set; }
 
         public int? month { get; set; }
