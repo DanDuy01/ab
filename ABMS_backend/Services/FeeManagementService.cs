@@ -129,11 +129,11 @@ namespace ABMS_backend.Services
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
-                fee.Status = (int)Constants.STATUS.IN_ACTIVE;
-                string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
-                fee.ModifyUser = getUser;
-                fee.ModifyTime = DateTime.Now;
-                _abmsContext.Fees.Update(fee);
+                //fee.Status = (int)Constants.STATUS.IN_ACTIVE;
+                //string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                //fee.ModifyUser = getUser;
+                //fee.ModifyTime = DateTime.Now;
+                _abmsContext.Fees.Remove(fee);
                 _abmsContext.SaveChanges();
                 return new ResponseData<string>
                 {
