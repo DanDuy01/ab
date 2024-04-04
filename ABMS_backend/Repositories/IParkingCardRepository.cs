@@ -15,5 +15,6 @@ namespace ABMS_backend.Repositories
         ResponseData<List<ParkingCard>> getParkingCard(ParkingCardForSearchDTO dto);
 
         ResponseData<ParkingCard> getParkingCardById(string id);
+        ResponseData<string> removeParkingCard(string id);
     }
 }
