@@ -42,9 +42,9 @@ namespace ABMS_backend.Controllers
         }
 
         [HttpGet("service-charge/get")]
-        public ResponseData<List<ServiceCharge>> Get([FromQuery] ServiceChargeForSearchDTO dto)
+        public ResponseData<List<ServiceChargeListResponseDTO>> Get([FromQuery] ServiceChargeForSearchDTO dto)
         {
-            ResponseData<List<ServiceCharge>> response = _repository.getServiceCharge(dto);
+            ResponseData<List<ServiceChargeListResponseDTO>> response = _repository.getServiceCharge(dto);
             return response;
         }
 
