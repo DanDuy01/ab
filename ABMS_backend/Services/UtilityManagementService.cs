@@ -402,6 +402,13 @@ namespace ABMS_backend.Services
                         ErrMsg = ErrorApp.OBJECT_NOT_FOUND.description
                     };
                 }
+                var detail = _abmsContext.UtiliityDetails.Where(x => x.UtilityId == id).ToList();
+                foreach (var d in detail)
+                {
+                    var schedule = _abmsContext.UtilitySchedules.Where(x => x.UtilityDetailId == d.Id).ToList();
+                    _abmsContext.UtilitySchedules.RemoveRange(schedule);
+                    _abmsContext.UtiliityDetails.Remove(d);
+                }
                 _abmsContext.Utilities.Remove(utility);
             }
             _abmsContext.SaveChanges();
