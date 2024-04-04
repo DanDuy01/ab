@@ -79,6 +79,7 @@ namespace ABMS_backend.Services
                 };
             }
         }
+
         public ResponseData<string> AssignFeesToAllRoomsInBuilding(string buildingId)
         {
             var excludedFeeNames = new List<string> { "Ô tô", "Xe đạp", "Xe máy","Xe đạp điện" };
@@ -185,10 +186,10 @@ namespace ABMS_backend.Services
                 ErrMsg = ErrorApp.SUCCESS.description
             };
         }
-        public ResponseData<bool> CheckSpecificFeesExistence()
+        public ResponseData<bool> CheckSpecificFeesExistence(string buildingId)
         {
             var feeNames = new List<string> { "Ô tô", "Xe đạp", "Xe máy","Xe đạp điện" };
-            bool exists = _abmsContext.Fees.Any(f => feeNames.Contains(f.ServiceName));
+            bool exists = _abmsContext.Fees.Any(f => feeNames.Contains(f.ServiceName) && f.BuildingId==buildingId);
 
             return new ResponseData<bool>
             {

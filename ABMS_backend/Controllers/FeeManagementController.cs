@@ -56,6 +56,28 @@ namespace ABMS_backend.Controllers
             return response;
         }
 
+        [HttpGet("CheckVehicleFee/{buildingId}")]
+        public ActionResult CheckVehicleFee(string buildingId)
+        {
+            try
+            {
+                var result = _repository.CheckSpecificFeesExistence(buildingId);
+                if (result.StatusCode != HttpStatusCode.OK)
+                {
+                    return BadRequest(result);
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ResponseData<bool>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = $"An error occurred while checking for vehicle fees: {ex.Message}"
+                });
+            }
+        }
+
         [HttpGet("CheckRoomsMissingFees/{buildingId}")]
         public ActionResult CheckRoomsMissingFees(string buildingId)
         {

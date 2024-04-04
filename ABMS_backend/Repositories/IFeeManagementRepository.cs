@@ -11,7 +11,7 @@ namespace ABMS_backend.Repositories
         ResponseData<string> updateFee(string id, FeeForInsertDTO dto);
         ResponseData<List<Fee>> getAllFee(FeeForSearchDTO dto);
         ResponseData<Fee> getFeeById(string id);
-        public ResponseData<bool> CheckSpecificFeesExistence();
+        public ResponseData<bool> CheckSpecificFeesExistence(string buildingId);
         public ResponseData<string> AssignFeesToAllRoomsInBuilding(string buildingId);
         ResponseData<List<string>> CheckRoomsMissingFees(string buildingId);
     }
