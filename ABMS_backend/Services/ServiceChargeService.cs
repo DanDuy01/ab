@@ -173,6 +173,8 @@ namespace ABMS_backend.Services
             foreach (var item in list)
             {
                 ServiceChargeListResponseDTO responseDTO = new ServiceChargeListResponseDTO();
+                responseDTO.id = item.Id;
+                responseDTO.room_id = item.RoomId;
                 responseDTO.room_number = item.Room.RoomNumber;
                 responseDTO.status = item.Status;
                 responseDTO.month = item.Month;
