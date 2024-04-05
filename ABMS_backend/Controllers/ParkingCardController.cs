@@ -39,6 +39,13 @@ namespace ABMS_backend.Controllers
             return response;
         }
 
+        [HttpDelete("parking-card/removee/{id}")]
+        public ResponseData<string> Remove(String id)
+        {
+            ResponseData<string> response = _repository.removeParkingCard(id);
+            return response;
+        }
+
         [HttpGet("parking-card/get")]
         public ResponseData<List<ParkingCard>> Get([FromQuery] ParkingCardForSearchDTO dto)
         {

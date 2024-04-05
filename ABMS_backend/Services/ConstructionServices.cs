@@ -81,8 +81,8 @@ namespace ABMS_backend.Services
                     };
                 }
 
-                c.Status = (int)Constants.STATUS.IN_ACTIVE;
-                _abmsContext.Constructions.Update(c);
+                //c.Status = (int)Constants.STATUS.IN_ACTIVE;
+                _abmsContext.Constructions.Remove(c);
                 _abmsContext.SaveChanges();
                 return new ResponseData<string>
                 {

@@ -33,7 +33,7 @@ namespace ABMS_backend.Services
              _hubContext = hubContext;
         }
 
-        public async Task<ResponseData<string>> createNotificationForReceptionistAsync(NotificationForResidentDTO dto)
+        public async Task<ResponseData<string>> createNotificationForReceptionistAsync(NotificationForRecepionistDTO dto)
         {
             string error = dto.Validate();
 
@@ -115,20 +115,36 @@ namespace ABMS_backend.Services
                 _abmsContext.Notifications.Add(notification);
                 _abmsContext.SaveChanges();
 
-                var targetAccounts = _abmsContext.Accounts.Where(a => a.Role == 3 && a.BuildingId == dto.buildingId).ToList();
-
-                foreach (var account in targetAccounts)
+                // Find target accounts based on roomId
+                var room = _abmsContext.Rooms.FirstOrDefault(r => r.Id == dto.roomId && r.BuildingId == dto.buildingId);
+                if (room == null)
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.NotFound,
+                        ErrMsg = "Room not found."
+                    };
+                }
+                var targetAccount = _abmsContext.Accounts.FirstOrDefault(a => a.Id == room.AccountId);
+                if (targetAccount != null)
                 {
                     var NotificationAccount = new NotificationAccount
                     {
                         Id = Guid.NewGuid().ToString(),
-                        AccountId = account.Id,
+                        AccountId = targetAccount.Id,
                         NotificationId = notification.Id,
                         IsRead = 0
                     };
                     _abmsContext.NotificationAccounts.Add(NotificationAccount);
                 }
-
+                else
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.NotFound,
+                        ErrMsg = "Account not found."
+                    };
+                }
                 _abmsContext.SaveChanges();
 
                 return new ResponseData<string>

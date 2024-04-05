@@ -25,9 +25,16 @@ namespace ABMS_backend.Controllers
         }
 
         [HttpPost("account/reset-password/{id}")]
-        public ResponseData<string> ResetPassword(string id)
+        public ResponseData<string> ResetPassword(string id, [FromBody] string otp)
         {
-            ResponseData<string> response = _repository.ResetPassword(id);
+            ResponseData<string> response = _repository.VerifyOtpAndResetPassword(id, otp);
+            return response;
+        }
+
+        [HttpPost("account/otp/{id}")]
+        public ResponseData<string> SendOtp(string id)
+        {
+            ResponseData<string> response = _repository.SendOtp(id);
             return response;
         }
 
@@ -37,6 +44,8 @@ namespace ABMS_backend.Controllers
             ResponseData<string> response = _repository.Register(dto);
             return response;
         }
+
+
 
         [HttpPost("account/login-by-phone")]
         public ResponseData<string> LoginByPhone([FromBody] Login dto)

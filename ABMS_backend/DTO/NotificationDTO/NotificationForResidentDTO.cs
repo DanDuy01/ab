@@ -9,6 +9,8 @@
         public string content { get; set; }
 
         public string buildingId { get; set; }
+
+        public string roomId { get; set; }
         public string Validate()
         {
 
