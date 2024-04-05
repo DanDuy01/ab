@@ -17,5 +17,7 @@
         public int totalConstructionRequests { get; set; }
 
         public int totalVisitorRequests { get; set; }
+
+        public int totalFee { get; set; }
     }
 }

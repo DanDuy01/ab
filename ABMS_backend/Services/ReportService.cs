@@ -29,6 +29,7 @@ namespace ABMS_backend.Services
             dto.totalElevatorRequests = _abmsContext.Elevators.Where(x => x.Room.BuildingId == buildingId && x.Status != (int)Constants.STATUS.IN_ACTIVE).Count();
             dto.totalConstructionRequests = _abmsContext.Constructions.Where(x => x.Room.BuildingId == buildingId && x.Status != (int)Constants.STATUS.IN_ACTIVE).Count();
             dto.totalVisitorRequests = _abmsContext.Visitors.Where(x => x.Room.BuildingId == buildingId && x.Status != (int)Constants.STATUS.IN_ACTIVE).Count();
+            dto.totalFee = _abmsContext.Fees.Where(x => x.BuildingId == buildingId).Count();
             return new ResponseData<ReportDTO>
             {
                 Data = dto,
