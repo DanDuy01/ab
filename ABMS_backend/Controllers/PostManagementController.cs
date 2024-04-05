@@ -41,6 +41,13 @@ namespace ABMS_backend.Controllers
             return response;
         }
 
+        [HttpPut("post/approve/{id}")]
+        public ResponseData<string> Approve(String id, int status)
+        {
+            ResponseData<string> response = _repository.approve(id, status);
+            return response;
+        }
+
         [HttpGet("post/get-all")]
         public ResponseData<List<Post>> GetAll([FromQuery] PostForSearchDTO dto)
         {

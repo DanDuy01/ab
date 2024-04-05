@@ -222,18 +222,17 @@ namespace ABMS_backend.Services
                     titleCell.Style.Font.Size = 14;
 
                     // Add headers
-                    worksheet.Cells["A3"].Value = "Expense";
-                    worksheet.Cells["B3"].Value = "Expense Source";
+                    worksheet.Cells["A3"].Value = "Expense Source";
+                    worksheet.Cells["B3"].Value = "Expense";
                     worksheet.Cells["C3"].Value = "Description";
 
                     // Add data
                     int row = 4;
                     foreach (var expense in expenses)
                     {
-                        worksheet.Cells[row, 1].Value = expense.Building?.Name;
+                        worksheet.Cells[row, 1].Value = expense.ExpenseSource;
                         worksheet.Cells[row, 2].Value = expense.Expense1;
-                        worksheet.Cells[row, 3].Value = expense.Expense1;
-                        worksheet.Cells[row, 4].Value = expense.Description;
+                        worksheet.Cells[row, 3].Value = expense.Description;
                         row++;
                     }
 

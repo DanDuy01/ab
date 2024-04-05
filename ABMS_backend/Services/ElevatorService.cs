@@ -153,8 +153,8 @@ namespace ABMS_backend.Services
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
-                elevator.Status = (int)Constants.STATUS.IN_ACTIVE;
-                _abmsContext.Elevators.Update(elevator);
+                //elevator.Status = (int)Constants.STATUS.IN_ACTIVE;
+                _abmsContext.Elevators.Remove(elevator);
                 _abmsContext.SaveChanges();
                 return new ResponseData<string>
                 {
