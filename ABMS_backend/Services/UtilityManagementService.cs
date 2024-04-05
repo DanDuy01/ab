@@ -44,6 +44,14 @@ namespace ABMS_backend.Services
 
             try
             {
+                if (_abmsContext.Utilities.Any(u => u.Name == dto.name && u.BuildingId == dto.buildingId))
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.Conflict,
+                        ErrMsg = "Utility with the same name already exists in this building."
+                    };
+                }
                 Utility utility = new Utility();
                 utility.Id = Guid.NewGuid().ToString();
                 utility.Name = dto.name;
