@@ -37,7 +37,7 @@ namespace ABMS_backend.Controllers
         [HttpDelete("room-service/delete-by-roomfee")]
         public ResponseData<string> DeleteByFeeId(string feeId, string roomId)
         {
-            ResponseData<string> response = _repository.deleteByFeeId(feeId, roomId);
+            ResponseData<string> response = _repository.deleteByFeeRoomId(feeId, roomId);
             return response;
         }
 
