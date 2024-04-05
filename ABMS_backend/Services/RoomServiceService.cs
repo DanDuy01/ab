@@ -196,5 +196,24 @@ namespace ABMS_backend.Services
                 ErrMsg = ErrorApp.SUCCESS.description
             };
         }
+        public ResponseData<bool> CheckUnassignedRoomServicesInBuilding(string buildingId)
+        {
+            var totalRooms = _abmsContext.Rooms.Where(r => r.BuildingId == buildingId).Count();
+            var assignedRooms = _abmsContext.RoomServices
+                                            .Where(rs => rs.Room.BuildingId == buildingId)
+                                            .Select(rs => rs.RoomId)
+                                            .Distinct()
+                                            .Count();
+
+            bool noAssignedRooms = totalRooms > 0 && assignedRooms == 0;
+            bool allRoomsUnassigned = totalRooms > assignedRooms;
+
+            return new ResponseData<bool>
+            {
+                Data = noAssignedRooms || allRoomsUnassigned,
+                StatusCode = HttpStatusCode.OK,
+                ErrMsg = noAssignedRooms || allRoomsUnassigned ? "No rooms are assigned in the building." : "Some or all rooms are assigned in the building."
+            };
+        }
     }
 }
