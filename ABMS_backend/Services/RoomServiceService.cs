@@ -206,13 +206,12 @@ namespace ABMS_backend.Services
                                             .Count();
 
             bool noAssignedRooms = totalRooms > 0 && assignedRooms == 0;
-            bool allRoomsUnassigned = totalRooms > assignedRooms;
 
             return new ResponseData<bool>
             {
-                Data = noAssignedRooms || allRoomsUnassigned,
+                Data = noAssignedRooms,
                 StatusCode = HttpStatusCode.OK,
-                ErrMsg = noAssignedRooms || allRoomsUnassigned ? "No rooms are assigned in the building." : "Some or all rooms are assigned in the building."
+                ErrMsg = noAssignedRooms ? "No rooms are assigned in the building." : "Some or all rooms are assigned in the building."
             };
         }
     }
