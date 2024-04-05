@@ -168,7 +168,7 @@ namespace ABMS_backend.Services
                 StatusCode = HttpStatusCode.OK,
                 ErrMsg = ErrorApp.SUCCESS.description
             };
-        }
+        } 
         public ResponseData<string> DeleteRoomServicesInBuilding(string buildingId)
         {
             // Find all RoomService records associated with rooms in the specified building.
