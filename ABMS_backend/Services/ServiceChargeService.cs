@@ -36,41 +36,59 @@ namespace ABMS_backend.Services
             {
                 return new ResponseData<string>
                 {
-                    StatusCode = HttpStatusCode.InternalServerError,
+                    StatusCode = HttpStatusCode.BadRequest, // Use BadRequest for validation errors
                     ErrMsg = error
                 };
             }
             try
             {
                 List<string> list = new List<string>();
-                var rooms = _abmsContext.Rooms.Include(x => x.RoomServices).Where(x => x.BuildingId == dto.building_id).ToList();
+                var rooms = _abmsContext.Rooms.Include(x => x.RoomServices)
+                    .Where(x => x.BuildingId == dto.building_id).ToList();
                 foreach (var room in rooms)
                 {
-                    ServiceCharge service = _abmsContext.ServiceCharges.FirstOrDefault
-                    (x => x.RoomId == room.Id && x.Month == dto.month && x.Year == dto.year);
-                    if (service != null)
-                    {
-                        throw new CustomException(ErrorApp.SERVICE_CHARGE_EXISTED);
-                    }
-                    ServiceCharge serviceCharge = new ServiceCharge();
-                    serviceCharge.Id = Guid.NewGuid().ToString();
-                    serviceCharge.RoomId = room.Id;
-                    serviceCharge.Month = dto.month;
-                    serviceCharge.Year = dto.year;
-                    string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
-                    serviceCharge.CreateUser = getUser;
-                    serviceCharge.CreateTime = DateTime.Now;
-                    serviceCharge.Status = (int)Constants.STATUS.NOT_PAID;
+                    var service = _abmsContext.ServiceCharges
+                        .FirstOrDefault(x => x.RoomId == room.Id && x.Month == dto.month && x.Year == dto.year);
 
-                    var roomService = _abmsContext.RoomServices.Include(x => x.Fee).
-                        Where(x => x.RoomId == room.Id && x.Fee.ExpireDate > DateOnly.FromDateTime(DateTime.Now) && x.Status == 1).ToList();
+                    if (service == null)
+                    {
+                        service = new ServiceCharge
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            RoomId = room.Id,
+                            Month = dto.month,
+                            Year = dto.year,
+                            Status = (int)Constants.STATUS.NOT_PAID,
+                            CreateTime = DateTime.Now,
+                            CreateUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"])
+                        };
+                        _abmsContext.ServiceCharges.Add(service);
+                    }
+                    else
+                    {
+                        service.TotalPrice = 0;
+                    }
+
+                    var roomService = _abmsContext.RoomServices.Include(x => x.Fee)
+                        .Where(x => x.RoomId == room.Id && x.Fee.ExpireDate > DateOnly.FromDateTime(DateTime.Now) && x.Status == 1).ToList();
+
                     foreach (var item in roomService)
                     {
-                        serviceCharge.TotalPrice += item.Amount * item.Fee.Price;
+                        service.TotalPrice += item.Amount * item.Fee.Price;
                     }
-                    list.Add(serviceCharge.Id);
-                    _abmsContext.ServiceCharges.Add(serviceCharge);
-                }               
+
+                    if (service.TotalPrice != 0)
+                    {
+                        list.Add(service.Id);
+                    }
+                    else
+                    {
+                        if (_abmsContext.Entry(service).State == EntityState.Added)
+                        {
+                            _abmsContext.ServiceCharges.Remove(service);
+                        }
+                    }
+                }
                 _abmsContext.SaveChanges();
                 string jsonData = JsonConvert.SerializeObject(list);
                 return new ResponseData<string>
@@ -86,10 +104,11 @@ namespace ABMS_backend.Services
                 return new ResponseData<string>
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
-                    ErrMsg = "Created failed why " + ex.Message
+                    ErrMsg = "Creation failed due to " + ex.Message
                 };
             }
         }
+
 
         public ResponseData<string> updateServiceCharge(string id, string? description, int? status)
         {
