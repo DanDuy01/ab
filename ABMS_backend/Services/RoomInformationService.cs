@@ -105,7 +105,7 @@ namespace ABMS_backend.Services
 
         public ResponseData<List<RoomBuildingResponseDTO>> getRoomInformation(RoomForSearchDTO dto)
         {
-            var list = _abmsContext.Rooms.Include(x => x.Residents).Include(x => x.Building)
+            var list = _abmsContext.Rooms.Include(x => x.Residents).Include(x => x.Building).Include(x => x.Account)
                  .Where(x => (dto.accountId == null || x.AccountId == dto.accountId)
                  && (dto.buildingId == null || x.BuildingId == dto.buildingId)
                  && (dto.roomNumber == null || x.RoomNumber.ToLower().Contains(dto.roomNumber.ToLower())))
@@ -114,6 +114,8 @@ namespace ABMS_backend.Services
                      // Map Room properties
                      Id = x.Id,
                      AccountId = x.AccountId,
+                     AccountName = x.Account.FullName,
+                     AccountStatus = x.Account.Status,
                      BuildingId = x.BuildingId,
                      RoomNumber = x.RoomNumber,
                      RoomArea = x.RoomArea,
@@ -123,7 +125,7 @@ namespace ABMS_backend.Services
                      ModifyUser = x.ModifyUser,
                      ModifyTime = x.ModifyTime,
                      Status = x.Status,
-                     Residents = x.Residents,
+                     Residents = x.Residents.Where(x => x.Status == 1).ToList(),
                      BuildingName = x.Building.Name,
                      BuildingAddress = x.Building.Address
                  }).ToList();
