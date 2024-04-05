@@ -34,6 +34,14 @@ namespace ABMS_backend.Controllers
             ResponseData<string> response = _repository.deleteFee(id);
             return response;
         }
+        [HttpDelete("fee/delete-by-name/{id}")]
+        public ResponseData<string> DeleteByName(String id, string buildingId)
+        {
+            ResponseData<string> response = _repository.deleteFeeByName(id, buildingId);
+            return response;
+        }
+
+
 
         [HttpPut("fee/update/{id}")]
         public ResponseData<string> Update(String id, [FromBody] FeeForInsertDTO dto)

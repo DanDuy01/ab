@@ -168,12 +168,12 @@ namespace ABMS_backend.Services
                 StatusCode = HttpStatusCode.OK,
                 ErrMsg = ErrorApp.SUCCESS.description
             };
-        } 
+        }
         public ResponseData<string> DeleteRoomServicesInBuilding(string buildingId)
         {
-            // Find all RoomService records associated with rooms in the specified building.
+            var excludedFeeNames = new List<string> { "Ô tô", "Xe máy", "Xe đạp","Xe đạp điện" };
             var roomServicesToDelete = _abmsContext.RoomServices
-                .Where(rs => rs.Room.BuildingId == buildingId)
+                .Where(rs => rs.Room.BuildingId == buildingId && !excludedFeeNames.Contains(rs.Fee.ServiceName))
                 .ToList();
 
             if (!roomServicesToDelete.Any())
@@ -181,7 +181,7 @@ namespace ABMS_backend.Services
                 return new ResponseData<string>
                 {
                     StatusCode = HttpStatusCode.NotFound,
-                    ErrMsg = "No RoomServices found to delete in the specified building."
+                    ErrMsg = "No RoomServices found to delete in the specified building, excluding specified fees."
                 };
             }
 
@@ -191,11 +191,12 @@ namespace ABMS_backend.Services
 
             return new ResponseData<string>
             {
-                Data = "Deleted RoomServices successfully",
+                Data = "Deleted RoomServices successfully, excluding specified fees.",
                 StatusCode = HttpStatusCode.OK,
                 ErrMsg = ErrorApp.SUCCESS.description
             };
         }
+
         public ResponseData<bool> CheckUnassignedRoomServicesInBuilding(string buildingId)
         {
             var totalRooms = _abmsContext.Rooms.Where(r => r.BuildingId == buildingId).Count();
@@ -214,5 +215,6 @@ namespace ABMS_backend.Services
                 ErrMsg = noAssignedRooms ? "No rooms are assigned in the building." : "Some or all rooms are assigned in the building."
             };
         }
+       
     }
 }

@@ -10,6 +10,7 @@ namespace ABMS_backend.Repositories
         ResponseData<string> deleteFee(string id);
         ResponseData<string> updateFee(string id, FeeForInsertDTO dto);
         ResponseData<List<Fee>> getAllFee(FeeForSearchDTO dto);
+        ResponseData<string> deleteFeeByName(string name, string buildingId);
         ResponseData<Fee> getFeeById(string id);
         public ResponseData<bool> CheckSpecificFeesExistence(string buildingId);
         public ResponseData<string> AssignFeesToAllRoomsInBuilding(string buildingId);

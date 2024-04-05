@@ -239,7 +239,38 @@ namespace ABMS_backend.Services
                 Count = fees.Count
             };
         }
+        public ResponseData<string> deleteFeeByName(string name, string buildingId)
+        {
+            try
+            {
+                Fee fee = _abmsContext.Fees
+                    .Where(f => f.ServiceName == name && f.BuildingId == buildingId)
+                    .FirstOrDefault(); // Get the first matching fee
 
+                if (fee == null)
+                {
+                    throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
+                }
+
+                _abmsContext.Fees.Remove(fee);
+                _abmsContext.SaveChanges();
+
+                return new ResponseData<string>
+                {
+                    Data = fee.Id, // You can return the deleted fee's ID if needed
+                    StatusCode = HttpStatusCode.OK,
+                    ErrMsg = ErrorApp.SUCCESS.description
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = "Delete failed: " + ex.Message
+                };
+            }
+        }
         public ResponseData<string> updateFee(string id, FeeForInsertDTO dto)
         {
             string error = dto.Validate();
