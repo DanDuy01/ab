@@ -39,7 +39,7 @@ namespace ABMS_backend.Services
                     (x => x.RoomId == dto.room_id && x.FeeId == dto.fee_id);
                 if (rs != null)
                 {
-                    rs.Amount = dto.amount;
+                    rs.Amount += dto.amount;
                     _abmsContext.RoomServices.Update(rs);
                     _abmsContext.SaveChanges();
                     return new ResponseData<string>
@@ -89,6 +89,34 @@ namespace ABMS_backend.Services
                 }
                 roomService.Status = (int)Constants.STATUS.IN_ACTIVE;
                 _abmsContext.RoomServices.Update(roomService);
+                _abmsContext.SaveChanges();
+                return new ResponseData<string>
+                {
+                    Data = roomService.Id,
+                    StatusCode = HttpStatusCode.OK,
+                    ErrMsg = ErrorApp.SUCCESS.description
+                };
+
+            }
+            catch (Exception ex)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = "Deleted failed why " + ex.Message
+                };
+            }
+        }
+        public ResponseData<string> deleteByFeeRoomId(string feeId, string roomId)
+        {
+            try
+            {
+                RoomService roomService = _abmsContext.RoomServices.Where(f=>f.FeeId== feeId && f.RoomId==roomId).FirstOrDefault();
+                if (roomService == null)
+                {
+                    throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
+                }
+                _abmsContext.RoomServices.Remove(roomService);
                 _abmsContext.SaveChanges();
                 return new ResponseData<string>
                 {
