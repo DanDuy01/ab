@@ -14,5 +14,6 @@ namespace ABMS_backend.Repositories
         public ResponseData<bool> CheckSpecificFeesExistence(string buildingId);
         public ResponseData<string> AssignFeesToAllRoomsInBuilding(string buildingId);
         ResponseData<List<string>> CheckRoomsMissingFees(string buildingId);
+        ResponseData<List<Fee>> GetFeesByNames(List<string> names, string buildingId);
     }
 }

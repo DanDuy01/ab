@@ -121,5 +121,27 @@ namespace ABMS_backend.Controllers
                 });
             }
         }
+
+        [HttpGet("GetFeesByNames")]
+        public ActionResult GetFeesByNames([FromQuery] List<string> names, string buildingId)
+        {
+            try
+            {
+                var result = _repository.GetFeesByNames(names, buildingId);
+                if (result.StatusCode != HttpStatusCode.OK)
+                {
+                    return BadRequest(result);
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ResponseData<List<Fee>>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = $"An error occurred while fetching fees: {ex.Message}"
+                });
+            }
+        }
     }
 }

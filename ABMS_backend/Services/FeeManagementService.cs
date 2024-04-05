@@ -225,6 +225,21 @@ namespace ABMS_backend.Services
                 ErrMsg = ErrorApp.SUCCESS.description
             };
         }
+        public ResponseData<List<Fee>> GetFeesByNames(List<string> names, string buildingId)
+        {
+            var fees = _abmsContext.Fees
+                        .Where(f => names.Contains(f.ServiceName) && f.BuildingId == buildingId)
+                        .ToList();
+
+            return new ResponseData<List<Fee>>
+            {
+                Data = fees,
+                StatusCode = HttpStatusCode.OK,
+                ErrMsg = ErrorApp.SUCCESS.description,
+                Count = fees.Count
+            };
+        }
+
         public ResponseData<string> updateFee(string id, FeeForInsertDTO dto)
         {
             string error = dto.Validate();
