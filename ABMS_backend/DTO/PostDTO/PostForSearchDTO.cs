@@ -6,5 +6,6 @@
         public string? title { get; set; }
         public string? buildingId { get; set; }
         public int? type { get; set; }
+        public int? status { get; set; }
     }
 }

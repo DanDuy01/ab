@@ -106,6 +106,7 @@ namespace ABMS_backend.Services
             var list = _abmsContext.Posts.Where(x => (dto.id == null || x.Id == dto.id)
             && (dto.buildingId == null || x.BuildingId == dto.buildingId)
             && (dto.title == null || x.Title == dto.title)
+            && (dto.status == null || x.Status == dto.status)
             && (dto.type == null || x.Type == dto.type)).ToList();
             return new ResponseData<List<Post>>
             {
