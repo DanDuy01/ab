@@ -17,6 +17,12 @@ namespace ABMS_backend.Controllers
         {
             _repository = repository;
         }
+        [HttpGet("report/utility-report/{buildingId}")]
+        public ResponseData<List<UtilityReservationCountDTO>> UtilityReport(String buildingId)
+        {
+            ResponseData<List<UtilityReservationCountDTO>> response = _repository.GetUtilityReservationCounts(buildingId);
+            return response;
+        }
 
         [HttpGet("report/building-report/{buildingId}")]
         public ResponseData<ReportDTO> BuildingReport(String buildingId)
@@ -24,5 +30,6 @@ namespace ABMS_backend.Controllers
             ResponseData<ReportDTO> response = _repository.buildingReport(buildingId);
             return response;
         }
+        
     }
 }

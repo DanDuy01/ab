@@ -6,6 +6,8 @@ namespace ABMS_backend.DTO.RoomDTO
     {
         public string Id { get; set; }
         public string AccountId { get; set; }
+        public string AccountName { get; set; }
+        public int AccountStatus { get; set; }
         public string BuildingId { get; set; }
         public string RoomNumber { get; set; }
         public float RoomArea { get; set; }

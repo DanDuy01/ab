@@ -5,6 +5,8 @@ using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Validates;
 using Microsoft.AspNetCore.Mvc;
 using ABMS_backend.DTO.RoomServiceDTO;
+using ABMS_backend.Services;
+using System.Net;
 
 namespace ABMS_backend.Controllers
 {
@@ -52,6 +54,44 @@ namespace ABMS_backend.Controllers
         {
             ResponseData<RoomService> response = _repository.getRoomServiceById(id);
             return response;
+        }
+        [HttpDelete("DeleteRoomServicesInBuilding/{buildingId}")]
+        public ActionResult DeleteRoomServicesInBuilding(string buildingId)
+        {
+            try
+            {
+                var result =_repository.DeleteRoomServicesInBuilding(buildingId);
+                if (result.StatusCode != HttpStatusCode.OK)
+                {
+                    return BadRequest(result);
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = $"An error occurred while deleting RoomServices: {ex.Message}"
+                });
+            }
+        }
+        [HttpGet("CheckUnassignedRoomServicesInBuilding/{buildingId}")]
+        public ActionResult CheckUnassignedRoomServicesInBuilding(string buildingId)
+        {
+            try
+            {
+                var result = _repository.CheckUnassignedRoomServicesInBuilding(buildingId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ResponseData<bool>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = $"An error occurred while checking for unassigned rooms: {ex.Message}"
+                });
+            }
         }
     }
 }

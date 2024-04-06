@@ -45,7 +45,7 @@ namespace ABMS_backend.Services
                     Type = dto.type,
                     CreateUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]),
                     CreateTime = DateTime.Now,
-                    Status = (int)Constants.STATUS.ACTIVE
+                    Status = (int)Constants.STATUS.SENT
                 };
                 _abmsContext.Posts.Add(post);
                 _abmsContext.SaveChanges();
@@ -77,11 +77,11 @@ namespace ABMS_backend.Services
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
-                post.Status = (int)Constants.STATUS.IN_ACTIVE;
-                string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
-                post.ModifyUser = getUser;
-                post.ModifyTime = DateTime.Now;
-                _abmsContext.Posts.Update(post);
+                //post.Status = (int)Constants.STATUS.IN_ACTIVE;
+                //string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                //post.ModifyUser = getUser;
+                //post.ModifyTime = DateTime.Now;
+                _abmsContext.Posts.Remove(post);
                 _abmsContext.SaveChanges();
                 return new ResponseData<string>
                 {
@@ -175,8 +175,41 @@ namespace ABMS_backend.Services
                 };
             }
         }
-       
-       
+
+        public ResponseData<string> approve(string id, int status)
+        {
+           
+            try
+            {
+                Post post = _abmsContext.Posts.Find(id);
+                if (post == null)
+                {
+                    throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
+                }
+                post.Status = status;
+                string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+                post.ModifyUser = getUser;
+                post.ModifyTime = DateTime.Now;
+                _abmsContext.Posts.Update(post);
+                _abmsContext.SaveChanges();
+                return new ResponseData<string>
+                {
+                    Data = post.Id,
+                    StatusCode = HttpStatusCode.OK,
+                    ErrMsg = ErrorApp.SUCCESS.description
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = "Update failed why " + ex.Message
+                };
+            }
+        }
+
+
 
     }
 

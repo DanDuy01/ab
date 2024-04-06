@@ -25,6 +25,7 @@
         public static readonly ErrorApp UTILITY_DETAIL_EXISTED = new ErrorApp(4005, "Utility detail existed!");
         public static readonly ErrorApp VEHICE_EXISTED = new ErrorApp(4006, "Vehice existed!");
         public static readonly ErrorApp SERVICE_CHARGE_EXISTED = new ErrorApp(4007, "Service charge existed!");
+        public static readonly ErrorApp ROOM_SERVICE_NOT_EXISTED = new ErrorApp(4008, "Room service not existed!");
 
     }
 }

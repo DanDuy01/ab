@@ -13,6 +13,12 @@ using ABMS_backend.Utils.Exceptions;
 using OfficeOpenXml;
 using ABMS_backend.Utils.Token;
 using Microsoft.EntityFrameworkCore;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
+using Twilio.Types;
+using ABMS_backend.Utils;
+using System.Net;
+using System.Net.Mail;
 
 namespace ABMS_backend.Services
 {
@@ -46,6 +52,7 @@ namespace ABMS_backend.Services
             return userClaim;
         }
 
+
         public string RandomString(int length)
         {
             Random random = new Random();
@@ -53,6 +60,97 @@ namespace ABMS_backend.Services
             return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
+        public ResponseData<string> VerifyOtpAndResetPassword(string id, string otp)
+        {
+            // Find the account and verify OTP
+            Account a = _abmsContext.Accounts.Find(id);
+            if (a == null || !VerifyOtpForAccount(a.Id, otp))
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.Unauthorized,
+                    ErrMsg = "OTP verification failed"
+                };
+            }
+
+            return ResetPassword(id);
+        }
+
+        public ResponseData<string> SendOtp(string id)
+        {
+            // Find the account
+            Account a = _abmsContext.Accounts.Find(id);
+            if (a == null)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    ErrMsg = "Account not found"
+                };
+            }
+
+            // Generate OTP
+            var otp = Utilities.GetRandomNumber(6);
+
+            StoreOtpForAccount(a.Id, otp);
+
+            // Initialize Twilio client
+            TwilioClient.Init("AC6c601af0eef6698b5dc145c5d81c4f4c", "a0a0331c816f6099b8c9d2c902c56503");
+
+            // Send OTP SMS
+            var message = MessageResource.Create(
+                body: $"Mã OTP của bạn là: {otp}",
+                from: new Twilio.Types.PhoneNumber("+19382533589"),
+                to: new Twilio.Types.PhoneNumber(Utilities.FormatToE164(a.PhoneNumber)) 
+            );
+
+            return new ResponseData<string>
+            {
+                Data = "OTP sent successfully.",
+                StatusCode = HttpStatusCode.OK,
+                ErrMsg = null
+            };
+        }
+        public void StoreOtpForAccount(string userId, string otp)
+        {
+            var expiryTime = DateTime.UtcNow.AddMinutes(5); // OTP expires after 5 minutes
+
+            // Create a new OTP record
+            var otpRecord = new Otp
+            {
+                Id = Guid.NewGuid().ToString(),
+                AccountId = userId,
+                Otp1 = otp,
+                Expire = expiryTime
+            };
+
+            // Store OTP record in the database
+            _abmsContext.Otps.Add(otpRecord);
+            _abmsContext.SaveChanges();
+        }
+        public bool VerifyOtpForAccount(string accountId, string otp)
+        {
+            var otpRecord = _abmsContext.Otps
+                                .Where(o => o.AccountId == accountId && o.Otp1 == otp && o.Expire > DateTime.UtcNow)
+                                .FirstOrDefault();
+
+            if (otpRecord != null)
+            {
+                // Optional: remove OTP record after successful verification to prevent reuse
+                _abmsContext.Otps.Remove(otpRecord);
+                _abmsContext.SaveChanges();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public string GenerateOtp()
+        {
+            var random = new Random();
+            return random.Next(0, 999999).ToString("D6"); 
+        }
         public ResponseData<string> ResetPassword(string id)
         {
             Account a = _abmsContext.Accounts.Find(id);
@@ -297,6 +395,7 @@ namespace ABMS_backend.Services
                 ErrMsg = ErrorApp.SUCCESS.description
             };
         }
+        
 
         public ResponseData<string> ImportData(IFormFile file, int role, string buildingId)
         {

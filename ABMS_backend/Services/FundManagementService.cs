@@ -181,7 +181,7 @@ namespace ABMS_backend.Services
         public byte[] ExportData(string buildingId)
         {
             try
-            {
+            { 
                 var funds = _abmsContext.Funds.Include(x => x.Building).Where(x => x.Status == 1 && x.BuildingId == buildingId).ToList();
                 Building building = _abmsContext.Buildings.Find(buildingId);
                 using (var package = new ExcelPackage())
@@ -196,18 +196,17 @@ namespace ABMS_backend.Services
                     titleCell.Style.Font.Size = 14;
 
                     // Add headers
-                    worksheet.Cells["A1"].Value = "Fund";
-                    worksheet.Cells["B1"].Value = "Fund Source";
-                    worksheet.Cells["C1"].Value = "Description";
-
+                    worksheet.Cells["A3"].Value = "Fund Source";
+                    worksheet.Cells["B3"].Value = "Fund";
+                    worksheet.Cells["C3"].Value = "Description";
+                     
                     // Add data
                     int row = 4;
                     foreach (var fund in funds)
                     {
-                        worksheet.Cells[row, 1].Value = fund.Building?.Name;
+                        worksheet.Cells[row, 1].Value = fund.FundSource;
                         worksheet.Cells[row, 2].Value = fund.Fund1;
-                        worksheet.Cells[row, 3].Value = fund.FundSource;
-                        worksheet.Cells[row, 4].Value = fund.Description;
+                        worksheet.Cells[row, 3].Value = fund.Description;
                         row++;
                     }
 

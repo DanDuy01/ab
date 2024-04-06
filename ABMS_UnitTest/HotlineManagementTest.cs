@@ -117,10 +117,10 @@ namespace ABMS_UnitTest
 
 
         [TestMethod]
-        public void createHotline_Test1()
-        {
-            // Chuẩn bị dữ liệu DTO
-            var dto = new HotlineForInsertDTO
+        public void CreateHotline_Test()
+        { 
+            // Arrange
+            HotlineForInsertDTO dto = new HotlineForInsertDTO
             {
                 phoneNumber = "0963535176",
                 name = "name",

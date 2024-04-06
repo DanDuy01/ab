@@ -11,6 +11,7 @@ namespace ABMS_backend.Models
         public Account()
         {
             NotificationAccounts = new HashSet<NotificationAccount>();
+            Otps = new HashSet<Otp>();
             Rooms = new HashSet<Room>();
         }
 
@@ -77,6 +78,7 @@ namespace ABMS_backend.Models
 
         public virtual Building Building { get; set; } = null!;
         public virtual ICollection<NotificationAccount> NotificationAccounts { get; set; }
+        public virtual ICollection<Otp> Otps { get; set; }
         public virtual ICollection<Room> Rooms { get; set; }
     }
 }

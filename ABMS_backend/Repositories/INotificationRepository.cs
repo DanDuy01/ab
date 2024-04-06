@@ -7,7 +7,7 @@ namespace ABMS_backend.Repositories
 {
     public interface INotificationRepository
     {
-        Task<ResponseData<string>> createNotificationForReceptionistAsync(NotificationForResidentDTO dto);
+        Task<ResponseData<string>> createNotificationForReceptionistAsync(NotificationForRecepionistDTO dto);
 
         ResponseData<string> createNotificationForResident(NotificationForResidentDTO dto);
 

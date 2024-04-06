@@ -27,6 +27,7 @@ namespace ABMS_backend.Models
         public virtual DbSet<Hotline> Hotlines { get; set; } = null!;
         public virtual DbSet<Notification> Notifications { get; set; } = null!;
         public virtual DbSet<NotificationAccount> NotificationAccounts { get; set; } = null!;
+        public virtual DbSet<Otp> Otps { get; set; } = null!;
         public virtual DbSet<ParkingCard> ParkingCards { get; set; } = null!;
         public virtual DbSet<Post> Posts { get; set; } = null!;
         public virtual DbSet<Resident> Residents { get; set; } = null!;
@@ -739,6 +740,41 @@ namespace ABMS_backend.Models
                     .WithMany(p => p.NotificationAccounts)
                     .HasForeignKey(d => d.NotificationId)
                     .HasConstraintName("notification_account_notification_FK");
+            });
+
+            modelBuilder.Entity<Otp>(entity =>
+            {
+                entity.ToTable("otp");
+
+                entity.HasIndex(e => e.AccountId, "otp_account_FK");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(100)
+                    .HasColumnName("id")
+                    .UseCollation("utf8mb4_general_ci")
+                    .HasCharSet("utf8mb4");
+
+                entity.Property(e => e.AccountId)
+                    .HasMaxLength(100)
+                    .HasColumnName("account_id")
+                    .UseCollation("utf8mb4_general_ci")
+                    .HasCharSet("utf8mb4");
+
+                entity.Property(e => e.Expire)
+                    .HasColumnType("datetime")
+                    .HasColumnName("expire");
+
+                entity.Property(e => e.Otp1)
+                    .HasMaxLength(100)
+                    .HasColumnName("otp")
+                    .UseCollation("utf8mb4_general_ci")
+                    .HasCharSet("utf8mb4");
+
+                entity.HasOne(d => d.Account)
+                    .WithMany(p => p.Otps)
+                    .HasForeignKey(d => d.AccountId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("otp_account_FK");
             });
 
             modelBuilder.Entity<ParkingCard>(entity =>

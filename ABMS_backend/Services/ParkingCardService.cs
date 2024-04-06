@@ -183,6 +183,35 @@ namespace ABMS_backend.Services
             
         }
 
+        public ResponseData<string> removeParkingCard(string id)
+        {
+            try
+            {
+                ParkingCard card = _abmsContext.ParkingCards.Find(id);
+                if (card == null)
+                {
+                    throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
+                }
+                _abmsContext.ParkingCards.Remove(card);
+                _abmsContext.SaveChanges();
+                return new ResponseData<string>
+                {
+                    Data = card.Id,
+                    StatusCode = HttpStatusCode.OK,
+                    ErrMsg = ErrorApp.SUCCESS.description
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = "Deleted failed why " + ex.Message
+                };
+            }
+
+        }
+
         public ResponseData<List<ParkingCard>> getParkingCard(ParkingCardForSearchDTO dto)
         {
             var list = _abmsContext.ParkingCards.Include(x=>x.Resident).ThenInclude(r=>r.Room).

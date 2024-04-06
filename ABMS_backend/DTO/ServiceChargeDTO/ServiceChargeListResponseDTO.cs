@@ -2,6 +2,10 @@
 {
     public class ServiceChargeListResponseDTO
     {
+        public string id { get; set; }
+
+        public string room_id { get; set; }
+
         public string room_number {  get; set; }
 
         public int status { get; set; }

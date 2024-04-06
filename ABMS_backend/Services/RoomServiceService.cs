@@ -169,5 +169,50 @@ namespace ABMS_backend.Services
                 ErrMsg = ErrorApp.SUCCESS.description
             };
         }
+        public ResponseData<string> DeleteRoomServicesInBuilding(string buildingId)
+        {
+            // Find all RoomService records associated with rooms in the specified building.
+            var roomServicesToDelete = _abmsContext.RoomServices
+                .Where(rs => rs.Room.BuildingId == buildingId)
+                .ToList();
+
+            if (!roomServicesToDelete.Any())
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    ErrMsg = "No RoomServices found to delete in the specified building."
+                };
+            }
+
+            // Remove the found RoomService records.
+            _abmsContext.RoomServices.RemoveRange(roomServicesToDelete);
+            _abmsContext.SaveChanges();
+
+            return new ResponseData<string>
+            {
+                Data = "Deleted RoomServices successfully",
+                StatusCode = HttpStatusCode.OK,
+                ErrMsg = ErrorApp.SUCCESS.description
+            };
+        }
+        public ResponseData<bool> CheckUnassignedRoomServicesInBuilding(string buildingId)
+        {
+            var totalRooms = _abmsContext.Rooms.Where(r => r.BuildingId == buildingId).Count();
+            var assignedRooms = _abmsContext.RoomServices
+                                            .Where(rs => rs.Room.BuildingId == buildingId)
+                                            .Select(rs => rs.RoomId)
+                                            .Distinct()
+                                            .Count();
+
+            bool noAssignedRooms = totalRooms > 0 && assignedRooms == 0;
+
+            return new ResponseData<bool>
+            {
+                Data = noAssignedRooms,
+                StatusCode = HttpStatusCode.OK,
+                ErrMsg = noAssignedRooms ? "No rooms are assigned in the building." : "Some or all rooms are assigned in the building."
+            };
+        }
     }
 }
