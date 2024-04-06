@@ -19,7 +19,7 @@ namespace ABMS_backend.Services
 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public FundManagementService(abmsContext abmsContext, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        public FundManagementService(abmsContext abmsContext, IHttpContextAccessor httpContextAccessor)
         {
             _abmsContext = abmsContext;
             _httpContextAccessor = httpContextAccessor;
