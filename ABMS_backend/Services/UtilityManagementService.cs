@@ -362,6 +362,7 @@ namespace ABMS_backend.Services
 
         public ResponseData<string> restore(List<string> idList)
         {
+            string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
             foreach (string id in idList)
             {
                 Utility utility = _abmsContext.Utilities.Find(id);
@@ -375,7 +376,8 @@ namespace ABMS_backend.Services
                     };
                 }
                 utility.Status = (int)Constants.STATUS.ACTIVE;
-                _abmsContext.Utilities.Update(utility);
+                utility.ModifyUser = getUser;
+                utility.ModifyTime = DateTime.Now;
             }
             _abmsContext.SaveChanges();
             string jsonData = JsonConvert.SerializeObject(idList);
