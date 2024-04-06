@@ -13,5 +13,8 @@ namespace ABMS_backend.Repositories
         ResponseData<string> Register(RegisterDTO request);
         ResponseData<string> ImportData(IFormFile file, int role,string buildingId);
         byte[] ExportData(string buildingId);
+
+        public ResponseData<string> SendOtp(string id);
+        public ResponseData<string> VerifyOtpAndResetPassword(string id, string otp);
     }
 }

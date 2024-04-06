@@ -12,7 +12,7 @@ namespace ABMS_backend.Repositories
 
         ResponseData<string> deleteServiceCharge(string id);
 
-        ResponseData<List<ServiceCharge>> getServiceCharge(ServiceChargeForSearchDTO dto);
+        ResponseData<List<ServiceChargeListResponseDTO>> getServiceCharge(ServiceChargeForSearchDTO dto);
 
         ResponseData<ServiceCharge> getServiceChargeById(string id);
 

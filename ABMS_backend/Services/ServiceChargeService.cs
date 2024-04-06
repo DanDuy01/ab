@@ -63,7 +63,7 @@ namespace ABMS_backend.Services
                     serviceCharge.Status = (int)Constants.STATUS.NOT_PAID;
 
                     var roomService = _abmsContext.RoomServices.Include(x => x.Fee).
-                        Where(x => x.RoomId == room.Id).ToList();
+                        Where(x => x.RoomId == room.Id && x.Fee.ExpireDate > DateOnly.FromDateTime(DateTime.Now) && x.Status == 1).ToList();
                     foreach (var item in roomService)
                     {
                         serviceCharge.TotalPrice += item.Amount * item.Fee.Price;
@@ -162,15 +162,30 @@ namespace ABMS_backend.Services
             }
         }
 
-        public ResponseData<List<ServiceCharge>> getServiceCharge(ServiceChargeForSearchDTO dto)
+        public ResponseData<List<ServiceChargeListResponseDTO>> getServiceCharge(ServiceChargeForSearchDTO dto)
         {
-            var list = _abmsContext.ServiceCharges.Where(x =>
+            var list = _abmsContext.ServiceCharges.Include(x => x.Room).Where(x =>
             (dto.room_id == null || x.RoomId == dto.room_id)
                 && (dto.month == null || x.Month == dto.month)
-                && (dto.year == null || x.Year == dto.year)).ToList();
-            return new ResponseData<List<ServiceCharge>>
+                && (dto.year == null || x.Year == dto.year)
+                && (dto.building_id == null || x.Room.BuildingId == dto.building_id)).ToList();
+            List<ServiceChargeListResponseDTO> listDto = new List<ServiceChargeListResponseDTO>();
+            foreach (var item in list)
             {
-                Data = list,
+                ServiceChargeListResponseDTO responseDTO = new ServiceChargeListResponseDTO();
+                responseDTO.id = item.Id;
+                responseDTO.room_id = item.RoomId;
+                responseDTO.room_number = item.Room.RoomNumber;
+                responseDTO.status = item.Status;
+                responseDTO.month = item.Month;
+                responseDTO.year = item.Year;
+                responseDTO.total_price = item.TotalPrice;
+                responseDTO.description = item.Description;
+                listDto.Add(responseDTO);
+            }
+            return new ResponseData<List<ServiceChargeListResponseDTO>>
+            {
+                Data = listDto,
                 StatusCode = HttpStatusCode.OK,
                 ErrMsg = ErrorApp.SUCCESS.description,
                 Count = list.Count
@@ -194,12 +209,15 @@ namespace ABMS_backend.Services
 
         public ResponseData<List<ServiceChargeResponseDTO>> getTotal(string room_id, int? status)
         {
-            var serviceCharge = _abmsContext.ServiceCharges
+            var serviceCharge = _abmsContext.ServiceCharges.Include(x => x.Room)
                 .Where(x => x.RoomId == room_id && (status == null || x.Status == status)).ToList();
             List< ServiceChargeResponseDTO > list = new List< ServiceChargeResponseDTO >();
             foreach (var item in serviceCharge)
             {
                 ServiceChargeResponseDTO dto = new ServiceChargeResponseDTO();
+                dto.id = item.Id;
+                dto.room_id = item.RoomId;
+                dto.room_number = item.Room.RoomNumber;
                 dto.year = item.Year;
                 dto.month = item.Month;
                 dto.total = item.TotalPrice;

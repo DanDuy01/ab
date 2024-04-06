@@ -89,7 +89,19 @@ namespace ABMS_backend.Services
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 account.ModifyUser = getUser;
                 account.ModifyTime = DateTime.Now;
-                _abmsContext.Accounts.Update(account);
+                _abmsContext.Accounts.Update(account);               
+                var residents = _abmsContext.Residents.Where(x => x.Room.AccountId == id).ToList();
+                foreach (var r in residents)
+                {
+                    r.Status = 0;
+                    if(r.IsHouseholder == true)
+                    {
+                        r.IsHouseholder = false;
+                    }
+                    r.ModifyUser = getUser;
+                    r.ModifyTime = DateTime.Now;
+                }
+                _abmsContext.Residents.UpdateRange(residents);
                 _abmsContext.SaveChanges();
                 return new ResponseData<string>
                 {

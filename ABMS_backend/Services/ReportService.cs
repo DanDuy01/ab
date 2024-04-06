@@ -29,6 +29,7 @@ namespace ABMS_backend.Services
             dto.totalElevatorRequests = _abmsContext.Elevators.Where(x => x.Room.BuildingId == buildingId && x.Status != (int)Constants.STATUS.IN_ACTIVE).Count();
             dto.totalConstructionRequests = _abmsContext.Constructions.Where(x => x.Room.BuildingId == buildingId && x.Status != (int)Constants.STATUS.IN_ACTIVE).Count();
             dto.totalVisitorRequests = _abmsContext.Visitors.Where(x => x.Room.BuildingId == buildingId && x.Status != (int)Constants.STATUS.IN_ACTIVE).Count();
+            dto.totalFee = _abmsContext.Fees.Where(x => x.BuildingId == buildingId).Count();
             return new ResponseData<ReportDTO>
             {
                 Data = dto,
@@ -36,5 +37,30 @@ namespace ABMS_backend.Services
                 ErrMsg = ErrorApp.SUCCESS.description
             };
         }
+        public ResponseData<List<UtilityReservationCountDTO>> GetUtilityReservationCounts(string buildingId)
+        {
+            var utilityReservationCounts = _abmsContext.Utilities
+                .Where(u => u.BuildingId == buildingId)
+                .Select(u => new UtilityReservationCountDTO
+                {
+                    UtilityName = u.Name,
+                    ReservationCount = u.UtiliityDetails
+                        .SelectMany(ud => ud.UtilitySchedules)
+                        .Count(),
+                })
+                .Where(u => u.ReservationCount > 0)
+                .ToList();
+
+            return new ResponseData<List<UtilityReservationCountDTO>>
+            {
+                Data = utilityReservationCounts,
+                StatusCode = HttpStatusCode.OK,
+                ErrMsg = ErrorApp.SUCCESS.description,
+                Count = utilityReservationCounts.Count
+            };
+        }
+
+     
+     
     }
 }
