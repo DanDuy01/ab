@@ -2,11 +2,7 @@
 using ABMS_backend.DTO.PostDTO;
 using ABMS_backend.Models;
 using ABMS_backend.Services;
-using ABMS_backend.Utils.Validates;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Moq;
 using System.Net;
 
@@ -15,92 +11,6 @@ namespace ABMS_UnitTest
     [TestClass]
     public class HotlineManagementTest
     {
-        //private readonly abmsContext _abmsContext;
-        //public HotlineManagementTest()
-        //{
-        //    _abmsContext = new abmsContext();
-
-        //}
-
-        //[TestMethod]
-        //public void CreateHotline_Test1()
-        //{
-        //    // Arrange
-        //    HotlineForInsertDTO dto = new HotlineForInsertDTO
-        //    {
-        //        phoneNumber = "0963535117",
-        //        name = "name",
-        //        buildingId = "1"
-        //    };
-
-        //    var service = new HotlineManagementService(_abmsContext, null);
-        //    // Act
-        //    var result = service.createHotline(dto);
-        //    // Assert
-        //    Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
-
-        //}
-
-
-        //[TestMethod]
-        //public void CreateHotline_Test2()
-        //{
-        //    // Arrange
-        //    var dto = new HotlineForInsertDTO
-        //    { 
-        //        phoneNumber = "123456789",
-        //        name = "", // Invalid name
-        //        buildingId = "1"
-        //    };
-
-        //    var service = new HotlineManagementService(_abmsContext, null);
-        //    // Act
-        //    var result = service.createHotline(dto);
-        //    // Assert
-        //    Assert.AreEqual(HttpStatusCode.InternalServerError, result.StatusCode);
-        //    Assert.IsNotNull(result.ErrMsg);
-        //    Assert.IsNull(result.Data);
-        //}
-
-        //[TestMethod]
-        //public void CreateHotline_Test3()
-        //{
-        //    // Arrange
-        //    var dto = new HotlineForInsertDTO
-        //    {
-        //        phoneNumber = "",
-        //        name = "", // Invalid name
-        //        buildingId = ""
-        //    };
-
-        //    var service = new HotlineManagementService(_abmsContext, null);
-        //    // Act
-        //    var result = service.createHotline(dto);
-        //    // Assert
-        //    Assert.AreEqual(HttpStatusCode.InternalServerError, result.StatusCode);
-        //    Assert.IsNotNull(result.ErrMsg);
-        //    Assert.IsNull(result.Data);
-        //}
-
-
-        //[TestMethod]
-        //public void DeleteHotline_Test1()
-        //{
-        //    // Arrange
-        //    // Thêm một đối tượng hotline vào cơ sở dữ liệu để kiểm tra việc xóa
-        //    var hotline = new Hotline { Id = "2", PhoneNumber = "0963535176", Name = "name", BuildingId = "1" };
-        //    _abmsContext.Hotlines.Add(hotline);
-        //    _abmsContext.SaveChanges();
-
-        //    var service = new HotlineManagementService(_abmsContext, null);
-
-        //    // Act
-        //    var result = service.deleteHotline("2");
-
-        //    // Assert
-        //    Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
-        //}
-
         private Mock<abmsContext> _contextMock;
         private HotlineManagementService _hotlineService;
 
