@@ -2,6 +2,7 @@
 using ABMS_backend.Models;
 using ABMS_backend.Services;
 using ABMS_backend.Utils.Validates;
+using ABMS_UnitTest.TestMocks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -40,12 +41,12 @@ namespace ABMS_UnitTest
 
 
         [TestMethod]
-        public void createPost_ValidPost_ReturnsSuccessResponse()
+        public void createPost_Test1()
         {
             // Chuẩn bị dữ liệu DTO
             var dto = new PostForInsertDTO
             {
-                title = "aa",
+                title = "aaaa",
                 buildingId = "building_id",
                 content = "aaaa",
                 image = "aa",
@@ -60,13 +61,63 @@ namespace ABMS_UnitTest
             var result = _postService.createPost(dto);
 
             // Kiểm tra kết quả
-            Assert.IsNotNull(result);
+            
             Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
+        }
+
+        [TestMethod]
+        public void createPost_Test2()
+        {
+            // Chuẩn bị dữ liệu DTO
+            var dto = new PostForInsertDTO
+            {
+                title = "",
+                buildingId = "building_id",
+                content = "aaaa",
+                image = "aa",
+                type = 2
+            };
+
+            // Giả mạo thêm dữ liệu khi thêm bài đăng
+            _contextMock.Setup(context => context.Posts.Add(It.IsAny<Post>()));
+            _contextMock.Setup(context => context.SaveChanges()).Returns(1);
+
+            // Thực thi hàm
+            var result = _postService.createPost(dto);
+
+            // Kiểm tra kết quả
+            
+            Assert.AreEqual(HttpStatusCode.InternalServerError, result.StatusCode);
+        }
+
+        [TestMethod]
+        public void createPost_Test3()
+        {
+            // Chuẩn bị dữ liệu DTO
+            var dto = new PostForInsertDTO
+            {
+                title = "",
+                buildingId = "",
+                content = "",
+                image = "",
+                type = 2
+            };
+
+            // Giả mạo thêm dữ liệu khi thêm bài đăng
+            _contextMock.Setup(context => context.Posts.Add(It.IsAny<Post>()));
+            _contextMock.Setup(context => context.SaveChanges()).Returns(1);
+
+            // Thực thi hàm
+            var result = _postService.createPost(dto);
+
+            // Kiểm tra kết quả
+            
+            Assert.AreEqual(HttpStatusCode.InternalServerError, result.StatusCode);
         }
 
 
         [TestMethod]
-        public void deletePost_ValidId_ReturnsSuccessResponse()
+        public void deletePost_Test1()
         {
             // Tạo một bài đăng mẫu để kiểm tra
             var postId = "1";
@@ -86,6 +137,22 @@ namespace ABMS_UnitTest
             Assert.IsNotNull(result);
             Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
             Assert.AreEqual(postId, result.Data);
+        }
+
+
+        [TestMethod]
+        public void deletePost_Test2()
+        {
+            string nullId = null;
+
+            _contextMock.Setup(x => x.Hotlines.Find(nullId));
+
+            // Act
+            var result = _postService.deletePost(nullId);
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.InternalServerError, result.StatusCode);
+
         }
 
 
@@ -151,12 +218,12 @@ namespace ABMS_UnitTest
 
 
         [TestMethod]
-        public void updatePost_ValidPost_ReturnsSuccessResponse()
+        public void updatePost_Test1()
         {
             // Chuẩn bị dữ liệu DTO
             var dto = new PostForInsertDTO
             {
-                title = "Updated Title",
+                title = "a",
                 buildingId = "updated_building_id",
                 content = "Updated content",
                 image = "updated_image.jpg",
@@ -167,7 +234,7 @@ namespace ABMS_UnitTest
             var existingPost = new Post
             {
                 Id = "1",
-                Title = "Initial Title",
+                Title = "aaaa",
                 BuildingId = "initial_building_id",
                 Content = "Initial content",
                 Image = "initial_image.jpg",
@@ -188,31 +255,76 @@ namespace ABMS_UnitTest
         }
 
 
-    }
-
-    //DbSetMock là một lớp tĩnh được sử dụng để tạo ra đối tượng giả mạo (mock object) của DbSet trong unit test.
-    public static class DbSetMock
-    {
-        // Phương thức này tạo ra một đối tượng giả mạo (mock object) của DbSet cho một kiểu dữ liệu cụ thể.
-        // Nó nhận một IEnumerable<T> chứa dữ liệu mẫu cho DbSet.
-        public static Mock<DbSet<T>> GetDbSetMock<T>(IEnumerable<T> data) where T : class
+        [TestMethod]
+        public void updatePost_Test2()
         {
-            // Chuyển đổi IEnumerable<T> thành IQueryable<T> để có thể sử dụng trong mock object.
-            var queryableData = data.AsQueryable();
-            // Khởi tạo một đối tượng giả mạo (mock object) của DbSet với kiểu dữ liệu là T.
-            var mockSet = new Mock<DbSet<T>>();
+            // Chuẩn bị dữ liệu DTO
+            var dto = new PostForInsertDTO
+            {
+                title = "aaaa",
+                buildingId = "updated_building_id",
+                content = "",
+                image = "updated_image.jpg",
+                type = 2
+            };
 
-            // Cấu hình các thuộc tính của IQueryable trong DbSetMock để trả về dữ liệu mẫu.
-            // Điều này cho phép chúng ta sử dụng các phương thức LINQ trên DbSetMock.
-            mockSet.As<IQueryable<T>>().Setup(m => m.Provider).Returns(queryableData.Provider);
-            mockSet.As<IQueryable<T>>().Setup(m => m.Expression).Returns(queryableData.Expression);
-            mockSet.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(queryableData.ElementType);
-            mockSet.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(() => queryableData.GetEnumerator());
+            // Giả mạo dữ liệu bài đăng tồn tại
+            var existingPost = new Post
+            {
+                Id = "1",
+                Title = "Initial Title",
+                BuildingId = "initial_building_id",
+                Content = "Initial content",
+                Image = "initial_image.jpg",
+                Type = 1
+            };
 
-            // Trả về đối tượng giả mạo của DbSet.
-            return mockSet;
+            // Giả mạo Context để trả về bài đăng tồn tại khi được truy vấn
+            _contextMock.Setup(context => context.Posts.Find(It.IsAny<string>())).Returns(existingPost);
+
+            // Thực thi phương thức updatePost()
+            var result = _postService.updatePost("1", dto);
+            // Kiểm tra kết quả
+            Assert.AreEqual(HttpStatusCode.InternalServerError, result.StatusCode);
+            
         }
-    }
 
+
+        [TestMethod]
+        public void updatePost_Test3()
+        {
+            // Chuẩn bị dữ liệu DTO
+            var dto = new PostForInsertDTO
+            {
+                title = "",
+                buildingId = "",
+                content = "",
+                image = "",
+                type = 2
+            };
+
+            // Giả mạo dữ liệu bài đăng tồn tại
+            var existingPost = new Post
+            {
+                Id = "1",
+                Title = "Initial Title",
+                BuildingId = "initial_building_id",
+                Content = "Initial content",
+                Image = "initial_image.jpg",
+                Type = 1
+            };
+
+            // Giả mạo Context để trả về bài đăng tồn tại khi được truy vấn
+            _contextMock.Setup(context => context.Posts.Find(It.IsAny<string>())).Returns(existingPost);
+
+            // Thực thi phương thức updatePost()
+            var result = _postService.updatePost("1", dto);
+            // Kiểm tra kết quả
+            Assert.AreEqual(HttpStatusCode.InternalServerError, result.StatusCode);
+
+        }
+
+
+    }
 
 }
