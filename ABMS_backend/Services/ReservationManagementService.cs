@@ -163,7 +163,7 @@ namespace ABMS_backend.Services
 
         public ResponseData<List<ReservationResponseDTO>> getReservation(ResevationForResidentSearchDTO dto)
         {
-            var utilitySchedules = _abmsContext.UtilitySchedules.Include(x => x.UtilityDetail.Utility).
+            var utilitySchedules = _abmsContext.UtilitySchedules.Include(x => x.UtilityDetail.Utility).Include(x=>x.Room).
                 Where(x => (dto.roomId == null || x.RoomId == dto.roomId) &&
                 (dto.utilityId == null || x.UtilityDetail.UtilityId == dto.utilityId) &&
                 (dto.utilityDetailId == null || x.UtilityDetailId == dto.utilityDetailId) &&
@@ -185,6 +185,7 @@ namespace ABMS_backend.Services
                 response.description = schedule.Description;
                 response.approve_user = schedule.ApproveUser;
                 response.status = schedule.Status;
+                response.room_number = schedule.Room.RoomNumber;
                 dtoList.Add(response);
             }
             return new ResponseData<List<ReservationResponseDTO>>

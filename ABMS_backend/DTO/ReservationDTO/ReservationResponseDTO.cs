@@ -1,4 +1,6 @@
-﻿namespace ABMS_backend.DTO.ReservationDTO
+﻿using ABMS_backend.Models;
+
+namespace ABMS_backend.DTO.ReservationDTO
 {
     public class ReservationResponseDTO
     {
@@ -24,5 +26,7 @@
         public string? approve_user { get; set; }
 
         public int status { get; set; }
+
+        public string room_number { get; set; }
     }
 }
