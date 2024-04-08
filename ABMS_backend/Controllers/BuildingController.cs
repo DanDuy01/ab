@@ -4,6 +4,7 @@ using ABMS_backend.Models;
 using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Validates;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace ABMS_backend.Controllers
 {
@@ -37,6 +38,20 @@ namespace ABMS_backend.Controllers
         {
             ResponseData<string> response = _repository.deleteBuilding(id);
             return response;
+        }
+
+        [HttpDelete("building/remove-all/{id}")]
+        public IActionResult RemoveAll(String id)
+        {
+            ResponseData<string> result = _repository.removeBuildingCompletely(id);
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                return Ok(new { message = "Deleted successfully." });
+            }
+            else
+            {
+                return StatusCode((int)result.StatusCode, result.ErrMsg);
+            }
         }
 
         [HttpGet("building/get")]

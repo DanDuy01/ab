@@ -157,45 +157,48 @@ namespace ABMS_backend.Services
         }
         public ResponseData<string> DeleteAccountAndRelatedData(string accountId)
         {
+            var strategy = _abmsContext.Database.CreateExecutionStrategy();
             try
             {
-                using (var transaction = _abmsContext.Database.BeginTransaction())
+                strategy.Execute(() =>
                 {
-                    Account accountToDelete = _abmsContext.Accounts.Include("Rooms").FirstOrDefault(a => a.Id == accountId);
-                    if (accountToDelete == null)
+                    using (var transaction = _abmsContext.Database.BeginTransaction())
                     {
-                        throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
+                        Account accountToDelete = _abmsContext.Accounts.Include("Rooms").FirstOrDefault(a => a.Id == accountId);
+                        if (accountToDelete == null)
+                        {
+                            throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
+                        }
+
+                        // Delete related entities in Rooms and their connected entities
+                        foreach (var room in accountToDelete.Rooms)
+                        {
+                            _abmsContext.Constructions.RemoveRange(room.Constructions);
+                            _abmsContext.Elevators.RemoveRange(room.Elevators);
+                            _abmsContext.Feedbacks.RemoveRange(room.Feedbacks);
+                            _abmsContext.Residents.RemoveRange(room.Residents);
+                            _abmsContext.RoomServices.RemoveRange(room.RoomServices);
+                            _abmsContext.ServiceCharges.RemoveRange(room.ServiceCharges);
+                            _abmsContext.UtilitySchedules.RemoveRange(room.UtilitySchedules);
+                            _abmsContext.Visitors.RemoveRange(room.Visitors);
+                        }
+
+                        _abmsContext.Rooms.RemoveRange(accountToDelete.Rooms);
+                        _abmsContext.NotificationAccounts.RemoveRange(accountToDelete.NotificationAccounts);
+                        _abmsContext.Otps.RemoveRange(accountToDelete.Otps);
+                        _abmsContext.Accounts.Remove(accountToDelete);
+
+                        _abmsContext.SaveChanges();
+                        transaction.Commit();
                     }
+                });
 
-                    // Delete related entities in Rooms and their connected entities
-                    foreach (var room in accountToDelete.Rooms)
-                    {
-                        _abmsContext.Constructions.RemoveRange(room.Constructions);
-                        _abmsContext.Elevators.RemoveRange(room.Elevators);
-                        _abmsContext.Feedbacks.RemoveRange(room.Feedbacks);
-                        _abmsContext.Residents.RemoveRange(room.Residents);
-                        _abmsContext.RoomServices.RemoveRange(room.RoomServices);
-                        _abmsContext.ServiceCharges.RemoveRange(room.ServiceCharges);
-                        _abmsContext.UtilitySchedules.RemoveRange(room.UtilitySchedules);
-                        _abmsContext.Visitors.RemoveRange(room.Visitors);
-                    }
-
-                    _abmsContext.Rooms.RemoveRange(accountToDelete.Rooms);
-
-                    _abmsContext.NotificationAccounts.RemoveRange(accountToDelete.NotificationAccounts);
-                    _abmsContext.Otps.RemoveRange(accountToDelete.Otps);
-
-                    _abmsContext.Accounts.Remove(accountToDelete);
-                    _abmsContext.SaveChanges();
-                    transaction.Commit();
-
-                    return new ResponseData<string>
-                    {
-                        Data = accountId,
-                        StatusCode = HttpStatusCode.OK,
-                        ErrMsg = ErrorApp.SUCCESS.description
-                    };
-                }
+                return new ResponseData<string>
+                {
+                    Data = accountId,
+                    StatusCode = HttpStatusCode.OK,
+                    ErrMsg = ErrorApp.SUCCESS.description
+                };
             }
             catch (Exception ex)
             {

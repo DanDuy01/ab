@@ -5,6 +5,7 @@ using ABMS_backend.Repositories;
 using ABMS_backend.Utils.Exceptions;
 using ABMS_backend.Utils.Token;
 using ABMS_backend.Utils.Validates;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Reflection.Metadata;
 
@@ -173,6 +174,67 @@ namespace ABMS_backend.Services
                 StatusCode = HttpStatusCode.OK,
                 ErrMsg = ErrorApp.SUCCESS.description
             };
+        }
+
+        public ResponseData<string> removeBuildingCompletely(string id)
+        {
+            using (var transaction = _abmsContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    var building = _abmsContext.Buildings.Include(b => b.Accounts)
+                                                         .Include(b => b.Expenses)
+                                                         .Include(b => b.Fees)
+                                                         .Include(b => b.Funds)
+                                                         .Include(b => b.Hotlines)
+                                                         .Include(b => b.Notifications)
+                                                         .Include(b => b.Posts)
+                                                         .Include(b => b.Rooms)
+                                                         .Include(b => b.ServiceTypes)
+                                                         .Include(b => b.Utilities)
+                                                         .FirstOrDefault(b => b.Id == id);
+
+                    if (building == null)
+                    {
+                        throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
+                    }
+
+                    // Delete related collections
+                    _abmsContext.Accounts.RemoveRange(building.Accounts);
+                    _abmsContext.Expenses.RemoveRange(building.Expenses);
+                    _abmsContext.Fees.RemoveRange(building.Fees);
+                    _abmsContext.Funds.RemoveRange(building.Funds);
+                    _abmsContext.Hotlines.RemoveRange(building.Hotlines);
+                    _abmsContext.Notifications.RemoveRange(building.Notifications);
+                    _abmsContext.Posts.RemoveRange(building.Posts);
+                    _abmsContext.Rooms.RemoveRange(building.Rooms);
+                    _abmsContext.ServiceTypes.RemoveRange(building.ServiceTypes);
+                    _abmsContext.Utilities.RemoveRange(building.Utilities);
+
+                    // Delete the building itself
+                    _abmsContext.Buildings.Remove(building);
+
+                    // Commit transaction
+                    _abmsContext.SaveChanges();
+                    transaction.Commit();
+
+                    return new ResponseData<string>
+                    {
+                        Data = "Deleted successfully",
+                        StatusCode = HttpStatusCode.OK,
+                        ErrMsg = ErrorApp.SUCCESS.description
+                    };
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.InternalServerError,
+                        ErrMsg = "Delete failed why " + ex.Message
+                    };
+                }
+            }
         }
     }
 }
