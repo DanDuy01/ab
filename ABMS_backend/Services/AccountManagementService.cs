@@ -6,6 +6,7 @@ using System.Net;
 using ABMS_backend.Utils.Exceptions;
 using ABMS_backend.Utils.Token;
 using ABMS_backend.DTO.AccountDTO;
+using Microsoft.EntityFrameworkCore;
 
 namespace ABMS_backend.Services
 {
@@ -138,6 +139,8 @@ namespace ABMS_backend.Services
             };
         }
 
+
+
         ResponseData<Account> IAccountManagementRepository.getCmbAccountById(string id)
         {
             Account account = _abmsContext.Accounts.Find(id);
@@ -152,7 +155,58 @@ namespace ABMS_backend.Services
                 ErrMsg = ErrorApp.SUCCESS.description
             };
         }
+        public ResponseData<string> DeleteAccountAndRelatedData(string accountId)
+        {
+            try
+            {
+                using (var transaction = _abmsContext.Database.BeginTransaction())
+                {
+                    Account accountToDelete = _abmsContext.Accounts.Include("Rooms").FirstOrDefault(a => a.Id == accountId);
+                    if (accountToDelete == null)
+                    {
+                        throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
+                    }
 
+                    // Delete related entities in Rooms and their connected entities
+                    foreach (var room in accountToDelete.Rooms)
+                    {
+                        _abmsContext.Constructions.RemoveRange(room.Constructions);
+                        _abmsContext.Elevators.RemoveRange(room.Elevators);
+                        _abmsContext.Feedbacks.RemoveRange(room.Feedbacks);
+                        _abmsContext.Residents.RemoveRange(room.Residents);
+                        _abmsContext.RoomServices.RemoveRange(room.RoomServices);
+                        _abmsContext.ServiceCharges.RemoveRange(room.ServiceCharges);
+                        _abmsContext.UtilitySchedules.RemoveRange(room.UtilitySchedules);
+                        _abmsContext.Visitors.RemoveRange(room.Visitors);
+                    }
+
+                    _abmsContext.Rooms.RemoveRange(accountToDelete.Rooms);
+
+                    _abmsContext.NotificationAccounts.RemoveRange(accountToDelete.NotificationAccounts);
+                    _abmsContext.Otps.RemoveRange(accountToDelete.Otps);
+
+                    _abmsContext.Accounts.Remove(accountToDelete);
+                    _abmsContext.SaveChanges();
+                    transaction.Commit();
+
+                    return new ResponseData<string>
+                    {
+                        Data = accountId,
+                        StatusCode = HttpStatusCode.OK,
+                        ErrMsg = ErrorApp.SUCCESS.description
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the error or handle it as needed
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = "Deletion failed due to: " + ex.Message
+                };
+            }
+        }
         public ResponseData<string> activeAccount(string id, int status)
         {
             try
