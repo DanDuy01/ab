@@ -15,5 +15,6 @@ namespace ABMS_backend.Repositories
         ResponseData<List<Building>> getBuilding(BuildingForSearchDTO dto);
 
         ResponseData<Building> getBuildingById(string id);
+        ResponseData<string> removeBuildingCompletely(string id);
     }
 }

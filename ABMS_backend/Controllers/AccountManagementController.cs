@@ -4,6 +4,8 @@ using ABMS_backend.DTO;
 using ABMS_backend.Repositories;
 using ABMS_backend.Models;
 using ABMS_backend.DTO.AccountDTO;
+using ABMS_backend.Services;
+using System.Net;
 
 namespace ABMS_backend.Controllers
 {
@@ -22,6 +24,20 @@ namespace ABMS_backend.Controllers
         {
             ResponseData<string> response = _repository.updateCmbAccount(id, dto);
             return response;
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteAccount(string id)
+        {
+            var result = _repository.DeleteAccountAndRelatedData(id);
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                return Ok(new { message = "Account and related data deleted successfully." });
+            }
+            else
+            {
+                return StatusCode((int)result.StatusCode, result.ErrMsg);
+            }
         }
 
         [HttpPut("account/active/{id}")]

@@ -17,5 +17,6 @@ namespace ABMS_backend.Repositories
         ResponseData<RoomService> getRoomServiceById(String id);
         ResponseData<string> DeleteRoomServicesInBuilding(string buildingId);
         ResponseData<bool> CheckUnassignedRoomServicesInBuilding(string buildingId);
+        ResponseData<string> deleteByFeeRoomId(string feeId, string roomId);
     }
 }

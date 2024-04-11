@@ -171,7 +171,8 @@ namespace ABMS_backend.Services
                 (dto.bookingDate == null || x.BookingDate == dto.bookingDate)).ToList();
             List < ReservationResponseDTO > dtoList = new List<ReservationResponseDTO> ();
             foreach (var schedule in utilitySchedules)
-            {
+            { 
+                 
                 ReservationResponseDTO response = new();
                 response.id = schedule.Id;
                 response.room_id = schedule.RoomId;
