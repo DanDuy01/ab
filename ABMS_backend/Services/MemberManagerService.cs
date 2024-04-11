@@ -99,6 +99,11 @@ namespace ABMS_backend.Services
                 resident.ModifyTime = DateTime.Now;
                 resident.Status = (int)Constants.STATUS.IN_ACTIVE;
                 _abmsContext.Residents.Update(resident);
+                Room room = _abmsContext.Rooms.Find(resident.RoomId);
+                room.NumberOfResident--;
+                room.ModifyUser = getUser;
+                room.ModifyTime = DateTime.Now;
+                _abmsContext.Rooms.Update(room);
                 _abmsContext.SaveChanges();
                 return new ResponseData<string>
                 {
