@@ -35,7 +35,7 @@ namespace ABMS_backend.Services
                     ErrMsg = error
                 };
             }
-            if (_abmsContext.Fees.Any(f => f.ServiceName == dto.feeName))
+            if (_abmsContext.Fees.Any(f => f.ServiceName == dto.feeName && f.BuildingId == dto.buildingId))
             {
                 return new ResponseData<string>
                 {
