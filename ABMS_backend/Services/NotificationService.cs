@@ -103,48 +103,74 @@ namespace ABMS_backend.Services
                     ErrMsg = error
                 };
             }
+
             try
             {
-                Notification notification = new Notification();
-                notification.Id = Guid.NewGuid().ToString();
-                notification.Title = dto.title;
-                notification.Content = dto.content;
-                notification.BuildingId = dto.buildingId;
-                notification.CreateTime = DateTime.Now;
-                notification.Type = 1;
-                _abmsContext.Notifications.Add(notification);
-                _abmsContext.SaveChanges();
+                Notification notification = new Notification
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Title = dto.title,
+                    Content = dto.content,
+                    BuildingId = dto.buildingId,
+                    CreateTime = DateTime.Now,
+                    Type = 1
+                };
 
-                // Find target accounts based on roomId
-                var room = _abmsContext.Rooms.FirstOrDefault(r => r.Id == dto.roomId && r.BuildingId == dto.buildingId);
-                if (room == null)
+                _abmsContext.Notifications.Add(notification);
+
+                if (dto.content == "Bill")
                 {
-                    return new ResponseData<string>
+                    var rooms = _abmsContext.Rooms.Where(r => r.BuildingId == dto.buildingId).ToList();
+                    foreach (var room in rooms)
                     {
-                        StatusCode = HttpStatusCode.NotFound,
-                        ErrMsg = "Room not found."
-                    };
-                }
-                var targetAccount = _abmsContext.Accounts.FirstOrDefault(a => a.Id == room.AccountId);
-                if (targetAccount != null)
-                {
-                    var NotificationAccount = new NotificationAccount
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        AccountId = targetAccount.Id,
-                        NotificationId = notification.Id,
-                        IsRead = 0
-                    };
-                    _abmsContext.NotificationAccounts.Add(NotificationAccount);
+                        var account = _abmsContext.Accounts.FirstOrDefault(a => a.Id == room.AccountId);
+                        if (account != null)
+                        {
+                            var notificationAccount = new NotificationAccount
+                            {
+                                Id = Guid.NewGuid().ToString(),
+                                AccountId = account.Id,
+                                NotificationId = notification.Id,
+                                IsRead = 0
+                            };
+                            _abmsContext.NotificationAccounts.Add(notificationAccount);
+                        }
+                    }
                 }
                 else
                 {
-                    return new ResponseData<string>
+                    var room = _abmsContext.Rooms.FirstOrDefault(r => r.Id == dto.roomId && r.BuildingId == dto.buildingId);
+                    if (room == null)
                     {
-                        StatusCode = HttpStatusCode.NotFound,
-                        ErrMsg = "Account not found."
-                    };
+                        return new ResponseData<string>
+                        {
+                            StatusCode = HttpStatusCode.NotFound,
+                            ErrMsg = "Room not found."
+                        };
+                    }
+
+                    var targetAccount = _abmsContext.Accounts.FirstOrDefault(a => a.Id == room.AccountId);
+                    if (targetAccount != null)
+                    {
+                        var notificationAccount = new NotificationAccount
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            AccountId = targetAccount.Id,
+                            NotificationId = notification.Id,
+                            IsRead = 0
+                        };
+                        _abmsContext.NotificationAccounts.Add(notificationAccount);
+                    }
+                    else
+                    {
+                        return new ResponseData<string>
+                        {
+                            StatusCode = HttpStatusCode.NotFound,
+                            ErrMsg = "Account not found."
+                        };
+                    }
                 }
+
                 _abmsContext.SaveChanges();
 
                 return new ResponseData<string>
@@ -159,10 +185,11 @@ namespace ABMS_backend.Services
                 return new ResponseData<string>
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
-                    ErrMsg = "Created failed why " + ex.Message
+                    ErrMsg = "Creation failed: " + ex.Message
                 };
             }
         }
+
 
         public ResponseData<List<Notification>> getNotification(string? buildingId)
         {
