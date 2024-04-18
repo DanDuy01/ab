@@ -45,14 +45,14 @@ namespace ABMS_backend.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseMySql("server=haidang.c344c4u4ocam.ap-southeast-2.rds.amazonaws.com;port=3306;database=abms;user=admin;password=Haidang4837", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.11.6-mariadb"));
+                optionsBuilder.UseMySql("server=abms.cvwsomiuc06a.ap-southeast-2.rds.amazonaws.com;port=3306;user id=sa;password=12345678;database=abms", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.11.6-mariadb"));
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.UseCollation("latin1_swedish_ci")
-                .HasCharSet("latin1");
+            modelBuilder.UseCollation("utf8mb3_general_ci")
+                .HasCharSet("utf8mb3");
 
             modelBuilder.Entity<Account>(entity =>
             {
@@ -686,6 +686,10 @@ namespace ABMS_backend.Models
                     .HasColumnType("datetime")
                     .HasColumnName("create_time");
 
+                entity.Property(e => e.ServiceId)
+                    .HasMaxLength(100)
+                    .HasColumnName("service_id");
+
                 entity.Property(e => e.Title)
                     .HasMaxLength(100)
                     .HasColumnName("title")
@@ -704,6 +708,9 @@ namespace ABMS_backend.Models
             modelBuilder.Entity<NotificationAccount>(entity =>
             {
                 entity.ToTable("notification_account");
+
+                entity.HasCharSet("latin1")
+                    .UseCollation("latin1_swedish_ci");
 
                 entity.HasIndex(e => e.AccountId, "notification_account_account_FK");
 
@@ -745,6 +752,9 @@ namespace ABMS_backend.Models
             modelBuilder.Entity<Otp>(entity =>
             {
                 entity.ToTable("otp");
+
+                entity.HasCharSet("latin1")
+                    .UseCollation("latin1_swedish_ci");
 
                 entity.HasIndex(e => e.AccountId, "otp_account_FK");
 
@@ -904,7 +914,7 @@ namespace ABMS_backend.Models
                     .HasComment("Người tạo");
 
                 entity.Property(e => e.Image)
-                    .HasMaxLength(200)
+                    .HasColumnType("text")
                     .HasColumnName("image")
                     .HasComment("Ảnh đính kèm");
 

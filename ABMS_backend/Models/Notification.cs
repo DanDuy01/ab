@@ -28,6 +28,7 @@ namespace ABMS_backend.Models
         public string? BuildingId { get; set; }
         public DateTime? CreateTime { get; set; }
         public int? Type { get; set; }
+        public string? ServiceId { get; set; }
 
         public virtual Building? Building { get; set; }
         public virtual ICollection<NotificationAccount> NotificationAccounts { get; set; }

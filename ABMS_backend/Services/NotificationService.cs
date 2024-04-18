@@ -224,5 +224,35 @@ namespace ABMS_backend.Services
 
             _abmsContext.SaveChanges();
         }
+        public async Task<ResponseData<string>> DeleteNotificationsByServiceIdAsync(string serviceId)
+        {
+            var notificationsToDelete = _abmsContext.Notifications.Where(n => n.ServiceId == serviceId).ToList();
+
+            if (!notificationsToDelete.Any())
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    ErrMsg = "No notifications found with the provided service ID."
+                };
+            }
+
+            foreach (var notification in notificationsToDelete)
+            {
+                var relatedAccounts = _abmsContext.NotificationAccounts.Where(na => na.NotificationId == notification.Id).ToList();
+                _abmsContext.NotificationAccounts.RemoveRange(relatedAccounts);
+                _abmsContext.Notifications.Remove(notification);
+            }
+
+            await _abmsContext.SaveChangesAsync();
+
+            return new ResponseData<string>
+            {
+                Data = "Deleted all notifications with service ID: " + serviceId,
+                StatusCode = HttpStatusCode.OK,
+                ErrMsg = ErrorApp.SUCCESS.description
+            };
+        }
+
     }
 }

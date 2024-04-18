@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using ABMS_backend.DTO.NotificationDTO;
 using ABMS_backend.Models;
 using ABMS_backend.DTO.PostDTO;
+using System.Net;
 
 namespace ABMS_backend.Controllers
 {
@@ -62,6 +63,24 @@ namespace ABMS_backend.Controllers
         {
             IEnumerable<NotificationAccountDTO> response = _repository.GetNotifications(accountId, skip, take);
             return response;
+        }
+
+        [HttpDelete("deleteByServiceId/{serviceId}")]
+        public async Task<IActionResult> DeleteNotificationsByServiceId(string serviceId)
+        {
+            try
+            {
+                var response = await _repository.DeleteNotificationsByServiceIdAsync(serviceId);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    return Ok(response);
+                }
+                return BadRequest(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseData<string> { ErrMsg = "Server error: " + ex.Message });
+            }
         }
     }
 }

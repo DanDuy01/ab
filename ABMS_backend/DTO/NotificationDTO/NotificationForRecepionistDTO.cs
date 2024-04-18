@@ -10,6 +10,7 @@ namespace ABMS_backend.DTO.NotificationDTO
         public string content { get; set; }
 
         public string buildingId { get; set; }
+        public string serviceId { get; set; }
         public string Validate()
         {
 

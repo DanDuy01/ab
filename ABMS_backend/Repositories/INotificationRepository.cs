@@ -18,5 +18,6 @@ namespace ABMS_backend.Repositories
         void MarkNotificationsAsRead(string accountId);
 
         IEnumerable<NotificationAccountDTO> GetNotifications(string accountId, int skip, int take);
+        async Task<ResponseData<string>> DeleteNotificationsByServiceIdAsync(string serviceId);
     }
 }
