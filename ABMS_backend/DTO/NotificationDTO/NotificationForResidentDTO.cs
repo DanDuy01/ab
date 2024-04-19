@@ -11,8 +11,6 @@
         public string buildingId { get; set; }
 
         public string roomId { get; set; }
-
-        public string serviceId { get; set; }
         public string Validate()
         {
 

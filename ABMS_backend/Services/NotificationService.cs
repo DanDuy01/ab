@@ -51,6 +51,7 @@ namespace ABMS_backend.Services
                 notification.Id = Guid.NewGuid().ToString();
                 notification.Title = dto.title;
                 notification.Content = dto.content;
+                notification.ServiceId = dto.serviceId;
                 notification.CreateTime = DateTime.Now;
                 notification.BuildingId = dto.buildingId;
                 notification.Type = 2;
