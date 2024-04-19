@@ -12,7 +12,7 @@ namespace ABMS_backend.Repositories
         ResponseData<string> createNotificationForResident(NotificationForResidentDTO dto);
 
         ResponseData<List<Notification>> getNotification(string? buildingId);
-
+        Task<ResponseData<string>> DeleteMultipleNotificationsAsync(List<string> notificationIds);
         ResponseData<string> updateNotification(string id);
 
         void MarkNotificationsAsRead(string accountId);

@@ -7,6 +7,7 @@ using ABMS_backend.DTO.NotificationDTO;
 using ABMS_backend.Models;
 using ABMS_backend.DTO.PostDTO;
 using System.Net;
+using ABMS_backend.Services;
 
 namespace ABMS_backend.Controllers
 {
@@ -63,6 +64,22 @@ namespace ABMS_backend.Controllers
         {
             IEnumerable<NotificationAccountDTO> response = _repository.GetNotifications(accountId, skip, take);
             return response;
+        }
+        [HttpDelete("DeleteMultiple")]
+        public async Task<IActionResult> DeleteMultipleNotifications([FromBody] List<string> notificationIds)
+        {
+            if (notificationIds == null || !notificationIds.Any())
+                return BadRequest("No notification IDs provided.");
+
+            var result = await _repository.DeleteMultipleNotificationsAsync(notificationIds);
+
+            if (result.StatusCode == HttpStatusCode.NotFound)
+                return NotFound(result.ErrMsg);
+
+            if (result.StatusCode != HttpStatusCode.OK)
+                return StatusCode((int)result.StatusCode, result.ErrMsg);
+
+            return Ok(result.Data);
         }
 
         [HttpDelete("deleteByServiceId/{serviceId}")]
