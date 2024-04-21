@@ -2,6 +2,7 @@
 using ABMS_backend.DTO.UtilityDTO;
 using ABMS_backend.Models;
 using ABMS_backend.Repositories;
+using ABMS_backend.Services;
 using ABMS_backend.Utils.Validates;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,6 +38,31 @@ namespace ABMS_backend.Controllers
         {
             ResponseData<string> response = _repository.deleteUtility(id);
             return response;
+        }
+
+        [HttpGet("{utilityId}/has-schedules")]
+        public IActionResult CheckUtilityDetailsHaveSchedules(string utilityId)
+        {
+            try
+            {
+                var response = _repository.CheckUtilityDetailsHaveSchedules(utilityId);
+                if (response.Data)
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return NotFound(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseData<bool>
+                {
+                    StatusCode = System.Net.HttpStatusCode.InternalServerError,
+                    ErrMsg = $"An error occurred: {ex.Message}"
+                });
+            }
         }
 
         [HttpGet("utility/get-all")]

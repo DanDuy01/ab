@@ -20,7 +20,7 @@ namespace ABMS_backend.Repositories
 
         ResponseData<string> remove(List<string> id);
 
-
+        ResponseData<bool> CheckUtilityDetailsHaveSchedules(string utilityId);
         ResponseData<string> createUtilityDetail(UtilityDetailDTO dto);
 
         ResponseData<string> updateUtilityDetail(string id, string name);

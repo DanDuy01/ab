@@ -431,5 +431,19 @@ namespace ABMS_backend.Services
                 Count = idList.Count
             };
         }
+        public ResponseData<bool> CheckUtilityDetailsHaveSchedules(string utilityId)
+        {
+            var utility = _abmsContext.Utilities
+                .Where(u => u.Id == utilityId)
+                .SelectMany(u => u.UtiliityDetails) // Select all UtilityDetails of the specified Utility
+                .Any(ud => _abmsContext.UtilitySchedules.Any(us => us.UtilityDetailId == ud.Id)); // Check if there's any schedule linked to these details
+
+            return new ResponseData<bool>
+            {
+                Data = utility,
+                StatusCode = utility ? HttpStatusCode.OK : HttpStatusCode.NotFound,
+                ErrMsg = utility ? "Utility Details with schedules found." : "No schedules found for any Utility Details."
+            };
+        }
     }
 }
