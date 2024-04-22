@@ -106,7 +106,7 @@ namespace ABMS_backend.Services
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
-                if (_abmsContext.Utilities.Any(u => u.Name == dto.name && u.BuildingId == dto.buildingId))
+                if (_abmsContext.Utilities.Any(u => u.Id != id && u.Name == dto.name && u.BuildingId == dto.buildingId))
                 {
                     return new ResponseData<string>
                     {
