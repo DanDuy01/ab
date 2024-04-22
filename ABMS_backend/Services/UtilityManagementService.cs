@@ -436,7 +436,7 @@ namespace ABMS_backend.Services
             var utility = _abmsContext.Utilities
                 .Where(u => u.Id == utilityId)
                 .SelectMany(u => u.UtiliityDetails) // Select all UtilityDetails of the specified Utility
-                .Any(ud => _abmsContext.UtilitySchedules.Any(us => us.UtilityDetailId == ud.Id)); // Check if there's any schedule linked to these details
+                .Any(ud => _abmsContext.UtilitySchedules.Any(us => us.UtilityDetailId == ud.Id && us.Status==2)); // Check if there's any schedule linked to these details
 
             return new ResponseData<bool>
             {
