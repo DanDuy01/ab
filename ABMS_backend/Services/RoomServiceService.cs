@@ -6,6 +6,7 @@ using ABMS_backend.Utils.Exceptions;
 using ABMS_backend.Utils.Token;
 using ABMS_backend.Utils.Validates;
 using System.Net;
+using Microsoft.EntityFrameworkCore;
 
 namespace ABMS_backend.Services
 {
@@ -132,6 +133,74 @@ namespace ABMS_backend.Services
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
                     ErrMsg = "Deleted failed why " + ex.Message
+                };
+            }
+        }
+        public ResponseData<string> UpdateOrDeleteRoomService(string roomId, string feeType)
+        {
+            try
+            {
+                // List of valid fee types
+                var validFeeTypes = new List<string> { "Ô tô", "Xe máy", "Xe đạp", "Xe đạp điện" };
+
+                // Validate the feeType
+                if (!validFeeTypes.Contains(feeType))
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        ErrMsg = "Invalid fee type provided."
+                    };
+                }
+
+                // Find the room service based on room ID and fee type
+                var roomService = _abmsContext.RoomServices
+                    .Include(rs => rs.Fee) // Include the Fee navigation property to access ServiceName
+                    .FirstOrDefault(rs => rs.RoomId == roomId && rs.Fee.ServiceName == feeType);
+
+                if (roomService == null)
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.NotFound,
+                        ErrMsg = "No matching room service found."
+                    };
+                }
+
+                // Check the amount and update or delete accordingly
+                if (roomService.Amount > 1)
+                {
+                    // Decrement the amount
+                    roomService.Amount -= 1;
+                    _abmsContext.SaveChanges();
+
+                    return new ResponseData<string>
+                    {
+                        Data = "Room service updated successfully. Amount decreased by 1.",
+                        StatusCode = HttpStatusCode.OK,
+                        ErrMsg = ErrorApp.SUCCESS.description
+                    };
+                }
+                else
+                {
+                    // Remove the room service if the amount is 1
+                    _abmsContext.RoomServices.Remove(roomService);
+                    _abmsContext.SaveChanges();
+
+                    return new ResponseData<string>
+                    {
+                        Data = "Room service deleted successfully as the amount reached zero.",
+                        StatusCode = HttpStatusCode.OK,
+                        ErrMsg = ErrorApp.SUCCESS.description
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ResponseData<string>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrMsg = "Operation failed: " + ex.Message
                 };
             }
         }

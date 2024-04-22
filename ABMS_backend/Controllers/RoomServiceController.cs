@@ -61,7 +61,15 @@ namespace ABMS_backend.Controllers
             ResponseData<RoomService> response = _repository.getRoomServiceById(id);
             return response;
         }
-        [HttpDelete("DeleteRoomServicesInBuilding/{buildingId}")]
+
+        [HttpPost("UpdateOrDeleteRoomService")]
+        public ResponseData<string> UpdateOrDeleteRoomService(string roomId, string feeType)
+        {
+            ResponseData<string> response = _repository.UpdateOrDeleteRoomService(roomId,feeType);
+            return response;
+        }
+
+            [HttpDelete("DeleteRoomServicesInBuilding/{buildingId}")]
         public ActionResult DeleteRoomServicesInBuilding(string buildingId)
         {
             try
