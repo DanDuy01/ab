@@ -105,6 +105,14 @@ namespace ABMS_backend.Services
                 {
                     throw new CustomException(ErrorApp.OBJECT_NOT_FOUND);
                 }
+                if (_abmsContext.Utilities.Any(u => u.Name == dto.name && u.BuildingId == dto.buildingId))
+                {
+                    return new ResponseData<string>
+                    {
+                        StatusCode = HttpStatusCode.Conflict,
+                        ErrMsg = "Utility with the same name already exists in this building."
+                    };
+                }
                 utility.Name = dto.name;
                 utility.OpenTime = dto.openTime;
                 utility.CloseTime = dto.closeTime;

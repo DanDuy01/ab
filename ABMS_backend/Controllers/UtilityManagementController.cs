@@ -46,14 +46,7 @@ namespace ABMS_backend.Controllers
             try
             {
                 var response = _repository.CheckUtilityDetailsHaveSchedules(utilityId);
-                if (response.Data)
-                {
-                    return Ok(response);
-                }
-                else
-                {
-                    return NotFound(response);
-                }
+                return Ok(response);
             }
             catch (Exception ex)
             {
