@@ -17,6 +17,7 @@ namespace ABMS_backend.DTO.UtilityDTO
         public float pricePerSlot { get; set; }
 
         public string? description { get; set; }
+        public string? location { get; set; }
 
         public string Validate()
         {

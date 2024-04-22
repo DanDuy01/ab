@@ -58,6 +58,7 @@ namespace ABMS_backend.Services
                 utility.BuildingId = dto.buildingId;
                 utility.OpenTime = dto.openTime;
                 utility.CloseTime = dto.closeTime;
+                utility.Location = dto.location;
                 utility.NumberOfSlot = dto.numberOfSlot;
                 utility.PricePerSlot = dto.pricePerSlot;
                 utility.Description = dto.description;
@@ -119,6 +120,7 @@ namespace ABMS_backend.Services
                 utility.NumberOfSlot = dto.numberOfSlot;
                 utility.PricePerSlot = dto.pricePerSlot;
                 utility.Description = dto.description;
+                utility.Location = dto.location;
                 string getUser = Token.GetUserFromToken(_httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
                 utility.ModifyUser = getUser;
                 utility.ModifyTime = DateTime.Now;
